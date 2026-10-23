@@ -1,0 +1,65 @@
+<aside
+  class="fixed left-0 top-0 z-50 hidden h-full w-72 flex-col justify-between bg-surface-container-low shadow-[0_1px_8px_rgba(30,24,24,0.04)] lg:flex"
+>
+  <div class="flex flex-1 flex-col overflow-y-auto">
+    <div class="flex items-center gap-space-sm p-space-lg">
+      <div
+        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container shadow-sm"
+      >
+        <span class="material-symbols-outlined text-[22px] text-on-primary" aria-hidden="true"
+          >accessible</span
+        >
+      </div>
+      <div>
+        <span
+          class="block font-title-md text-title-md leading-tight tracking-tight text-primary-container"
+          >Arequipa Accesible</span
+        >
+        <span
+          class="block font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant"
+          >Gobierno Municipal</span
+        >
+      </div>
+    </div>
+
+    <div class="px-space-md py-space-xs">
+      <span class="px-space-sm font-label-sm text-label-sm uppercase tracking-wider text-outline"
+        >Panel de Control</span
+      >
+    </div>
+
+    <nav
+      aria-label="Navegación principal"
+      class="mt-space-xs flex flex-col gap-space-xs px-space-md"
+    >
+      <a
+        routerLink="/"
+        routerLinkActive
+        #dashboardLink="routerLinkActive"
+        [class]="dashboardLink.isActive ? activeLinkClass : inactiveLinkClass"
+        [attr.aria-current]="dashboardLink.isActive ? 'page' : null"
+      >
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">dashboard</span>
+        <span>Dashboard</span>
+      </a>
+
+      <span
+        aria-disabled="true"
+        title="Disponible próximamente"
+        class="flex cursor-not-allowed items-center gap-space-sm rounded-full px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant opacity-60"
+      >
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">assignment</span>
+        <span>Lista de Reportes</span>
+      </span>
+
+      <span
+        aria-disabled="true"
+        title="Disponible próximamente"
+        class="flex cursor-not-allowed items-center gap-space-sm rounded-full px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant opacity-60"
+      >
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">group</span>
+        <span>Gestión de Usuarios</span>
+      </span>
+    </nav>
+  </div>
+</aside>
