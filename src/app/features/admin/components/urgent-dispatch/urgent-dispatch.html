@@ -1,0 +1,79 @@
+<section
+  aria-labelledby="urgent-title"
+  class="flex h-full flex-col gap-space-md rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-space-lg shadow-sm"
+>
+  <div
+    class="flex items-center justify-between border-b border-outline-variant/30 pb-space-xs"
+  >
+    <div>
+      <div class="flex items-center gap-2">
+        <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-error"
+          >Bandeja Inmediata</span
+        >
+        <span class="rounded-full bg-error-container px-2 py-0.5 text-[11px] font-bold text-error"
+          >{{ reports().length }} Prioritarios</span
+        >
+      </div>
+      <h2 id="urgent-title" class="mt-0.5 font-headline-md text-headline-md font-bold text-on-surface">
+        Acción Requerida
+      </h2>
+    </div>
+    <span
+      aria-disabled="true"
+      title="Disponible próximamente"
+      class="flex cursor-not-allowed items-center gap-1 font-label-sm text-label-sm font-bold text-primary opacity-70"
+    >
+      <span>Ver todos (51)</span>
+      <span class="material-symbols-outlined text-[16px]" aria-hidden="true">arrow_forward</span>
+    </span>
+  </div>
+
+  <div class="flex flex-col gap-space-sm">
+    @for (report of reports(); track report.id) {
+      <article
+        class="flex flex-col gap-space-xs rounded-xl border border-outline-variant/40 bg-surface-container-low p-space-sm transition-all hover:border-primary/40"
+      >
+        <div class="flex items-center justify-between gap-space-sm">
+          <span class="font-mono text-label-sm font-bold text-primary">{{ report.id }}</span>
+          <span
+            [class]="
+              'inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-label-sm text-[11px] font-bold ' +
+              severityMeta(report.severity).badge
+            "
+          >
+            <span
+              [class]="'h-1.5 w-1.5 rounded-full ' + severityMeta(report.severity).dot"
+              aria-hidden="true"
+            ></span>
+            {{ severityMeta(report.severity).label }}
+          </span>
+        </div>
+
+        <div>
+          <h3 class="font-title-md text-body-md font-bold leading-tight text-on-surface">
+            {{ report.title }}
+          </h3>
+          <p class="mt-0.5 line-clamp-1 font-body-sm text-[12px] text-on-surface-variant">
+            {{ report.description }}
+          </p>
+        </div>
+
+        <div
+          class="flex items-center justify-between border-t border-outline-variant/20 pt-1"
+        >
+          <span class="font-body-sm text-[11px] text-on-surface-variant"
+            >{{ report.time }} • {{ report.district }}</span
+          >
+          <button
+            type="button"
+            [attr.aria-label]="'Asignar reporte ' + report.id"
+            class="flex items-center gap-1 rounded-full bg-primary px-3 py-1 font-label-sm text-label-sm font-bold text-on-primary shadow-xs transition-colors hover:bg-primary-container"
+          >
+            <span class="material-symbols-outlined text-[14px]" aria-hidden="true">send</span>
+            Asignar
+          </button>
+        </div>
+      </article>
+    }
+  </div>
+</section>

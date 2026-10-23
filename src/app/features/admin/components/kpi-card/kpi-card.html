@@ -1,0 +1,44 @@
+<div
+  [class]="
+    'flex h-full flex-col justify-between rounded-2xl border p-space-md shadow-sm ' + theme().card
+  "
+>
+  <div class="flex items-start justify-between gap-space-sm">
+    <span [class]="'font-label-sm text-label-sm font-semibold uppercase tracking-wider ' + theme().label">
+      {{ kpi().label }}
+    </span>
+    <div
+      [class]="
+        'flex h-9 w-9 shrink-0 items-center justify-center rounded-full ' + theme().iconWrapper
+      "
+    >
+      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">{{ kpi().icon }}</span>
+    </div>
+  </div>
+
+  <div class="mt-space-sm">
+    <div [class]="'font-headline-xl text-headline-xl font-extrabold leading-none ' + theme().value">
+      {{ kpi().value }}
+    </div>
+
+    <div class="mt-space-xs flex flex-wrap items-center gap-1">
+      @if (kpi().indicatorIcon) {
+        <span [class]="'material-symbols-outlined ' + theme().indicatorIcon" aria-hidden="true">{{
+          kpi().indicatorIcon
+        }}</span>
+      } @else if (kpi().pulse) {
+        <span [class]="'h-2 w-2 rounded-full ' + theme().indicatorDot" aria-hidden="true"></span>
+      }
+
+      <span [class]="'font-label-sm text-label-sm font-bold ' + theme().detail">
+        {{ kpi().detail }}
+      </span>
+
+      @if (kpi().detailSuffix) {
+        <span class="font-body-sm text-body-sm text-on-surface-variant">
+          {{ kpi().detailSuffix }}
+        </span>
+      }
+    </div>
+  </div>
+</div>

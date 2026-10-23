@@ -1,0 +1,140 @@
+<section
+  aria-labelledby="map-title"
+  class="flex h-full flex-col gap-space-md rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-space-lg shadow-sm"
+>
+  <div class="flex flex-col justify-between gap-space-xs sm:flex-row sm:items-center">
+    <div>
+      <div class="flex items-center gap-2">
+        <span class="h-2.5 w-2.5 rounded-full bg-secondary-container" aria-hidden="true"></span>
+        <h2 id="map-title" class="font-headline-md text-headline-md font-bold text-on-surface">
+          Mapa de Incidencias en Vivo
+        </h2>
+      </div>
+      <span class="mt-0.5 block font-body-sm text-body-sm text-on-surface-variant">
+        Arequipa Metrópoli • Georreferenciación y estado de cuadrillas
+      </span>
+    </div>
+
+    <div
+      class="flex items-center gap-1 self-start rounded-full border border-outline-variant/40 bg-surface-container-low p-1 sm:self-auto"
+    >
+      <button
+        type="button"
+        aria-pressed="true"
+        class="rounded-full bg-surface-container-lowest px-3 py-1 font-label-sm text-label-sm font-bold text-primary shadow-xs"
+      >
+        Todos (51)
+      </button>
+      <button
+        type="button"
+        aria-pressed="false"
+        class="rounded-full px-3 py-1 font-label-sm text-label-sm text-on-surface-variant transition-colors hover:text-on-surface"
+      >
+        Críticos (12)
+      </button>
+      <button
+        type="button"
+        aria-pressed="false"
+        class="rounded-full px-3 py-1 font-label-sm text-label-sm text-on-surface-variant transition-colors hover:text-on-surface"
+      >
+        En Ruta (5)
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="relative h-80 w-full overflow-hidden rounded-2xl border border-outline-variant/50 shadow-inner"
+  >
+    <div
+      class="h-full w-full bg-cover bg-center"
+      style="background-image: url('images/incident-map.png')"
+      role="img"
+      aria-label="Mapa de Arequipa con incidencias georreferenciadas"
+    ></div>
+    <div class="pointer-events-none absolute inset-0 bg-stone-900/10"></div>
+
+    @for (pin of pins(); track pin.id) {
+      <div
+        class="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
+        [style.top.%]="pin.top"
+        [style.left.%]="pin.left"
+      >
+        <div [class]="pinLabelClass(pin.tone)">
+          @if (pin.pulse) {
+            <span
+              class="h-2 w-2 animate-ping rounded-full bg-secondary-container"
+              aria-hidden="true"
+            ></span>
+          }
+          <span>{{ pin.name }} ({{ pin.count }})</span>
+        </div>
+        <div
+          role="img"
+          [attr.aria-label]="pin.name + ': ' + pin.count + ' reportes'"
+          [class]="'flex items-center justify-center rounded-full ' + pinMarkerClass(pin.tone, pin.size)"
+        >
+          <span
+            [class]="'material-symbols-outlined ' + pinIconClass(pin.size)"
+            aria-hidden="true"
+            >{{ pin.icon }}</span
+          >
+        </div>
+      </div>
+    }
+
+    <div
+      class="absolute bottom-3 left-3 flex items-center gap-3 rounded-xl border border-outline-variant/40 bg-surface-container-lowest/95 px-3.5 py-2 shadow-md backdrop-blur-md"
+    >
+      <div class="flex items-center gap-1.5">
+        <span class="h-2.5 w-2.5 animate-pulse rounded-full bg-secondary" aria-hidden="true"></span>
+        <span class="font-label-sm text-label-sm font-bold text-on-surface"
+          >{{ summary().activeCrews }} Cuadrillas Activas</span
+        >
+      </div>
+      <span class="text-outline-variant" aria-hidden="true">|</span>
+      <div class="flex items-center gap-1 text-[11px] font-medium text-on-surface-variant">
+        <span class="material-symbols-outlined text-[14px] text-primary" aria-hidden="true"
+          >gps_fixed</span
+        >
+        <span>{{ summary().gpsConnected ? 'GPS Conectado' : 'GPS Desconectado' }}</span>
+      </div>
+    </div>
+
+    <div class="absolute right-3 top-3 flex flex-col gap-1.5">
+      <button
+        type="button"
+        title="Acercar"
+        aria-label="Acercar mapa"
+        class="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-container-lowest/95 text-on-surface shadow-md transition-colors hover:bg-surface-container"
+      >
+        <span class="material-symbols-outlined text-[18px]" aria-hidden="true">add</span>
+      </button>
+      <button
+        type="button"
+        title="Alejar"
+        aria-label="Alejar mapa"
+        class="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-container-lowest/95 text-on-surface shadow-md transition-colors hover:bg-surface-container"
+      >
+        <span class="material-symbols-outlined text-[18px]" aria-hidden="true">remove</span>
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="flex flex-wrap items-center justify-between gap-space-sm border-t border-outline-variant/30 pt-space-xs text-[12px] text-on-surface-variant"
+  >
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true"
+        >location_city</span
+      >
+      <span
+        >Zona de mayor densidad:
+        <strong class="font-semibold text-on-surface">{{ summary().densestZone }}</strong></span
+      >
+    </div>
+    <div class="flex items-center gap-1 font-semibold text-primary">
+      <span class="material-symbols-outlined text-[16px]" aria-hidden="true">speed</span>
+      <span>Tiempo medio arribo: {{ summary().averageArrival }}</span>
+    </div>
+  </div>
+</section>

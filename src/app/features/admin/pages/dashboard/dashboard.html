@@ -1,0 +1,68 @@
+<section class="flex flex-col justify-between gap-space-md pb-space-xs lg:flex-row lg:items-center">
+  <div>
+    <div
+      class="mb-space-xs inline-flex items-center gap-space-xs rounded-full bg-primary-fixed px-space-sm py-0.5 font-label-sm text-label-sm uppercase tracking-wider text-primary"
+    >
+      <span class="h-2 w-2 animate-pulse rounded-full bg-primary" aria-hidden="true"></span>
+      <span>Monitoreo Provincial Operativo en Tiempo Real</span>
+    </div>
+    <h1
+      class="font-headline-xl text-headline-xl-mobile font-extrabold tracking-tight text-on-surface sm:text-headline-xl"
+    >
+      Centro de Control y Monitoreo de Reportes
+    </h1>
+    <p class="mt-0.5 font-body-md text-body-md text-on-surface-variant">
+      Gestión técnica, despacho de cuadrillas y auditoría de barreras arquitectónicas en el Centro
+      Histórico y distritos metropolitanos.
+    </p>
+  </div>
+
+  <div class="flex flex-wrap items-center gap-space-sm">
+    <button
+      type="button"
+      class="group inline-flex cursor-pointer items-center gap-space-xs rounded-full border border-outline-variant/60 bg-surface-container-lowest px-space-md py-2 text-on-surface shadow-xs transition-colors hover:bg-surface-container-high"
+    >
+      <span
+        class="material-symbols-outlined text-[18px] text-outline transition-colors group-hover:text-primary"
+        aria-hidden="true"
+        >calendar_today</span
+      >
+      <span class="font-label-md text-label-md font-semibold text-on-surface"
+        >Filtro por Período: Últimos 30 días</span
+      >
+      <span
+        class="material-symbols-outlined text-[16px] text-outline transition-colors group-hover:text-on-surface"
+        aria-hidden="true"
+        >expand_more</span
+      >
+    </button>
+
+    <button
+      type="button"
+      class="inline-flex cursor-pointer items-center gap-space-xs rounded-full border border-outline-variant/30 bg-primary-container px-space-md py-2 font-label-md text-label-md font-bold text-on-primary shadow-sm transition-all hover:bg-primary hover:shadow-md"
+    >
+      <span class="material-symbols-outlined text-[18px] text-primary-fixed" aria-hidden="true"
+        >picture_as_pdf</span
+      >
+      <span>Descargar Informe Mensual (PDF)</span>
+    </button>
+  </div>
+</section>
+
+<section aria-label="Indicadores principales" class="grid grid-cols-1 gap-space-md sm:grid-cols-2 lg:grid-cols-4">
+  @for (kpi of data.kpis; track kpi.id) {
+    <app-kpi-card [kpi]="kpi" />
+  }
+</section>
+
+<div class="flex flex-col gap-space-xl">
+  <div class="grid grid-cols-1 items-start gap-space-xl lg:grid-cols-12">
+    <app-incident-map [pins]="data.mapPins" [summary]="data.mapSummary" />
+    <app-urgent-dispatch [reports]="data.urgentReports" />
+  </div>
+
+  <div class="grid grid-cols-1 items-stretch gap-space-xl lg:grid-cols-2">
+    <app-barrier-distribution [items]="data.barriers" />
+    <app-compliance-card [compliance]="data.compliance" />
+  </div>
+</div>
