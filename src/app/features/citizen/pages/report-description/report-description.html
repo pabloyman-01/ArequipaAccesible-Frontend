@@ -1,0 +1,172 @@
+<div class="flex w-full flex-col">
+  <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <nav aria-label="Ruta de navegación" class="flex flex-wrap items-center gap-2 font-label-md text-label-md text-on-surface-variant">
+      <a routerLink="/ciudadano" class="flex items-center gap-1.5 transition-colors hover:text-primary">
+        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">home</span>
+        Inicio
+      </a>
+      <span class="text-outline-variant" aria-hidden="true">/</span>
+      <span class="font-bold text-primary">Nuevo Reporte</span>
+      <span class="text-outline-variant" aria-hidden="true">/</span>
+      <span class="text-outline">Paso 3 de 3</span>
+    </nav>
+    <div class="inline-flex items-center gap-2 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm text-on-surface shadow-sm">
+      <span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">share_location</span>
+      Arequipa Centro Histórico • Sistema Georreferenciado
+      <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-secondary"></span>
+    </div>
+  </div>
+
+  <div class="mb-8 flex flex-col gap-2">
+    <h1 class="font-headline-xl text-headline-xl font-bold tracking-tight text-on-surface">Nuevo Reporte de Barrera Arquitectónica</h1>
+    <p class="max-w-3xl font-body-md text-body-md text-on-surface-variant">Completa los 3 pasos para que las cuadrillas de OMAPED atiendan la incidencia de forma inmediata.</p>
+  </div>
+
+  <section aria-label="Progreso del reporte" class="mb-8 rounded-2xl bg-surface-container-lowest p-6 shadow-sm">
+    <ol class="grid grid-cols-1 gap-6 md:grid-cols-3">
+      <li class="relative flex items-center gap-3.5">
+        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-sm">
+          <span class="material-symbols-outlined text-[22px]" aria-hidden="true">check</span>
+        </span>
+        <span class="flex min-w-0 flex-col">
+          <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Paso 1 • Completado</span>
+          <span class="truncate font-title-md text-title-md text-on-surface">Tipo y Severidad</span>
+        </span>
+        <span class="absolute right-0 top-1/2 hidden h-0.5 w-8 -translate-y-1/2 bg-primary-container/40 md:block" aria-hidden="true"></span>
+      </li>
+      <li class="relative flex items-center gap-3.5">
+        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-sm">
+          <span class="material-symbols-outlined text-[22px]" aria-hidden="true">check</span>
+        </span>
+        <span class="flex min-w-0 flex-col">
+          <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Paso 2 • Completado</span>
+          <span class="truncate font-title-md text-title-md text-on-surface">Evidencia y Ubicación</span>
+        </span>
+        <span class="absolute right-0 top-1/2 hidden h-0.5 w-8 -translate-y-1/2 bg-primary-container/40 md:block" aria-hidden="true"></span>
+      </li>
+      <li class="flex items-center gap-3.5 rounded-xl bg-surface-container-low px-4 py-3">
+        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-container font-title-md text-title-md font-bold text-on-primary shadow-md">3</span>
+        <span class="flex min-w-0 flex-col">
+          <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-primary">Paso Activo</span>
+          <span class="truncate font-title-md text-title-md font-bold text-primary">Descripción Final</span>
+        </span>
+      </li>
+    </ol>
+  </section>
+
+  <section class="mb-8 flex flex-col justify-between gap-4 rounded-2xl bg-surface-container p-5 shadow-sm lg:flex-row lg:items-center">
+    <div class="flex flex-wrap items-center gap-6">
+      <div class="flex items-center gap-3">
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-surface-container-lowest text-primary shadow-sm">
+          <span class="material-symbols-outlined text-[20px]" aria-hidden="true">accessible_forward</span>
+        </span>
+        <div class="flex flex-col">
+          <span class="font-label-sm text-label-sm text-on-surface-variant">Incidencia Clasificada</span>
+          <span class="flex flex-wrap items-center gap-2 font-title-md text-title-md font-semibold text-on-surface">
+            Rampa Rota o Inexistente
+            <span class="flex items-center gap-1 rounded-full bg-error-container px-2.5 py-0.5 font-label-sm text-label-sm font-bold text-on-error-container">
+              <span class="h-1.5 w-1.5 rounded-full bg-error"></span>
+              Crítica / Alta
+            </span>
+          </span>
+        </div>
+      </div>
+      <span class="hidden h-10 w-px bg-outline-variant/40 lg:block" aria-hidden="true"></span>
+      <div class="flex items-center gap-3">
+        <img src="images/citizen/report-summary.png" alt="Rampa de sillar deteriorada en el Centro Histórico de Arequipa" class="h-12 w-12 shrink-0 rounded-xl object-cover shadow-sm" />
+        <div class="flex flex-col">
+          <span class="flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant">
+            <span class="material-symbols-outlined text-[14px] text-tertiary" aria-hidden="true">verified</span>
+            Ubicación Geovalidada (IA)
+          </span>
+          <span class="font-body-md text-body-md font-semibold text-on-surface">Calle San Francisco 312, Cercado de Arequipa</span>
+        </div>
+      </div>
+    </div>
+    <a routerLink="/ciudadano/nuevo-reporte" class="inline-flex shrink-0 items-center justify-center gap-2 self-start rounded-full bg-surface-container-lowest px-4 py-2.5 font-label-md text-label-md font-bold text-primary shadow-sm transition-all hover:bg-surface-bright lg:self-center">
+      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">edit</span>
+      Modificar Datos Previos
+    </a>
+  </section>
+
+  <section class="mb-10 flex flex-col gap-6">
+    <article class="flex flex-col gap-4 rounded-2xl bg-surface-container-lowest p-7 shadow-sm">
+      <div class="flex items-start justify-between gap-4">
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center gap-2">
+            <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-surface-container-high font-label-md text-label-md font-bold text-primary">1</span>
+            <h2 class="font-headline-md text-headline-md font-bold text-on-surface">Descripción Detallada del Incidente</h2>
+          </div>
+          <p class="font-body-md text-body-md text-on-surface-variant">Proporciona referencias adicionales para facilitar el trabajo de la cuadrilla municipal de obras:</p>
+        </div>
+        <button type="button" (click)="toggleVoiceInput()" [class]="'inline-flex shrink-0 items-center gap-2 rounded-full border border-outline-variant/30 px-3.5 py-2 font-label-md text-label-md font-bold transition-all ' + (isListening() ? 'bg-error-container text-on-error-container' : 'bg-surface-container-low text-primary hover:bg-surface-container')" title="Dictar descripción por voz (Español / Quechua)">
+          <span [class]="'material-symbols-outlined text-[18px] ' + (isListening() ? 'animate-pulse' : 'text-primary')" aria-hidden="true">mic</span>
+          {{ isListening() ? 'Escuchando...' : 'Dictar por voz' }}
+        </button>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <div class="rounded-xl bg-surface p-4 shadow-inner">
+          <label for="reportDescription" class="sr-only">Descripción detallada del incidente</label>
+          <textarea id="reportDescription" rows="4" maxlength="500" [value]="description()" (input)="description.set($any($event.target).value)" placeholder="Describe detalles específicos sobre el deterioro, obstrucción o peligro inminente..." class="w-full resize-none bg-transparent font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none"></textarea>
+        </div>
+        <div class="flex items-center justify-between px-1 font-label-sm text-label-sm text-on-surface-variant">
+          <span></span>
+          <span class="font-semibold text-outline">{{ characterCount() }} / 500 caracteres</span>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2 pt-2">
+        <span class="font-label-sm text-label-sm font-medium text-on-surface-variant">Etiquetas contextuales sugeridas:</span>
+        <button type="button" class="rounded-full bg-surface-container-low px-2.5 py-1 font-label-sm text-label-sm text-on-surface-variant transition-colors hover:bg-surface-container">+ Desprendimiento de sillar</button>
+        <button type="button" class="rounded-full bg-surface-container-low px-2.5 py-1 font-label-sm text-label-sm text-on-surface-variant transition-colors hover:bg-surface-container">+ Sin señalización podotáctil</button>
+        <button type="button" class="rounded-full bg-surface-container-low px-2.5 py-1 font-label-sm text-label-sm text-on-surface-variant transition-colors hover:bg-surface-container">+ Congestión peatonal alta</button>
+      </div>
+    </article>
+  </section>
+
+  <footer class="flex flex-col items-center justify-between gap-4 rounded-2xl bg-surface-container-lowest p-4 shadow-sm md:flex-row md:p-6">
+    <a routerLink="/ciudadano/nuevo-reporte/evidencia" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-surface-container px-6 py-3 font-label-lg text-label-lg font-bold text-on-surface transition-all hover:bg-surface-container-high md:w-auto">
+      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_back</span>
+      Paso Anterior (Evidencia y Ubicación)
+    </a>
+    <div class="order-first flex items-center gap-2 font-label-md text-label-md text-on-surface-variant md:order-none">
+      <span class="material-symbols-outlined animate-pulse text-[18px] text-secondary" aria-hidden="true">cloud_done</span>
+      Borrador guardado automáticamente (11:42 AM)
+    </div>
+    <button type="button" (click)="submit()" [disabled]="isSubmitting()" class="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-primary-container px-8 py-3.5 font-label-lg text-label-lg font-bold text-on-primary shadow-md transition-all hover:bg-primary disabled:cursor-wait disabled:opacity-75 md:w-auto">
+      @if (isSubmitting()) {
+        <span class="material-symbols-outlined animate-spin text-[20px]" aria-hidden="true">sync</span>
+        Transmitiendo a SNA...
+      } @else {
+        Enviar Reporte
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">send</span>
+      }
+    </button>
+  </footer>
+
+  @if (showSuccess()) {
+    <div role="dialog" aria-modal="true" aria-labelledby="successTitle" class="fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/40 p-4 backdrop-blur-sm">
+      <div class="flex w-full max-w-lg flex-col items-center gap-5 rounded-2xl bg-surface-container-lowest p-8 text-center shadow-xl">
+        <span class="flex h-16 w-16 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-lg">
+          <span class="material-symbols-outlined text-[36px]" aria-hidden="true">check_circle</span>
+        </span>
+        <div class="flex flex-col gap-1.5">
+          <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Folio Oficial Generado</span>
+          <h3 id="successTitle" class="font-headline-lg text-headline-lg font-bold text-on-surface">¡Reporte Enviado con Éxito!</h3>
+          <p class="font-body-md text-body-md text-on-surface-variant">Tu reporte ha sido asignado a la Cuadrilla de Intervención Rápida OMAPED Centro Histórico.</p>
+        </div>
+        <div class="flex w-full items-center justify-between rounded-xl bg-surface-container p-4 font-mono font-title-md text-title-md font-bold text-primary">
+          <span>CÓDIGO: AQ-2024-8841</span>
+          <button type="button" title="Copiar código" aria-label="Copiar código" class="p-1 text-on-surface-variant transition-colors hover:text-primary">
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">content_copy</span>
+          </button>
+        </div>
+        <div class="flex w-full flex-col gap-2 pt-2">
+          <a routerLink="/ciudadano" class="w-full rounded-full bg-primary-container py-3 text-center font-label-lg text-label-lg font-bold text-on-primary transition-colors hover:bg-primary">Ir a Mis Reportes</a>
+          <a routerLink="/ciudadano" class="w-full py-2.5 font-label-md text-label-md font-semibold text-on-surface-variant transition-colors hover:text-on-surface">Cerrar y volver al inicio</a>
+        </div>
+      </div>
+    </div>
+  }
+</div>

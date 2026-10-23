@@ -1,0 +1,169 @@
+<div class="flex w-full flex-col">
+  <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <nav aria-label="Ruta de navegación" class="flex items-center gap-2 font-label-md text-label-md text-on-surface-variant">
+      <a routerLink="/ciudadano" class="flex items-center gap-1.5 transition-colors hover:text-primary">
+        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">home</span>
+        Inicio
+      </a>
+      <span class="text-outline-variant" aria-hidden="true">/</span>
+      <span class="font-semibold text-primary">Nuevo Reporte</span>
+    </nav>
+    <div class="flex items-center gap-2 rounded-full bg-surface-container-high px-3 py-1 font-label-sm text-label-sm text-on-surface-variant shadow-sm">
+      <span class="material-symbols-outlined text-[16px] text-secondary" aria-hidden="true">verified</span>
+      Arequipa Centro Histórico • Sistema Georreferenciado
+    </div>
+  </div>
+
+  <div class="mx-auto flex w-full max-w-3xl flex-col gap-6">
+    <div class="flex flex-col gap-2">
+      <span class="font-label-sm text-label-sm font-bold uppercase tracking-widest text-secondary">Asistente de Reporte Urbano</span>
+      <h1 class="font-headline-lg text-headline-lg font-bold tracking-tight text-primary">Nuevo Reporte de Barrera Arquitectónica</h1>
+      <p class="max-w-xl font-body-md text-body-md leading-relaxed text-on-surface-variant">
+        Completa los 3 pasos para que las cuadrillas de OMAPED atiendan la incidencia de forma inmediata.
+      </p>
+    </div>
+
+    <section aria-label="Progreso del reporte" class="flex items-center justify-between gap-2 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-4 shadow-sm sm:p-5">
+      <div class="flex flex-1 items-center gap-3">
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary font-bold text-on-primary shadow-sm">
+          <span class="material-symbols-outlined text-[20px]" aria-hidden="true">check</span>
+        </span>
+        <span class="hidden min-w-0 flex-col sm:flex">
+          <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Paso 1</span>
+          <span class="truncate text-[13px] font-bold text-on-surface">Tipo y Severidad</span>
+        </span>
+      </div>
+      <span class="h-0.5 w-8 shrink-0 bg-primary/40 sm:w-16" aria-hidden="true"></span>
+      <div class="flex shrink-0 items-center gap-3 rounded-xl border border-primary/20 bg-surface-container-low px-3 py-1.5">
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-container text-[14px] font-bold text-on-primary shadow-sm">2</span>
+        <span class="flex min-w-0 flex-col pr-1">
+          <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-primary">Paso Activo</span>
+          <span class="truncate text-[13px] font-bold text-primary">Evidencia y Ubicación</span>
+        </span>
+      </div>
+      <span class="h-0.5 w-8 shrink-0 bg-outline-variant/50 sm:w-16" aria-hidden="true"></span>
+      <div class="flex flex-1 items-center justify-end gap-3 opacity-60 sm:justify-start">
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-container-high text-[14px] font-semibold text-on-surface-variant">3</span>
+        <span class="hidden min-w-0 flex-col sm:flex">
+          <span class="font-label-sm text-label-sm font-medium uppercase tracking-wider text-outline">Paso 3</span>
+          <span class="truncate text-[13px] font-medium text-on-surface-variant">Descripción Final</span>
+        </span>
+      </div>
+    </section>
+
+    <section class="flex items-center justify-between rounded-xl border border-outline-variant/30 bg-surface-container-low/70 px-4 py-2.5 font-body-sm text-body-sm text-on-surface-variant">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true">accessible_forward</span>
+        <span>Barrera seleccionada: <strong class="text-on-surface">Rampa Rota o Inexistente</strong></span>
+        <span class="ml-1 rounded-full bg-error-container px-2 py-0.5 text-[11px] font-bold text-on-error-container">Crítica / Alta</span>
+      </div>
+      <a routerLink="/ciudadano/nuevo-reporte" class="flex shrink-0 items-center gap-0.5 text-[12px] font-semibold text-primary hover:underline">
+        Modificar
+        <span class="material-symbols-outlined text-[14px]" aria-hidden="true">edit</span>
+      </a>
+    </section>
+
+    <div class="flex flex-col gap-6">
+      <section class="flex flex-col gap-4 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-6 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-fixed font-bold text-primary">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">photo_camera</span>
+            </span>
+            <div>
+              <h2 class="font-headline-md text-headline-md font-bold text-on-surface">1. Evidencia Fotográfica</h2>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">Fotografía del obstáculo o bordillo capturada en el sitio</p>
+            </div>
+          </div>
+          <span class="flex items-center gap-1 rounded-full bg-primary-container/10 px-2.5 py-1 font-label-sm text-label-sm font-semibold text-primary">
+            <span class="material-symbols-outlined text-[14px]" aria-hidden="true">check_circle</span>
+            1 Foto Cargada
+          </span>
+        </div>
+
+        <div class="flex flex-col overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-low sm:flex-row sm:items-stretch">
+          <div class="relative h-48 w-full shrink-0 overflow-hidden bg-surface-dim sm:w-64">
+            <img src="images/citizen/report-evidence.png" alt="Desnivel en una vereda de sillar de Arequipa" class="h-full w-full object-cover" />
+            <span class="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[11px] font-bold text-on-primary shadow-sm">
+              <span class="material-symbols-outlined text-[13px]" aria-hidden="true">auto_awesome</span>
+              IA Procesada
+            </span>
+          </div>
+          <div class="flex flex-1 flex-col justify-between gap-3 p-5">
+            <div class="flex flex-col gap-2">
+              <span class="inline-flex w-fit items-center gap-1.5 rounded-full bg-secondary-fixed px-3 py-1 font-label-sm text-label-sm font-bold text-on-secondary-fixed">
+                <span class="material-symbols-outlined text-[15px]" aria-hidden="true">psychology</span>
+                IA Detectó: Vereda con desnivel en sillar (8.2 cm)
+              </span>
+              <p class="font-body-sm text-body-sm leading-relaxed text-on-surface-variant">Inclinación inadecuada con rotura del pavimento en el borde peatonal. Coordenadas EXIF validadas con precisión.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 border-t border-outline-variant/30 pt-2">
+              <button type="button" class="flex items-center gap-1.5 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm font-semibold text-on-surface shadow-sm transition-colors hover:bg-surface-container">
+                <span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">add_a_photo</span>
+                Tomar otra foto
+              </button>
+              <button type="button" class="flex items-center gap-1 rounded-full px-3.5 py-1.5 font-label-sm text-label-sm font-semibold text-error transition-colors hover:bg-error-container">
+                <span class="material-symbols-outlined text-[16px]" aria-hidden="true">delete</span>
+                Cambiar imagen
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="flex flex-col gap-4 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-6 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-fixed font-bold text-primary">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">pin_drop</span>
+            </span>
+            <div>
+              <h2 class="font-headline-md text-headline-md font-bold text-on-surface">2. Ubicación Georreferenciada</h2>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">Verifica o ajusta el punto de intervención en el mapa</p>
+            </div>
+          </div>
+          <button type="button" class="flex items-center gap-1.5 rounded-full bg-surface-container px-3 py-1.5 font-label-sm text-label-sm font-semibold text-primary shadow-sm transition-colors hover:bg-surface-container-high">
+            <span class="material-symbols-outlined text-[16px]" aria-hidden="true">my_location</span>
+            Usar mi ubicación GPS actual
+          </button>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label for="addressInput" class="font-label-sm text-label-sm font-semibold text-on-surface">Dirección o Referencia</label>
+          <div class="relative flex items-center">
+            <span class="material-symbols-outlined absolute left-3.5 text-[20px] text-primary" aria-hidden="true">search</span>
+            <input id="addressInput" type="text" [value]="address()" (input)="address.set($any($event.target).value)" class="w-full rounded-xl border border-outline-variant/30 bg-surface-container-low py-2.5 pl-10 pr-4 font-body-md text-body-md text-on-surface transition-all focus:border-primary focus:bg-surface-container-lowest focus:outline-none" />
+          </div>
+        </div>
+
+        <div class="relative h-48 w-full overflow-hidden rounded-xl border border-outline-variant/30 shadow-sm">
+          <img src="images/citizen/report-map.png" alt="Mapa de referencia de Calle San Francisco y Calle Zela, Arequipa" class="h-full w-full object-cover" />
+          <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div class="relative flex flex-col items-center">
+              <span class="absolute -top-1 h-6 w-6 animate-ping rounded-full bg-primary/30"></span>
+              <span class="z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-surface bg-primary text-on-primary shadow-lg">
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">accessible</span>
+              </span>
+              <span class="-mt-1 rounded-full bg-inverse-surface/90 px-2.5 py-0.5 text-[11px] font-semibold text-inverse-on-surface shadow-md">San Francisco c/ Zela</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="mt-2 flex flex-col items-center justify-between gap-4 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-4 shadow-sm sm:flex-row sm:p-5">
+      <a routerLink="/ciudadano/nuevo-reporte" class="flex w-full items-center justify-center gap-2 rounded-full bg-surface-container px-5 py-2.5 font-label-md text-label-md font-semibold text-on-surface-variant transition-colors hover:bg-surface-container-high sm:w-auto">
+        <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_back</span>
+        Paso Anterior (Tipo de barrera)
+      </a>
+      <div class="flex items-center gap-2 font-label-sm text-label-sm text-outline">
+        <span class="material-symbols-outlined text-[16px] text-secondary" aria-hidden="true">cloud_done</span>
+        Borrador guardado automáticamente
+      </div>
+      <a routerLink="/ciudadano/nuevo-reporte/descripcion" class="flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5 font-label-md text-label-md font-bold text-on-primary shadow-md transition-all hover:bg-primary-container sm:w-auto">
+        Continuar al Paso 3
+        <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
+      </a>
+    </footer>
+  </div>
+</div>

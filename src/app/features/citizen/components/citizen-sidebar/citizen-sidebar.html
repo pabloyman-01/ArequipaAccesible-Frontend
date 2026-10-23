@@ -1,0 +1,67 @@
+<aside
+  class="fixed left-0 top-0 z-50 hidden h-full w-64 flex-col justify-between border-r border-outline-variant/30 bg-surface px-4 py-6 lg:flex"
+>
+  <div class="flex flex-col gap-8">
+    <div class="flex items-center gap-3 px-2">
+      <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-on-primary shadow-sm">
+        <span class="material-symbols-outlined text-[22px]" aria-hidden="true">account_balance</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-[15px] font-bold leading-none tracking-tight text-primary">Arequipa Accesible</span>
+        <span class="mt-1 text-[12px] leading-none text-on-surface-variant">Gobierno Municipal</span>
+      </div>
+    </div>
+
+    <nav aria-label="Navegación ciudadana" class="flex flex-col gap-1.5">
+      <a
+        routerLink="/ciudadano"
+        routerLinkActive
+        [routerLinkActiveOptions]="{ exact: true }"
+        #homeLink="routerLinkActive"
+        [class]="homeLink.isActive ? activeLinkClass : inactiveLinkClass"
+        [attr.aria-current]="homeLink.isActive ? 'page' : null"
+      >
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">dashboard</span>
+        <span>Inicio</span>
+      </a>
+      <a
+        routerLink="/ciudadano/nuevo-reporte"
+        routerLinkActive
+        [routerLinkActiveOptions]="{ exact: true }"
+        #newReportLink="routerLinkActive"
+        [class]="newReportLink.isActive ? activeLinkClass : inactiveLinkClass"
+        [attr.aria-current]="newReportLink.isActive ? 'page' : null"
+      >
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">add_circle</span>
+        <span>Nuevo Reporte</span>
+      </a>
+      <a
+        routerLink="/ciudadano/reportes"
+        routerLinkActive
+        [routerLinkActiveOptions]="{ exact: true }"
+        #reportsLink="routerLinkActive"
+        [class]="reportsLink.isActive ? activeLinkClass : inactiveLinkClass"
+        [attr.aria-current]="reportsLink.isActive ? 'page' : null"
+      >
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">assignment</span>
+        <span>Mis Reportes</span>
+      </a>
+    </nav>
+  </div>
+
+  <div class="flex flex-col gap-2 border-t border-outline-variant/30 px-2 pt-4">
+    <a
+      href="https://www.congreso.gob.pe/Docs/leyes/ley29973.html"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex items-center justify-between py-1 text-[12px] font-medium text-on-surface-variant transition-colors hover:text-primary"
+    >
+      <span class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">menu_book</span>
+        Ley General N° 29973
+      </span>
+      <span class="material-symbols-outlined text-[14px]" aria-hidden="true">open_in_new</span>
+    </a>
+    <span class="text-[11px] text-outline">v2.4 • Municipalidad de Arequipa</span>
+  </div>
+</aside>

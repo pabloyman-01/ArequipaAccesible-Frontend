@@ -1,0 +1,123 @@
+<section class="relative flex flex-col gap-5 overflow-hidden rounded-2xl border border-outline-variant/25 bg-surface-container-lowest p-6 shadow-sm sm:p-8">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-primary-fixed/50 px-3 py-1 text-[11px] font-semibold text-primary">
+        <span class="material-symbols-outlined text-[14px]" aria-hidden="true">verified</span>
+        Vecino Verificado DNI 4482****
+      </span>
+      <span class="inline-flex items-center gap-1 rounded-full border border-outline-variant/30 bg-surface-container-low px-2.5 py-1 text-[11px] font-medium text-on-surface-variant">
+        <span class="material-symbols-outlined text-[13px] text-primary" aria-hidden="true">location_city</span>
+        OMAPED Cercado • Sector 02
+      </span>
+    </div>
+    <div class="flex items-center gap-1.5 rounded-full border border-outline-variant/30 bg-surface-container-low px-3 py-1 text-[12px] font-medium text-on-surface-variant">
+      <span class="material-symbols-outlined text-[15px] text-primary" aria-hidden="true">calendar_today</span>
+      <span>24 de Octubre 2023</span>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+    <div class="max-w-3xl">
+      <h1 class="text-[24px] font-bold leading-tight tracking-tight text-on-surface md:text-[28px]">
+        ¡Bienvenido, Aarón! Tu voz transforma <span class="text-primary">Arequipa en una ciudad accesible</span>
+      </h1>
+      <p class="mt-2 text-[14px] leading-relaxed text-on-surface-variant">
+        Monitorea tus alertas de infraestructura, visualiza cuadrillas municipales de sillar en tiempo real y colabora con fiscalización urbana bajo los lineamientos de accesibilidad universal.
+      </p>
+    </div>
+    <a routerLink="/ciudadano/nuevo-reporte" class="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-primary px-5 py-2.5 text-[13px] font-semibold text-on-primary shadow-sm transition-all hover:bg-primary-container">
+      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">add_circle</span>
+      Iniciar Nuevo Reporte
+    </a>
+  </div>
+</section>
+
+<section class="grid grid-cols-1 gap-5 md:grid-cols-3">
+  @for (metric of metrics; track metric.id) {
+    <div class="flex items-center justify-between rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-5 shadow-sm">
+      <div>
+        <p class="text-[12px] font-semibold uppercase tracking-wider text-on-surface-variant">{{ metric.label }}</p>
+        <p class="mt-1 text-[30px] font-bold leading-none" [class.text-primary]="metric.tone === 'primary'" [class.text-on-surface]="metric.tone !== 'primary'">{{ metric.value }}</p>
+        <p class="mt-2 flex items-center gap-1.5 text-[12px] text-on-surface-variant" [class.text-secondary]="metric.tone === 'secondary'">
+          <span class="material-symbols-outlined text-[15px]" [class.text-tertiary]="metric.tone === 'tertiary'" [class.text-secondary]="metric.tone === 'secondary'" aria-hidden="true">{{ metric.tone === 'primary' ? 'circle' : metric.tone === 'secondary' ? 'check_circle' : 'bolt' }}</span>
+          {{ metric.detail }}
+        </p>
+      </div>
+      <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-surface-container-low" [class.text-primary]="metric.tone === 'primary'" [class.text-secondary]="metric.tone === 'secondary'" [class.text-tertiary]="metric.tone === 'tertiary'">
+        <span class="material-symbols-outlined text-[24px]" aria-hidden="true">{{ metric.icon }}</span>
+      </div>
+    </div>
+  }
+</section>
+
+<section id="mis-reportes" class="flex flex-col gap-4">
+  <div class="flex flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-center">
+    <div class="flex items-center gap-2 overflow-x-auto">
+      <button type="button" (click)="selectStatus('')" [class]="selectedStatus() === '' ? 'shrink-0 rounded-full bg-primary px-4 py-1.5 text-[13px] font-medium text-on-primary transition-colors' : 'shrink-0 rounded-full border border-outline-variant/30 bg-surface-container-lowest px-4 py-1.5 text-[13px] font-medium text-on-surface-variant transition-colors hover:bg-surface-container'">Todos (4)</button>
+      <button type="button" (click)="selectStatus('en-proceso')" [class]="selectedStatus() === 'en-proceso' ? 'shrink-0 rounded-full bg-primary px-4 py-1.5 text-[13px] font-medium text-on-primary transition-colors' : 'shrink-0 rounded-full border border-outline-variant/30 bg-surface-container-lowest px-4 py-1.5 text-[13px] font-medium text-on-surface-variant transition-colors hover:bg-surface-container'">En Proceso (2)</button>
+      <button type="button" (click)="selectStatus('atendido')" [class]="selectedStatus() === 'atendido' ? 'shrink-0 rounded-full bg-primary px-4 py-1.5 text-[13px] font-medium text-on-primary transition-colors' : 'shrink-0 rounded-full border border-outline-variant/30 bg-surface-container-lowest px-4 py-1.5 text-[13px] font-medium text-on-surface-variant transition-colors hover:bg-surface-container'">Atendidos (1)</button>
+    </div>
+    <div class="relative sm:w-72">
+      <label for="citizenReportSearch" class="sr-only">Buscar por calle o identificador</label>
+      <input id="citizenReportSearch" type="search" [value]="search()" (input)="search.set($any($event.target).value)" placeholder="Buscar por calle o ID..." class="w-full rounded-full border border-outline-variant/40 bg-surface-container-lowest py-1.5 pl-9 pr-3 text-[13px] text-on-surface transition-colors placeholder:text-outline focus:border-primary focus:outline-none" />
+      <span class="material-symbols-outlined absolute left-3 top-2 text-[16px] text-outline" aria-hidden="true">search</span>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-3">
+    @for (report of filteredReports(); track report.key) {
+      <article class="flex flex-col items-start justify-between gap-5 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-5 shadow-sm transition-colors hover:border-outline-variant/60 md:flex-row md:items-center">
+        <div class="flex flex-1 items-start gap-4">
+          @if (report.image) {
+            <div class="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-outline-variant/30">
+              <img [src]="report.image" [alt]="report.imageAlt" loading="lazy" class="h-full w-full object-cover" />
+            </div>
+          } @else {
+            <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border border-outline-variant/30 bg-surface-container-low text-on-surface-variant">
+              <span class="material-symbols-outlined text-[28px]" aria-hidden="true">{{ report.fallbackIcon }}</span>
+            </div>
+          }
+
+          <div class="flex flex-col gap-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="rounded bg-primary-fixed/40 px-2 py-0.5 font-mono text-[11px] font-bold text-primary">{{ report.id }}</span>
+              <span class="text-[12px] text-on-surface-variant">{{ report.date }}</span>
+              <span [class]="'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ' + statusMeta(report.status).badge">
+                <span class="material-symbols-outlined text-[13px]" aria-hidden="true">{{ statusMeta(report.status).icon }}</span>
+                {{ statusMeta(report.status).label }}
+              </span>
+            </div>
+            <h2 class="text-[15px] font-bold text-on-surface">{{ report.title }}</h2>
+            <p class="flex items-center gap-1 text-[13px] text-on-surface-variant">
+              <span class="material-symbols-outlined text-[15px] text-primary" aria-hidden="true">location_on</span>
+              {{ report.location }}
+            </p>
+            <div class="mt-2 flex items-center gap-3">
+              <div class="h-1.5 w-40 overflow-hidden rounded-full bg-surface-container">
+                <div [class]="'h-full rounded-full ' + statusMeta(report.status).progress" [style.width.%]="report.progress"></div>
+              </div>
+              <span [class]="'text-[11px] font-medium ' + statusMeta(report.status).detail">{{ report.progressDetail }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex w-full shrink-0 items-center justify-between gap-2 border-t border-outline-variant/20 pt-2 md:w-auto md:flex-col md:items-end md:border-t-0 md:pt-0">
+          @if (report.rating) {
+            <div class="flex items-center text-[13px] text-secondary" title="Calificación del ciudadano" aria-label="Calificación de cinco estrellas">
+              @for (star of [].constructor(report.rating); track $index) {
+                <span class="material-symbols-outlined text-[16px]" aria-hidden="true">star</span>
+              }
+            </div>
+          } @else {
+            <span class="text-[12px] text-on-surface-variant">{{ report.delivery }}</span>
+          }
+          <button type="button" class="cursor-pointer rounded-full bg-surface-container px-4 py-2 text-[12px] font-semibold text-primary transition-colors hover:bg-surface-container-high">{{ report.actionLabel }}</button>
+        </div>
+      </article>
+    } @empty {
+      <div class="rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-space-xl text-center text-on-surface-variant">
+        No se encontraron reportes que coincidan con la búsqueda.
+      </div>
+    }
+  </div>
+</section>

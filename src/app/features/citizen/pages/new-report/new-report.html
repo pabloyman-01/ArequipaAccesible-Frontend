@@ -1,0 +1,157 @@
+<div class="flex w-full flex-col">
+  <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <nav aria-label="Ruta de navegación" class="flex items-center gap-2 font-label-md text-label-md text-on-surface-variant">
+      <a routerLink="/ciudadano" class="flex items-center gap-1.5 transition-colors hover:text-primary">
+        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">home</span>
+        Inicio
+      </a>
+      <span class="text-outline-variant" aria-hidden="true">/</span>
+      <span class="font-bold text-primary">Nuevo Reporte</span>
+    </nav>
+    <div class="inline-flex items-center gap-2 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm text-on-surface-variant shadow-sm">
+      <span class="h-2 w-2 animate-pulse rounded-full bg-secondary"></span>
+      <span class="material-symbols-outlined text-[15px] text-primary" aria-hidden="true">location_city</span>
+      Arequipa Centro Histórico • Sistema Georreferenciado
+    </div>
+  </div>
+
+  <div class="mb-8 flex flex-col gap-1.5">
+    <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Asistente de Reporte Urbano</span>
+    <h1 class="font-headline-xl text-headline-xl font-bold tracking-tight text-primary">Nuevo Reporte de Barrera Arquitectónica</h1>
+    <p class="max-w-3xl font-body-md text-body-md text-on-surface-variant">
+      Completa los 3 pasos para que las cuadrillas de OMAPED atiendan la incidencia de forma inmediata en cumplimiento de la Ley N° 29973.
+    </p>
+  </div>
+
+  <section aria-label="Progreso del reporte" class="mb-8 overflow-hidden rounded-xl bg-surface-container-lowest p-5 shadow-sm">
+    <ol class="grid grid-cols-1 gap-6 md:grid-cols-3">
+      <li class="relative flex items-center gap-4">
+        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-container font-headline-md text-headline-md font-bold text-on-primary shadow-md ring-4 ring-primary-fixed/60">1</span>
+        <span class="flex min-w-0 flex-col">
+          <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Paso activo</span>
+          <span class="truncate font-title-md text-title-md font-bold text-on-surface">Tipo y Severidad</span>
+        </span>
+        <span class="absolute right-0 top-1/2 hidden h-0.5 w-8 -translate-y-1/2 bg-outline-variant/40 md:block" aria-hidden="true"></span>
+      </li>
+      <li class="relative flex items-center gap-4 opacity-60">
+        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-surface-container-high font-headline-md text-headline-md font-bold text-on-surface-variant">2</span>
+        <span class="flex min-w-0 flex-col">
+          <span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline">Paso 2</span>
+          <span class="truncate font-title-md text-title-md font-semibold text-on-surface">Evidencia y Ubicación</span>
+        </span>
+        <span class="absolute right-0 top-1/2 hidden h-0.5 w-8 -translate-y-1/2 bg-outline-variant/40 md:block" aria-hidden="true"></span>
+      </li>
+      <li class="flex items-center gap-4 opacity-50">
+        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-surface-container-high font-headline-md text-headline-md font-bold text-on-surface-variant">3</span>
+        <span class="flex min-w-0 flex-col">
+          <span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline">Paso 3</span>
+          <span class="truncate font-title-md text-title-md font-semibold text-on-surface">Descripción Final</span>
+        </span>
+      </li>
+    </ol>
+  </section>
+
+  <form class="flex flex-col gap-8" aria-label="Paso 1 del nuevo reporte">
+    <section class="flex flex-col gap-6 overflow-hidden rounded-xl bg-surface-container-lowest p-6 shadow-sm md:p-8">
+      <div class="flex flex-col gap-1">
+        <div class="flex items-center gap-2">
+          <span class="h-5 w-1.5 rounded-full bg-primary-container"></span>
+          <h2 class="font-headline-md text-headline-md font-bold text-on-surface">1. Tipo de Barrera Urbana</h2>
+        </div>
+        <p class="pl-3.5 font-body-md text-body-md text-on-surface-variant">Selecciona el impedimento arquitectónico o de tránsito en la vía pública (Catálogo Oficial OMAPED):</p>
+      </div>
+
+      <div role="radiogroup" aria-label="Tipos de barrera urbana" class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        @for (barrier of barriers; track barrier.key) {
+          <button type="button" role="radio" [attr.aria-checked]="selectedBarrier() === barrier.key" (click)="selectBarrier(barrier.key)" [class]="'flex min-h-72 cursor-pointer flex-col justify-between rounded-xl p-5 text-left transition-all duration-200 ' + selectionClass(selectedBarrier() === barrier.key)">
+            <span>
+              <span class="mb-4 flex items-start justify-between">
+                <span [class]="'flex h-12 w-12 items-center justify-center rounded-xl ' + (selectedBarrier() === barrier.key ? 'bg-primary-container text-on-primary shadow-sm' : 'bg-surface-container-highest text-primary-container')">
+                  <span class="material-symbols-outlined text-[26px]" aria-hidden="true">{{ barrier.icon }}</span>
+                </span>
+                @if (selectedBarrier() === barrier.key) {
+                  <span class="flex h-6 w-6 items-center justify-center rounded-full bg-primary-container text-on-primary">
+                    <span class="material-symbols-outlined text-[16px] font-bold" aria-hidden="true">check</span>
+                  </span>
+                }
+              </span>
+              <span class="mb-1.5 block font-title-md text-title-md font-bold text-on-surface">{{ barrier.title }}</span>
+              <span class="block font-body-sm text-body-sm text-on-surface-variant">{{ barrier.description }}</span>
+            </span>
+            <span [class]="'mt-4 flex items-center gap-1.5 border-t border-outline-variant/20 pt-3 font-label-sm text-label-sm font-semibold ' + (selectedBarrier() === barrier.key ? 'text-primary' : 'text-on-surface-variant')">
+              <span class="material-symbols-outlined text-[15px]" aria-hidden="true">{{ selectedBarrier() === barrier.key ? 'verified' : 'info' }}</span>
+              Código OMAPED: {{ barrier.code }}
+            </span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <section class="flex flex-col gap-6 overflow-hidden rounded-xl bg-surface-container-lowest p-6 shadow-sm md:p-8">
+      <div class="flex flex-col gap-1">
+        <div class="flex items-center gap-2">
+          <span class="h-5 w-1.5 rounded-full bg-primary-container"></span>
+          <h2 class="font-headline-md text-headline-md font-bold text-on-surface">2. Nivel de Afectación Inmediata (Prioridad)</h2>
+        </div>
+        <p class="pl-3.5 font-body-md text-body-md text-on-surface-variant">Indica cómo afecta este obstáculo al desplazamiento de las personas para dimensionar la cuadrilla técnica:</p>
+      </div>
+
+      <div role="radiogroup" aria-label="Nivel de prioridad" class="grid grid-cols-1 gap-5 md:grid-cols-3">
+        @for (severity of severities; track severity.key) {
+          <button type="button" role="radio" [attr.aria-checked]="selectedSeverity() === severity.key" (click)="selectSeverity(severity.key)" [class]="'flex min-h-72 cursor-pointer flex-col justify-between rounded-xl p-6 text-left transition-all duration-200 ' + selectionClass(selectedSeverity() === severity.key)">
+            <span class="flex flex-col gap-3">
+              <span class="flex items-center justify-between gap-3">
+                <span [class]="'inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-label-sm text-label-sm font-bold tracking-wide ' + severity.badgeClass">
+                  @if (severity.key === 'critica') {
+                    <span class="h-2 w-2 animate-ping rounded-full bg-error"></span>
+                  }
+                  {{ severity.badge }}
+                </span>
+                @if (selectedSeverity() === severity.key) {
+                  <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-container text-on-primary">
+                    <span class="material-symbols-outlined text-[16px] font-bold" aria-hidden="true">check</span>
+                  </span>
+                }
+              </span>
+              <span class="font-headline-md text-headline-md font-bold leading-tight text-on-surface">{{ severity.title }}</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant">{{ severity.description }}</span>
+            </span>
+            <span [class]="'mt-5 flex items-center gap-2 border-t border-outline-variant/20 pt-3 font-label-sm text-label-sm font-semibold ' + (selectedSeverity() === severity.key ? 'text-primary' : 'text-on-surface-variant')">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">{{ severity.icon }}</span>
+              {{ severity.response }}
+            </span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <aside class="flex flex-col items-center justify-between gap-5 rounded-xl bg-surface-container-low p-5 shadow-sm md:flex-row">
+      <div class="flex items-center gap-4">
+        <img src="images/citizen/barrier-reference.png" alt="Rampa de vereda deteriorada en el Centro Histórico de Arequipa" loading="lazy" class="h-16 w-16 shrink-0 rounded-xl object-cover shadow-sm" />
+        <div class="flex flex-col">
+          <span class="font-label-md text-label-md font-bold text-primary">¿Tienes dudas sobre el tipo de barrera?</span>
+          <span class="font-body-sm text-body-sm text-on-surface-variant">El personal de fiscalización municipal verificará la clasificación técnica durante la visita en campo con equipo especializado.</span>
+        </div>
+      </div>
+      <div class="flex shrink-0 items-center gap-2">
+        <span class="material-symbols-outlined text-[18px] text-secondary" aria-hidden="true">verified_user</span>
+        <span class="font-label-sm text-label-sm font-bold text-secondary">Validado por OMAPED Arequipa</span>
+      </div>
+    </aside>
+
+    <footer class="mt-2 flex flex-col items-center justify-between gap-4 overflow-hidden rounded-xl bg-surface-container-lowest p-4 shadow-sm sm:flex-row md:p-6">
+      <a routerLink="/ciudadano" class="inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 font-label-lg text-label-lg text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-primary sm:w-auto">
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">arrow_back</span>
+        Cancelar y Volver al Inicio
+      </a>
+      <div class="order-last flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant sm:order-none">
+        <span class="material-symbols-outlined text-[18px] text-outline" aria-hidden="true">cloud_done</span>
+        Borrador guardado automáticamente
+      </div>
+      <a routerLink="/ciudadano/nuevo-reporte/evidencia" class="inline-flex min-h-[52px] w-full cursor-pointer items-center justify-center gap-2.5 rounded-full bg-primary-container px-8 py-3.5 font-label-lg text-label-lg font-bold text-on-primary shadow-md transition-all hover:bg-primary sm:w-auto">
+        Continuar al Paso 2 (Evidencia)
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">arrow_forward</span>
+      </a>
+    </footer>
+  </form>
+</div>
