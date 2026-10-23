@@ -11,4 +11,12 @@ export const AUTH_ROUTES: Routes = [
     title: 'Registro Ciudadano | Arequipa Accesible',
     loadComponent: () => import('./pages/register/register').then((module) => module.Register),
   },
+  {
+    path: 'recuperar-contrasena',
+    title: 'Recuperar Contraseña | Arequipa Accesible',
+    loadComponent: () =>
+      import('./pages/password-recovery/password-recovery').then(
+        (module) => module.PasswordRecovery,
+      ),
+  },
 ];
