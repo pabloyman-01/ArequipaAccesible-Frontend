@@ -1,0 +1,248 @@
+<div class="flex flex-col overflow-hidden rounded-lg bg-surface-container-lowest shadow-sm">
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-[980px] border-collapse text-left">
+      <caption class="sr-only">
+        Listado de reportes de barreras de accesibilidad
+      </caption>
+      <thead>
+        <tr
+          class="bg-surface-container-high/50 font-label-md text-label-md uppercase tracking-wider text-on-surface"
+        >
+          <th scope="col" class="px-space-md py-space-md">Reporte ID</th>
+          <th scope="col" class="px-space-md py-space-md">Fecha</th>
+          <th scope="col" class="px-space-md py-space-md">Ciudadano</th>
+          <th scope="col" class="px-space-md py-space-md">Categoría Barrera</th>
+          <th scope="col" class="px-space-md py-space-md">Ubicación</th>
+          <th scope="col" class="px-space-md py-space-md">Estado</th>
+          <th scope="col" class="px-space-md py-space-md text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="font-body-md text-body-md text-on-surface">
+        @for (report of reports(); track report.key) {
+          <tr class="group transition-colors hover:bg-surface-container-low/70">
+            <td class="px-space-md py-space-md">
+              <span class="font-label-lg text-label-lg font-bold tracking-tight text-primary">{{
+                report.id
+              }}</span>
+              <span class="block font-label-sm text-label-sm text-outline">{{
+                report.urgency
+              }}</span>
+            </td>
+
+            <td class="whitespace-nowrap px-space-md py-space-md font-medium text-on-surface-variant">
+              {{ report.date }}
+            </td>
+
+            <td class="px-space-md py-space-md">
+              <div class="flex items-center gap-space-xs">
+                <span
+                  class="flex h-7 w-7 items-center justify-center rounded-full bg-surface-container-high font-label-sm text-label-sm font-bold text-primary"
+                  aria-hidden="true"
+                  >{{ report.citizen.initials }}</span
+                >
+                <span class="font-semibold text-on-surface">{{ report.citizen.name }}</span>
+              </div>
+            </td>
+
+            <td class="px-space-md py-space-md">
+              <span
+                [class]="
+                  'inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-label-sm text-label-sm font-semibold ' +
+                  barrierToneMeta(report.barrierTone).badge
+                "
+              >
+                <span
+                  [class]="'h-1.5 w-1.5 rounded-full ' + barrierToneMeta(report.barrierTone).dot"
+                  aria-hidden="true"
+                ></span>
+                {{ report.barrier }}
+              </span>
+            </td>
+
+            <td class="px-space-md py-space-md">
+              <div class="flex items-center gap-space-sm">
+                <div class="relative h-14 w-14 shrink-0 overflow-hidden rounded shadow-sm">
+                  <img
+                    [src]="report.location.image"
+                    [alt]="report.location.alt"
+                    loading="lazy"
+                    class="h-full w-full object-cover"
+                  />
+                  <div class="absolute inset-0 bg-surface-container/20"></div>
+                  <span
+                    class="material-symbols-outlined absolute inset-0 m-auto h-fit w-fit text-[20px] text-primary drop-shadow"
+                    aria-hidden="true"
+                    >location_on</span
+                  >
+                </div>
+                <div class="flex max-w-[190px] flex-col">
+                  <span class="line-clamp-1 font-label-lg text-label-lg font-bold text-on-surface">{{
+                    report.location.address
+                  }}</span>
+                  <span class="font-label-sm text-label-sm text-on-surface-variant">{{
+                    report.location.district
+                  }}</span>
+                </div>
+              </div>
+            </td>
+
+            <td class="relative px-space-md py-space-md">
+              <div class="relative inline-block w-40">
+                <button
+                  type="button"
+                  [attr.aria-expanded]="openMenuKey() === report.key"
+                  [attr.aria-controls]="'status-menu-' + report.key"
+                  [attr.aria-label]="'Estado del reporte ' + report.id + ': ' + statusMeta(report.status).label"
+                  aria-haspopup="listbox"
+                  (click)="toggleStatusMenu(report.key, $event)"
+                  [class]="
+                    'flex w-full items-center justify-between rounded-full px-3 py-1.5 font-label-md text-label-md font-bold shadow-sm transition-colors ' +
+                    statusMeta(report.status).button
+                  "
+                >
+                  <span class="inline-flex items-center gap-1.5">
+                    <span
+                      [class]="'h-2 w-2 rounded-full ' + statusMeta(report.status).dot"
+                      aria-hidden="true"
+                    ></span>
+                    {{ statusMeta(report.status).label }}
+                  </span>
+                  <span
+                    [class]="
+                      'material-symbols-outlined text-[16px] ' + statusMeta(report.status).icon
+                    "
+                    aria-hidden="true"
+                    >expand_more</span
+                  >
+                </button>
+
+                @if (openMenuKey() === report.key) {
+                  <div
+                    [id]="'status-menu-' + report.key"
+                    role="listbox"
+                    [attr.aria-label]="'Cambiar estado del reporte ' + report.id"
+                    class="absolute left-0 top-full z-30 mt-1 flex w-44 flex-col gap-0.5 rounded-lg bg-surface-container-lowest p-1.5 shadow-xl"
+                  >
+                    @for (option of statusOptions; track option) {
+                      <button
+                        type="button"
+                        role="option"
+                        [attr.aria-selected]="report.status === option"
+                        (click)="chooseStatus(report.key, option, $event)"
+                        [class]="
+                          'flex w-full items-center gap-2 rounded px-3 py-1.5 text-left font-label-md text-label-md transition-colors hover:bg-surface-container-low ' +
+                          (report.status === option
+                            ? statusMeta(option).menuActive
+                            : 'text-on-surface')
+                        "
+                      >
+                        <span
+                          [class]="'h-2 w-2 rounded-full ' + statusMeta(option).dot"
+                          aria-hidden="true"
+                        ></span>
+                        {{ statusMeta(option).label }}
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+            </td>
+
+            <td class="px-space-md py-space-md text-center">
+              <div class="flex items-center justify-center gap-space-xs">
+                <button
+                  type="button"
+                  title="Ver detalles"
+                  [attr.aria-label]="'Ver detalles del reporte ' + report.id"
+                  class="flex h-8 w-8 items-center justify-center rounded-full bg-surface-container text-on-surface transition-colors hover:bg-surface-container-high"
+                >
+                  <span class="material-symbols-outlined text-[18px]" aria-hidden="true"
+                    >visibility</span
+                  >
+                </button>
+                <button
+                  type="button"
+                  [title]="secondaryActionMeta(report.secondaryAction).label"
+                  [attr.aria-label]="
+                    secondaryActionMeta(report.secondaryAction).label + ' del reporte ' + report.id
+                  "
+                  class="flex h-8 w-8 items-center justify-center rounded-full bg-surface-container text-on-surface transition-colors hover:bg-surface-container-high"
+                >
+                  <span class="material-symbols-outlined text-[18px]" aria-hidden="true">{{
+                    secondaryActionMeta(report.secondaryAction).icon
+                  }}</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7" class="px-space-md py-space-xl text-center text-on-surface-variant">
+              No se encontraron reportes con los filtros seleccionados.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="flex flex-col items-center justify-between gap-space-sm bg-surface-container-high/40 px-space-md py-space-sm sm:flex-row"
+  >
+    <span class="font-body-sm text-body-sm font-medium text-on-surface-variant">
+      Mostrando
+      <span class="font-bold text-on-surface"
+        >{{ reports().length ? 1 : 0 }} - {{ reports().length }}</span
+      >
+      de <span class="font-bold text-on-surface">{{ total() }}</span> reportes urbanos
+    </span>
+
+    <nav aria-label="Paginación de reportes" class="flex items-center gap-space-xs">
+      <button
+        type="button"
+        disabled
+        aria-label="Página anterior"
+        class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-surface-container-lowest text-on-surface-variant shadow-sm disabled:opacity-40"
+      >
+        <span class="material-symbols-outlined text-[18px]" aria-hidden="true">chevron_left</span>
+      </button>
+      <button
+        type="button"
+        aria-current="page"
+        aria-label="Página 1"
+        class="h-8 w-8 rounded-full bg-primary-container font-label-md text-label-md font-bold text-on-primary shadow-sm"
+      >
+        1
+      </button>
+      <button
+        type="button"
+        aria-label="Página 2"
+        class="h-8 w-8 rounded-full bg-surface-container-lowest font-label-md text-label-md text-on-surface shadow-sm transition-colors hover:bg-surface-container-high"
+      >
+        2
+      </button>
+      <button
+        type="button"
+        aria-label="Página 3"
+        class="h-8 w-8 rounded-full bg-surface-container-lowest font-label-md text-label-md text-on-surface shadow-sm transition-colors hover:bg-surface-container-high"
+      >
+        3
+      </button>
+      <span class="px-1 font-bold text-outline" aria-hidden="true">...</span>
+      <button
+        type="button"
+        aria-label="Página 6"
+        class="h-8 w-8 rounded-full bg-surface-container-lowest font-label-md text-label-md text-on-surface shadow-sm transition-colors hover:bg-surface-container-high"
+      >
+        6
+      </button>
+      <button
+        type="button"
+        aria-label="Página siguiente"
+        class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-surface-container-lowest text-on-surface-variant shadow-sm hover:text-on-surface"
+      >
+        <span class="material-symbols-outlined text-[18px]" aria-hidden="true">chevron_right</span>
+      </button>
+    </nav>
+  </div>
+</div>

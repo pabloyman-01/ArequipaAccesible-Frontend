@@ -35,6 +35,7 @@
       <a
         routerLink="/"
         routerLinkActive
+        [routerLinkActiveOptions]="{ exact: true }"
         #dashboardLink="routerLinkActive"
         [class]="dashboardLink.isActive ? activeLinkClass : inactiveLinkClass"
         [attr.aria-current]="dashboardLink.isActive ? 'page' : null"
@@ -43,14 +44,17 @@
         <span>Dashboard</span>
       </a>
 
-      <span
-        aria-disabled="true"
-        title="Disponible próximamente"
-        class="flex cursor-not-allowed items-center gap-space-sm rounded-full px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant opacity-60"
+      <a
+        routerLink="/reportes"
+        routerLinkActive
+        [routerLinkActiveOptions]="{ exact: true }"
+        #reportsLink="routerLinkActive"
+        [class]="reportsLink.isActive ? activeLinkClass : inactiveLinkClass"
+        [attr.aria-current]="reportsLink.isActive ? 'page' : null"
       >
         <span class="material-symbols-outlined text-[20px]" aria-hidden="true">assignment</span>
         <span>Lista de Reportes</span>
-      </span>
+      </a>
 
       <span
         aria-disabled="true"
