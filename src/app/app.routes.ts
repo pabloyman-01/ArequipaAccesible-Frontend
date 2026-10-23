@@ -2,6 +2,10 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'inicio-sesion',
+    loadChildren: () => import('./features/auth/auth.routes').then((module) => module.AUTH_ROUTES),
+  },
+  {
     path: 'ciudadano',
     loadChildren: () =>
       import('./features/citizen/citizen.routes').then((module) => module.CITIZEN_ROUTES),
