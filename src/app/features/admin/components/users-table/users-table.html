@@ -1,0 +1,208 @@
+<div class="flex flex-col overflow-hidden rounded-lg bg-surface-container-lowest shadow-[0_2px_8px_rgba(30,24,24,0.04)]">
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-[1120px] border-collapse text-left">
+      <caption class="sr-only">
+        Listado de usuarios y roles del sistema municipal
+      </caption>
+      <thead>
+        <tr
+          class="bg-surface-container font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant"
+        >
+          <th scope="col" class="rounded-l-2xl px-space-md py-3">Usuario</th>
+          <th scope="col" class="px-space-md py-3">DNI</th>
+          <th scope="col" class="px-space-md py-3">Correo Electrónico</th>
+          <th scope="col" class="px-space-md py-3">Rol &amp; Dependencia</th>
+          <th scope="col" class="px-space-md py-3">Jurisdicción / Sector</th>
+          <th scope="col" class="px-space-md py-3">Intervenciones</th>
+          <th scope="col" class="rounded-r-2xl px-space-md py-3 text-right">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-transparent font-body-md text-body-md">
+        @for (user of users(); track user.key) {
+          <tr class="group transition-colors hover:bg-surface-container-low/70">
+            <td class="px-space-md py-space-md">
+              <div class="flex items-center gap-space-sm">
+                <div
+                  [class]="
+                    'relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full font-title-md text-title-md font-bold ' +
+                    avatarToneMeta(user.avatarTone).background
+                  "
+                  [attr.title]="'Estado: ' + statusMeta(user.status).label"
+                >
+                  @if (user.image) {
+                    <img
+                      [src]="user.image"
+                      [alt]="user.imageAlt"
+                      loading="lazy"
+                      class="h-full w-full object-cover"
+                    />
+                  } @else {
+                    {{ user.initials }}
+                  }
+                  <span
+                    [class]="
+                      'absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full shadow-[0_0_0_2px_#ffffff] ' +
+                      statusMeta(user.status).dot
+                    "
+                    aria-hidden="true"
+                  ></span>
+                </div>
+
+                <div class="flex min-w-0 items-center gap-1">
+                  <span class="truncate font-title-md text-title-md font-semibold text-on-surface">{{
+                    user.name
+                  }}</span>
+                  @if (user.role === 'ciudadano' && user.verified) {
+                    <span
+                      class="material-symbols-outlined shrink-0 text-[16px] text-green-600"
+                      title="DNI Verificado RENIEC"
+                      aria-label="DNI Verificado RENIEC"
+                      >verified</span
+                    >
+                  }
+                </div>
+              </div>
+            </td>
+
+            <td class="whitespace-nowrap px-space-md py-space-md">
+              <span class="font-body-md font-medium text-on-surface">{{ user.dni }}</span>
+            </td>
+
+            <td class="whitespace-nowrap px-space-md py-space-md">
+              <span class="font-body-sm text-body-sm text-on-surface-variant">{{ user.email }}</span>
+            </td>
+
+            <td class="whitespace-nowrap px-space-md py-space-md">
+              <span
+                [class]="
+                  'inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-label-sm text-label-sm ' +
+                  roleMeta(user.role).badge
+                "
+              >
+                <span class="material-symbols-outlined text-[13px]" aria-hidden="true">{{
+                  roleMeta(user.role).icon
+                }}</span>
+                {{ roleMeta(user.role).label }}
+              </span>
+              <span class="mt-0.5 block font-label-sm text-label-sm text-outline">{{
+                user.dependency
+              }}</span>
+            </td>
+
+            <td class="px-space-md py-space-md">
+              <span class="block font-body-md font-medium text-on-surface">{{
+                user.jurisdiction.area
+              }}</span>
+              <span class="font-label-sm text-label-sm text-outline">{{
+                user.jurisdiction.sector
+              }}</span>
+            </td>
+
+            <td class="whitespace-nowrap px-space-md py-space-md">
+              <span class="font-label-lg text-label-lg font-bold text-on-surface">{{
+                user.interventions
+              }}</span>
+              <span class="block font-body-sm text-body-sm text-outline">{{
+                user.interventionLabel
+              }}</span>
+            </td>
+
+            <td class="whitespace-nowrap px-space-md py-space-md text-right">
+              <div class="flex items-center justify-end gap-1">
+                <button
+                  type="button"
+                  [title]="primaryActionMeta(user.primaryAction).label"
+                  [attr.aria-label]="primaryActionMeta(user.primaryAction).label + ' de ' + user.name"
+                  [class]="
+                    'flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-colors ' +
+                    primaryActionMeta(user.primaryAction).button
+                  "
+                >
+                  <span class="material-symbols-outlined text-[18px]" aria-hidden="true">{{
+                    primaryActionMeta(user.primaryAction).icon
+                  }}</span>
+                </button>
+                <button
+                  type="button"
+                  title="Opciones"
+                  [attr.aria-label]="'Más opciones para ' + user.name"
+                  class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-surface-container text-outline transition-colors hover:bg-surface-container-high hover:text-on-surface"
+                >
+                  <span class="material-symbols-outlined text-[18px]" aria-hidden="true"
+                    >more_vert</span
+                  >
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7" class="px-space-md py-space-xl text-center text-on-surface-variant">
+              No se encontraron usuarios con los filtros seleccionados.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="flex flex-col items-center justify-between gap-space-md px-space-md pb-space-md pt-space-sm sm:flex-row"
+  >
+    <span class="font-label-sm text-label-sm text-outline">
+      Mostrando
+      <span class="font-bold text-on-surface"
+        >{{ users().length ? 1 : 0 }} - {{ users().length }}</span
+      >
+      de <span class="font-bold text-on-surface">{{ total() | number }}</span> usuarios registrados
+    </span>
+
+    <nav aria-label="Paginación de usuarios" class="flex items-center gap-1">
+      <button
+        type="button"
+        disabled
+        aria-label="Página anterior"
+        class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-surface-container-low text-outline transition-colors hover:bg-surface-container hover:text-on-surface disabled:opacity-40"
+      >
+        <span class="material-symbols-outlined text-[18px]" aria-hidden="true">chevron_left</span>
+      </button>
+      <button
+        type="button"
+        aria-current="page"
+        aria-label="Página 1"
+        class="h-8 w-8 rounded-full bg-primary-container font-label-md text-label-md font-bold text-on-primary shadow-sm"
+      >
+        1
+      </button>
+      <button
+        type="button"
+        aria-label="Página 2"
+        class="h-8 w-8 rounded-full bg-surface-container-low font-label-md text-label-md text-on-surface transition-colors hover:bg-surface-container"
+      >
+        2
+      </button>
+      <button
+        type="button"
+        aria-label="Página 3"
+        class="h-8 w-8 rounded-full bg-surface-container-low font-label-md text-label-md text-on-surface transition-colors hover:bg-surface-container"
+      >
+        3
+      </button>
+      <span class="px-1 font-label-md text-label-md text-outline" aria-hidden="true">...</span>
+      <button
+        type="button"
+        aria-label="Página 7"
+        class="h-8 w-8 rounded-full bg-surface-container-low font-label-md text-label-md text-on-surface transition-colors hover:bg-surface-container"
+      >
+        7
+      </button>
+      <button
+        type="button"
+        aria-label="Página siguiente"
+        class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-surface-container-low text-outline transition-colors hover:bg-surface-container hover:text-on-surface"
+      >
+        <span class="material-symbols-outlined text-[18px]" aria-hidden="true">chevron_right</span>
+      </button>
+    </nav>
+  </div>
+</div>
