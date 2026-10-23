@@ -56,14 +56,17 @@
         <span>Lista de Reportes</span>
       </a>
 
-      <span
-        aria-disabled="true"
-        title="Disponible próximamente"
-        class="flex cursor-not-allowed items-center gap-space-sm rounded-full px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant opacity-60"
+      <a
+        routerLink="/usuarios"
+        routerLinkActive
+        [routerLinkActiveOptions]="{ exact: true }"
+        #usersLink="routerLinkActive"
+        [class]="usersLink.isActive ? activeLinkClass : inactiveLinkClass"
+        [attr.aria-current]="usersLink.isActive ? 'page' : null"
       >
         <span class="material-symbols-outlined text-[20px]" aria-hidden="true">group</span>
         <span>Gestión de Usuarios</span>
-      </span>
+      </a>
     </nav>
   </div>
 </aside>
