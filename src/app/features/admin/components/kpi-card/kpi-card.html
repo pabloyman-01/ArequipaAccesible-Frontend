@@ -3,7 +3,7 @@
     'flex h-full flex-col justify-between rounded-2xl border p-space-md shadow-sm ' + theme().card
   "
 >
-  <div class="flex items-start justify-between gap-space-sm">
+  <div class="flex items-start justify-between gap-space-sm text-center sm:text-left">
     <span [class]="'font-label-sm text-label-sm font-semibold uppercase tracking-wider ' + theme().label">
       {{ kpi().label }}
     </span>
@@ -16,12 +16,12 @@
     </div>
   </div>
 
-  <div class="mt-space-sm">
+  <div class="mt-space-sm text-center sm:text-left">
     <div [class]="'font-headline-xl text-headline-xl font-extrabold leading-none ' + theme().value">
       {{ kpi().value }}
     </div>
 
-    <div class="mt-space-xs flex flex-wrap items-center gap-1">
+    <div class="mt-space-xs flex flex-wrap items-center justify-center gap-1 sm:justify-start">
       @if (kpi().indicatorIcon) {
         <span [class]="'material-symbols-outlined ' + theme().indicatorIcon" aria-hidden="true">{{
           kpi().indicatorIcon
