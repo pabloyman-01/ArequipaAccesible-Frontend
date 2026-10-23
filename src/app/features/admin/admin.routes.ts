@@ -8,9 +8,17 @@ export const ADMIN_ROUTES: Routes = [
     children: [
       {
         path: '',
+        pathMatch: 'full',
         title: 'Dashboard | Arequipa Accesible',
+        data: { breadcrumb: 'Dashboard de Gestión' },
         loadComponent: () =>
           import('./pages/dashboard/dashboard').then((module) => module.Dashboard),
+      },
+      {
+        path: 'reportes',
+        title: 'Gestión de Reportes | Arequipa Accesible',
+        data: { breadcrumb: 'Plataforma Municipal de Accesibilidad' },
+        loadComponent: () => import('./pages/reports/reports').then((module) => module.Reports),
       },
     ],
   },

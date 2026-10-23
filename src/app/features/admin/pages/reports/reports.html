@@ -1,0 +1,61 @@
+<div class="flex w-full flex-col gap-space-lg pb-space-xl">
+  <div class="flex flex-col justify-between gap-space-md xl:flex-row xl:items-end">
+    <div class="flex flex-col gap-space-xs">
+      <div class="flex items-center gap-space-xs">
+        <span class="inline-flex h-2.5 w-2.5 items-center justify-center rounded-full bg-secondary" aria-hidden="true"></span>
+        <span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline"
+          >Supervisión Municipal • SG-ACC-2023</span
+        >
+      </div>
+      <h1 class="font-headline-xl text-headline-xl font-bold tracking-tight text-primary">
+        Panel de Gestión de Reportes
+      </h1>
+      <p class="max-w-2xl font-body-md text-body-md text-on-surface-variant">
+        Central de monitoreo de barreras arquitectónicas, urbanísticas y de transporte en el Centro
+        Histórico y distritos metropolitanos de Arequipa.
+      </p>
+    </div>
+
+    <div class="flex shrink-0 flex-wrap items-center gap-space-sm">
+      <button
+        type="button"
+        class="flex cursor-pointer items-center gap-space-xs rounded-full bg-surface-container px-space-md py-space-sm font-label-lg text-label-lg text-on-surface shadow-sm transition-all duration-200 hover:bg-surface-container-high"
+      >
+        <span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true"
+          >download</span
+        >
+        <span>Exportar CSV</span>
+      </button>
+      <button
+        type="button"
+        class="flex cursor-pointer items-center gap-space-xs rounded-full bg-surface-container px-space-md py-space-sm font-label-lg text-label-lg text-on-surface shadow-sm transition-all duration-200 hover:bg-surface-container-high"
+      >
+        <span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true"
+          >picture_as_pdf</span
+        >
+        <span>Informe PDF</span>
+      </button>
+      <button
+        type="button"
+        class="flex cursor-pointer items-center gap-space-xs rounded-full bg-primary-container px-space-lg py-space-sm font-label-lg text-label-lg text-on-primary shadow-md transition-all duration-200 hover:bg-primary"
+      >
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">add_circle</span>
+        <span>Nuevo Expediente</span>
+      </button>
+    </div>
+  </div>
+
+  <app-reports-filters
+    [(search)]="search"
+    [(district)]="district"
+    [(barrierType)]="barrierType"
+    [(status)]="status"
+    [total]="totalRegistered"
+  />
+
+  <app-reports-table
+    [reports]="filteredReports()"
+    [total]="totalRegistered"
+    (statusChange)="changeStatus($event)"
+  />
+</div>

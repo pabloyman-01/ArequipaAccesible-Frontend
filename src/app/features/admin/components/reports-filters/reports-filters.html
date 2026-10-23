@@ -1,0 +1,87 @@
+<div
+  class="flex flex-col items-stretch justify-between gap-space-md rounded-lg bg-surface-container-lowest p-space-md shadow-sm lg:flex-row lg:items-center"
+>
+  <div class="flex flex-1 flex-wrap items-center gap-space-sm">
+    <div class="relative min-w-[260px] max-w-md flex-1">
+      <label for="globalSearch" class="sr-only">Buscar reporte, ciudadano o dirección</label>
+      <span
+        class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[20px] text-outline"
+        aria-hidden="true"
+        >search</span
+      >
+      <input
+        id="globalSearch"
+        type="search"
+        [value]="search()"
+        (input)="search.set($any($event.target).value)"
+        placeholder="Buscar reporte, ciudadano o dirección..."
+        class="w-full rounded-full bg-surface-container-low py-2.5 pl-11 pr-4 font-body-md text-body-md text-on-surface transition-all placeholder:text-outline focus:bg-surface-container focus:outline-none"
+      />
+    </div>
+
+    <div class="relative">
+      <label for="districtFilter" class="sr-only">Filtrar por distrito</label>
+      <select
+        id="districtFilter"
+        [value]="district()"
+        (change)="district.set($any($event.target).value)"
+        class="cursor-pointer appearance-none rounded-full bg-surface-container-low py-2.5 pl-4 pr-10 font-label-lg text-label-lg text-on-surface transition-colors focus:bg-surface-container focus:outline-none"
+      >
+        @for (option of districtOptions; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+      <span
+        class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-outline"
+        aria-hidden="true"
+        >expand_more</span
+      >
+    </div>
+
+    <div class="relative">
+      <label for="barrierFilter" class="sr-only">Filtrar por tipo de barrera</label>
+      <select
+        id="barrierFilter"
+        [value]="barrierType()"
+        (change)="barrierType.set($any($event.target).value)"
+        class="cursor-pointer appearance-none rounded-full bg-surface-container-low py-2.5 pl-4 pr-10 font-label-lg text-label-lg text-on-surface transition-colors focus:bg-surface-container focus:outline-none"
+      >
+        @for (option of barrierOptions; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+      <span
+        class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-outline"
+        aria-hidden="true"
+        >tune</span
+      >
+    </div>
+
+    <div class="relative">
+      <label for="statusFilter" class="sr-only">Filtrar por estado</label>
+      <select
+        id="statusFilter"
+        [value]="status()"
+        (change)="status.set($any($event.target).value)"
+        class="cursor-pointer appearance-none rounded-full bg-surface-container-low py-2.5 pl-4 pr-10 font-label-lg text-label-lg text-on-surface transition-colors focus:bg-surface-container focus:outline-none"
+      >
+        @for (option of statusOptions; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+      <span
+        class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-outline"
+        aria-hidden="true"
+        >filter_alt</span
+      >
+    </div>
+  </div>
+
+  <div
+    class="flex shrink-0 items-center gap-space-xs self-end font-label-sm text-label-sm text-on-surface-variant lg:self-center"
+  >
+    <span class="h-2 w-2 rounded-full bg-secondary-container" aria-hidden="true"></span>
+    <span class="font-semibold text-on-surface">{{ total() }}</span>
+    <span>reportes registrados</span>
+  </div>
+</div>
