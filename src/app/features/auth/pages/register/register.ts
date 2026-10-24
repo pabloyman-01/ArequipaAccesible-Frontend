@@ -17,6 +17,7 @@ export class Register {
   readonly busy = signal(false);
   readonly error = signal('');
   readonly done = signal(false);
+  readonly awaitingConfirmation = signal(false);
   async submit() {
     if (this.busy() || this.done()) return;
     this.error.set('');
@@ -29,6 +30,7 @@ export class Register {
       const session = await this.auth.signup(this.email.trim(), this.password);
       this.password = '';
       this.confirmation = '';
+      this.awaitingConfirmation.set(!session);
       this.done.set(true);
       if (session) await this.router.navigateByUrl('/inicio-sesion/completar-perfil');
     } catch (error) {

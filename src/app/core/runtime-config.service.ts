@@ -37,4 +37,18 @@ export class RuntimeConfigService {
       (target.pathname === base.pathname || target.pathname.startsWith(base.pathname + '/'))
     );
   }
+  async emailConfirmationRequired(): Promise<boolean> {
+    const response = await fetch(this.value.supabaseUrl + '/auth/v1/settings', {
+      headers: { apikey: this.value.supabasePublishableKey },
+      cache: 'no-store',
+      redirect: 'error',
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!response.ok)
+      throw new Error('No se pudo consultar la configuración de registro de Supabase.');
+    const settings = await response.json();
+    if (typeof settings.mailer_autoconfirm !== 'boolean')
+      throw new Error('Supabase no informó la configuración de confirmación de correo.');
+    return !settings.mailer_autoconfirm;
+  }
 }

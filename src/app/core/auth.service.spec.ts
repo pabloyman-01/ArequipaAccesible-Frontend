@@ -24,6 +24,7 @@ describe('Real session integration', () => {
       'onAuthStateChange',
       'signInWithPassword',
       'signUp',
+      'setSession',
       'signOut',
       'resetPasswordForEmail',
       'updateUser',
@@ -44,6 +45,7 @@ describe('Real session integration', () => {
     ])
       sdk[method].and.resolveTo({ error: null });
     sdk.signUp.and.resolveTo({ data: { session: null }, error: null });
+    sdk.setSession.and.resolveTo({ data: { session }, error: null });
     api = jasmine.createSpyObj('ApiService', ['perfil']);
     api.perfil.and.resolveTo(citizen as any);
     TestBed.configureTestingModule({
@@ -54,6 +56,7 @@ describe('Real session integration', () => {
           provide: RuntimeConfigService,
           useValue: {
             load: async () => {},
+            emailConfirmationRequired: async () => true,
             value: {
               supabaseUrl: 'https://identity.example.test',
               supabasePublishableKey: 'sb_publishable_fixture',
@@ -123,6 +126,42 @@ describe('Real session integration', () => {
     expect(await service.signup('fixture@example.test', 'fixture-password')).toBeNull();
     expect(api.perfil).not.toHaveBeenCalled();
     expect(sdk.signUp.calls.mostRecent().args[0].options.emailRedirectTo).toBe(location.origin);
+  });
+  it('adopts the real signup session when email confirmation is disabled', async () => {
+    const config = TestBed.inject(RuntimeConfigService);
+    spyOn(config, 'emailConfirmationRequired').and.resolveTo(false);
+    sdk.signUp.and.resolveTo({
+      data: { session: { ...session, refresh_token: 'fixture-refresh' } },
+      error: null,
+    });
+    expect(await service.signup('fixture@example.test', 'fixture-password')).toEqual(
+      session as any,
+    );
+    expect(sdk.setSession).toHaveBeenCalledWith({
+      access_token: 'unit-test-token',
+      refresh_token: 'fixture-refresh',
+    });
+    expect(service.session()).toEqual(session as any);
+    expect(service.profile()).toBeNull();
+  });
+  it('does not register if the server confirmation setting cannot be read', async () => {
+    const config = TestBed.inject(RuntimeConfigService);
+    spyOn(config, 'emailConfirmationRequired').and.rejectWith(new Error('offline'));
+    await expectAsync(service.signup('fixture@example.test', 'fixture-password')).toBeRejected();
+    expect(sdk.signUp).not.toHaveBeenCalled();
+  });
+  it('does not repeat signup when adopting the immediate session fails', async () => {
+    const config = TestBed.inject(RuntimeConfigService);
+    spyOn(config, 'emailConfirmationRequired').and.resolveTo(false);
+    sdk.signUp.and.resolveTo({
+      data: { session: { ...session, refresh_token: 'fixture-refresh' } },
+      error: null,
+    });
+    sdk.setSession.and.resolveTo({ data: { session: null }, error: new Error('offline') });
+    await expectAsync(
+      service.signup('fixture@example.test', 'fixture-password'),
+    ).toBeRejectedWithError(/cuenta fue creada/);
+    expect(sdk.signUp).toHaveBeenCalledTimes(1);
   });
   it('clears profile, private draft and browser session even if logout fails', async () => {
     spyOn(TestBed.inject(Router), 'navigateByUrl').and.resolveTo(true);

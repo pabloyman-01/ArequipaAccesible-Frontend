@@ -3,22 +3,36 @@ import { InjectionToken, Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import type { SupabaseClient, Session } from '@supabase/supabase-js';
 export const AUTH_CLIENT_FACTORY = new InjectionToken<
-  (url: string, key: string) => Promise<SupabaseClient>
+  (url: string, key: string, flow?: 'pkce' | 'implicit') => Promise<SupabaseClient>
 >('AUTH_CLIENT_FACTORY', {
   providedIn: 'root',
-  factory: () => async (url, key) => {
-    const { createClient } = await import('@supabase/supabase-js');
-    return createClient(url, key, {
-      auth: {
-        flowType: 'pkce',
-        storageKey: 'arequipa-auth-session',
-        storage: localStorage,
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-      },
-    });
-  },
+  factory:
+    () =>
+    async (url, key, flow = 'pkce') => {
+      const { createClient } = await import('@supabase/supabase-js');
+      // A non-persistent client is used only for password signup when the server auto-confirms.
+      // Login links and recovery retain the existing PKCE client.
+      if (flow === 'implicit')
+        return createClient(url, key, {
+          auth: {
+            flowType: 'implicit',
+            storageKey: 'arequipa-registration-' + crypto.randomUUID(),
+            persistSession: false,
+            autoRefreshToken: false,
+            detectSessionInUrl: false,
+          },
+        });
+      return createClient(url, key, {
+        auth: {
+          flowType: 'pkce',
+          storageKey: 'arequipa-auth-session',
+          storage: localStorage,
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true,
+        },
+      });
+    },
 });
 import { ApiService, mensajeError } from './api.service';
 import { ReportDraftService } from './report-draft.service';
@@ -123,12 +137,31 @@ export class AuthService {
     if (error) throw error;
   }
   async signup(email: string, password: string) {
-    const { data, error } = await this.auth().signUp({
+    const confirmationRequired = await this.config.emailConfirmationRequired();
+    const config = this.config.value;
+    const registrationAuth = confirmationRequired
+      ? this.auth()
+      : (await this.createClient(config.supabaseUrl, config.supabasePublishableKey, 'implicit'))
+          .auth;
+    const { data, error } = await registrationAuth.signUp({
       email,
       password,
       options: { emailRedirectTo: location.origin },
     });
     if (error) throw error;
+    if (data.session && !confirmationRequired) {
+      const adopted = await this.auth().setSession({
+        access_token: data.session.access_token,
+        refresh_token: data.session.refresh_token,
+      });
+      if (adopted.error || !adopted.data.session)
+        throw new Error(
+          'La cuenta fue creada. Inicia sesión con tu correo y contraseña para continuar.',
+        );
+      this.profile.set(null);
+      this.session.set(adopted.data.session);
+      return adopted.data.session;
+    }
     return data.session;
   }
   async requestRecovery(email: string) {

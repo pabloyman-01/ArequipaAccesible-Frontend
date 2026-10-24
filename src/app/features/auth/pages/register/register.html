@@ -7,17 +7,21 @@
       >
       <h1 class="page-title">Crea tu Cuenta Ciudadana</h1>
       <p class="muted">
-        Confirma tu correo y después completa tu perfil para registrar barreras de accesibilidad.
+        Crea tu acceso y completa tu perfil para registrar barreras de accesibilidad.
       </p>
     </div>
     @if (error()) {
       <p class="error" role="alert">{{ error() }}</p>
     }
     @if (done()) {
-      <p class="notice" role="status">
-        Revisa tu correo para confirmar la cuenta. Abre el enlace en este mismo navegador. Si ya
-        tienes cuenta, inicia sesión.
-      </p>
+      @if (awaitingConfirmation()) {
+        <p class="notice" role="status">
+          Revisa tu correo para confirmar la cuenta. Abre el enlace en este mismo navegador. Si ya
+          tienes cuenta, inicia sesión.
+        </p>
+      } @else {
+        <p class="notice" role="status">Cuenta creada. Abriendo el formulario de perfil…</p>
+      }
     } @else {
       <form (ngSubmit)="submit()" class="grid gap-5">
         <label

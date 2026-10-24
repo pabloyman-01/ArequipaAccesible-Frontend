@@ -14,6 +14,8 @@ Aplicación web para la gestión y el seguimiento de incidencias de accesibilida
 
 La rama `feat/integracion-frontend`, basada en `dev`, conecta el MVP con el backend Java y Supabase Auth. Ver [INTEGRACION.md](INTEGRACION.md) para contratos, comandos ejecutados, pruebas y limitaciones verificadas. Los servicios de cuadrillas, IA y certificaciones oficiales no están habilitados.
 
+El registro soporta el piloto sin confirmación de correo cuando se desactiva Confirm email en Supabase. Consulta el ajuste real antes de cada alta y abre el perfil inmediatamente si recibe sesión. Ver [REGISTRO_PILOTO.md](REGISTRO_PILOTO.md) para la configuración remota, el alcance temporal y las pruebas; el código por sí solo no cambia la opción del proyecto.
+
 ## Tecnologías
 
 - Angular 20
