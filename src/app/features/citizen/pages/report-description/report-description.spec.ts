@@ -22,4 +22,11 @@ describe('ReportDescription', () => {
       'Descripción Detallada del Incidente',
     );
   });
+
+  it('renders the voice dictation control', () => {
+    const fixture = TestBed.createComponent(ReportDescription);
+    fixture.detectChanges();
+
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Dictar por voz');
+  });
 });

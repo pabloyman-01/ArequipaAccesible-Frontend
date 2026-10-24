@@ -22,8 +22,8 @@ export interface MapPin {
   icon: string;
   tone: MapPinTone;
   size: MapPinSize;
-  top: number;
-  left: number;
+  latitude: number;
+  longitude: number;
   pulse?: boolean;
 }
 

@@ -39,6 +39,12 @@ export const CITIZEN_ROUTES: Routes = [
         title: 'Mis Reportes | Arequipa Accesible',
         loadComponent: () => import('./pages/my-reports/my-reports').then((module) => module.MyReports),
       },
+      {
+        path: 'cuenta',
+        title: 'Mi Cuenta | Arequipa Accesible',
+        loadComponent: () =>
+          import('./pages/account/account').then((module) => module.CitizenAccount),
+      },
     ],
   },
 ];

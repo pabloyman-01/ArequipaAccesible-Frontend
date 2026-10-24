@@ -51,8 +51,8 @@ export class DashboardService {
         icon: 'accessible_forward',
         tone: 'primary',
         size: 'lg',
-        top: 38,
-        left: 46,
+        latitude: -16.3989,
+        longitude: -71.535,
         pulse: true,
       },
       {
@@ -62,8 +62,8 @@ export class DashboardService {
         icon: 'hearing',
         tone: 'secondary',
         size: 'md',
-        top: 28,
-        left: 34,
+        latitude: -16.3907,
+        longitude: -71.5431,
       },
       {
         id: 'cayma',
@@ -72,8 +72,8 @@ export class DashboardService {
         icon: 'stairs',
         tone: 'tertiary',
         size: 'sm',
-        top: 18,
-        left: 40,
+        latitude: -16.3458,
+        longitude: -71.5674,
       },
     ],
     mapSummary: {

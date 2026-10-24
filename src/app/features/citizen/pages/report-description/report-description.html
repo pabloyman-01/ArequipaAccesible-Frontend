@@ -85,7 +85,7 @@
           </div>
           <p class="font-body-md text-body-md text-on-surface-variant">Proporciona referencias adicionales para facilitar el trabajo de la cuadrilla municipal de obras:</p>
         </div>
-        <button type="button" (click)="toggleVoiceInput()" [class]="'inline-flex shrink-0 items-center gap-2 rounded-full border border-outline-variant/30 px-3.5 py-2 font-label-md text-label-md font-bold transition-all ' + (isListening() ? 'bg-error-container text-on-error-container' : 'bg-surface-container-low text-primary hover:bg-surface-container')" title="Dictar descripción por voz (Español / Quechua)">
+        <button type="button" (click)="toggleVoiceInput()" [attr.aria-pressed]="isListening()" [class]="'inline-flex shrink-0 items-center gap-2 rounded-full border border-outline-variant/30 px-3.5 py-2 font-label-md text-label-md font-bold transition-all ' + (isListening() ? 'bg-error-container text-on-error-container' : 'bg-surface-container-low text-primary hover:bg-surface-container')" title="Dictar descripción por voz">
           <span [class]="'material-symbols-outlined text-[18px] ' + (isListening() ? 'animate-pulse' : 'text-primary')" aria-hidden="true">mic</span>
           {{ isListening() ? 'Escuchando...' : 'Dictar por voz' }}
         </button>
@@ -97,17 +97,14 @@
           <textarea id="reportDescription" rows="4" maxlength="500" [value]="description()" (input)="description.set($any($event.target).value)" placeholder="Describe detalles específicos sobre el deterioro, obstrucción o peligro inminente..." class="w-full resize-none bg-transparent font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none"></textarea>
         </div>
         <div class="flex items-center justify-between px-1 font-label-sm text-label-sm text-on-surface-variant">
-          <span></span>
+          <span aria-live="polite">{{ isListening() ? 'Escuchando tu dictado...' : '' }}</span>
           <span class="font-semibold text-outline">{{ characterCount() }} / 500 caracteres</span>
         </div>
+        @if (voiceError()) {
+          <p role="alert" class="px-1 font-body-sm text-body-sm text-error">{{ voiceError() }}</p>
+        }
       </div>
 
-      <div class="flex flex-wrap items-center gap-2 pt-2">
-        <span class="font-label-sm text-label-sm font-medium text-on-surface-variant">Etiquetas contextuales sugeridas:</span>
-        <button type="button" class="rounded-full bg-surface-container-low px-2.5 py-1 font-label-sm text-label-sm text-on-surface-variant transition-colors hover:bg-surface-container">+ Desprendimiento de sillar</button>
-        <button type="button" class="rounded-full bg-surface-container-low px-2.5 py-1 font-label-sm text-label-sm text-on-surface-variant transition-colors hover:bg-surface-container">+ Sin señalización podotáctil</button>
-        <button type="button" class="rounded-full bg-surface-container-low px-2.5 py-1 font-label-sm text-label-sm text-on-surface-variant transition-colors hover:bg-surface-container">+ Congestión peatonal alta</button>
-      </div>
     </article>
   </section>
 

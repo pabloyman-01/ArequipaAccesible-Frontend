@@ -44,3 +44,46 @@
     @apply not-sr-only fixed left-4 top-4 z-[100] rounded-full bg-primary px-4 py-2 font-label-lg text-label-lg text-on-primary shadow-lg;
   }
 }
+
+/* Tailwind's responsive image reset changes Leaflet tile dimensions. */
+.leaflet-container img.leaflet-tile {
+  max-height: none !important;
+  max-width: none !important;
+}
+
+.report-location-marker {
+  align-items: center;
+  background: #7d1d1d;
+  border: 3px solid #ffffff;
+  border-radius: 9999px 9999px 9999px 0;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.3);
+  color: #ffffff;
+  display: flex;
+  height: 36px;
+  justify-content: center;
+  transform: rotate(-45deg);
+  width: 36px;
+}
+
+.report-location-marker .material-symbols-outlined {
+  font-size: 20px;
+  transform: rotate(45deg);
+}
+
+.incident-map-marker {
+  background: transparent;
+  border: 0;
+}
+
+.incident-map-marker span {
+  align-items: center;
+  border: 3px solid #ffffff;
+  border-radius: 9999px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.3);
+  color: #ffffff;
+  display: flex;
+  font: 700 12px/1 'Plus Jakarta Sans', sans-serif;
+  height: 34px;
+  justify-content: center;
+  width: 34px;
+}

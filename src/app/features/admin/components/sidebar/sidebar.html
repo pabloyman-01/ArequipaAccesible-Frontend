@@ -67,6 +67,29 @@
         <span class="material-symbols-outlined text-[20px]" aria-hidden="true">group</span>
         <span>Gestión de Usuarios</span>
       </a>
+
     </nav>
+  </div>
+
+  <div class="flex flex-col gap-space-xs border-t border-outline-variant/30 p-space-md">
+    <a
+      routerLink="/cuenta"
+      routerLinkActive
+      [routerLinkActiveOptions]="{ exact: true }"
+      #accountLink="routerLinkActive"
+      [class]="accountLink.isActive ? activeLinkClass : inactiveLinkClass"
+      [attr.aria-current]="accountLink.isActive ? 'page' : null"
+    >
+      <span class="material-symbols-outlined text-[20px]" aria-hidden="true">manage_accounts</span>
+      <span>Mi cuenta</span>
+    </a>
+    <button
+      type="button"
+      (click)="signOut()"
+      class="flex w-full items-center gap-space-sm rounded-full px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant transition-colors hover:bg-error-container hover:text-on-error-container"
+    >
+      <span class="material-symbols-outlined text-[20px]" aria-hidden="true">logout</span>
+      <span>Cerrar sesión</span>
+    </button>
   </div>
 </aside>

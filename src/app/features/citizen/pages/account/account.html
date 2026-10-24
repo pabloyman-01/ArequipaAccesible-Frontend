@@ -1,0 +1,66 @@
+<div class="flex w-full max-w-4xl flex-col gap-space-lg pb-space-xl">
+  <div class="flex flex-col justify-between gap-space-md sm:flex-row sm:items-start">
+    <div class="flex flex-col gap-space-xs">
+      <span class="inline-flex w-fit items-center gap-space-xs rounded-full bg-surface-container-high px-3 py-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-container">
+        <span class="material-symbols-outlined text-[14px]" aria-hidden="true">manage_accounts</span>
+        Perfil ciudadano
+      </span>
+      <h1 class="font-headline-xl text-headline-xl font-bold tracking-tight text-on-surface">Mi cuenta</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant">Consulta y actualiza los datos de tu cuenta ciudadana.</p>
+    </div>
+
+    @if (!isEditing()) {
+      <button type="button" (click)="enableEditing()" class="inline-flex items-center justify-center gap-space-xs rounded-full bg-primary-container px-space-lg py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition-colors hover:bg-primary">
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">edit</span>
+        Editar datos
+      </button>
+    }
+  </div>
+
+  @if (saved()) {
+    <div role="status" class="flex items-center gap-space-sm rounded-xl bg-tertiary-fixed p-space-md font-body-md text-body-md text-on-tertiary-fixed">
+      <span class="material-symbols-outlined text-[20px]" aria-hidden="true">check_circle</span>
+      Tus datos fueron actualizados correctamente.
+    </div>
+  }
+
+  <section class="overflow-hidden rounded-xl bg-surface-container-lowest shadow-sm">
+    <div class="flex items-center gap-space-md border-b border-outline-variant/40 p-space-lg">
+      <div class="flex h-14 w-14 items-center justify-center rounded-full bg-primary-container text-on-primary">
+        <span class="material-symbols-outlined text-[28px]" aria-hidden="true">person</span>
+      </div>
+      <div>
+        <h2 class="font-title-md text-title-md text-on-surface">{{ profile.name }}</h2>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">Ciudadano verificado</p>
+      </div>
+    </div>
+
+    <form class="grid gap-space-lg p-space-lg sm:grid-cols-2" (ngSubmit)="save()">
+      <label class="flex flex-col gap-space-xs font-label-lg text-label-lg text-on-surface">Nombre completo
+        <input [(ngModel)]="profile.name" name="name" [readonly]="!isEditing()" required class="rounded-lg border border-outline-variant bg-surface-container-low px-space-md py-3 font-body-md text-body-md outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary-fixed" />
+      </label>
+      <label class="flex flex-col gap-space-xs font-label-lg text-label-lg text-on-surface">DNI
+        <input [value]="profile.dni" readonly aria-readonly="true" class="cursor-not-allowed rounded-lg border border-outline-variant bg-surface-container px-space-md py-3 font-body-md text-body-md text-on-surface-variant" />
+      </label>
+      <label class="flex flex-col gap-space-xs font-label-lg text-label-lg text-on-surface">Correo electrónico
+        <input [(ngModel)]="profile.email" name="email" type="email" [readonly]="!isEditing()" required class="rounded-lg border border-outline-variant bg-surface-container-low px-space-md py-3 font-body-md text-body-md outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary-fixed" />
+      </label>
+      <label class="flex flex-col gap-space-xs font-label-lg text-label-lg text-on-surface">Teléfono
+        <input [(ngModel)]="profile.phone" name="phone" type="tel" [readonly]="!isEditing()" required class="rounded-lg border border-outline-variant bg-surface-container-low px-space-md py-3 font-body-md text-body-md outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary-fixed" />
+      </label>
+      <label class="flex flex-col gap-space-xs font-label-lg text-label-lg text-on-surface">Distrito
+        <input [(ngModel)]="profile.district" name="district" [readonly]="!isEditing()" required class="rounded-lg border border-outline-variant bg-surface-container-low px-space-md py-3 font-body-md text-body-md outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary-fixed" />
+      </label>
+      <label class="flex flex-col gap-space-xs font-label-lg text-label-lg text-on-surface">Dirección
+        <input [(ngModel)]="profile.address" name="address" [readonly]="!isEditing()" required class="rounded-lg border border-outline-variant bg-surface-container-low px-space-md py-3 font-body-md text-body-md outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary-fixed" />
+      </label>
+
+      @if (isEditing()) {
+        <div class="flex justify-end gap-space-sm sm:col-span-2">
+          <button type="button" (click)="cancel()" class="rounded-full px-space-lg py-2.5 font-label-md text-label-md text-on-surface-variant transition-colors hover:bg-surface-container">Cancelar</button>
+          <button type="submit" class="rounded-full bg-primary-container px-space-lg py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition-colors hover:bg-primary">Guardar cambios</button>
+        </div>
+      }
+    </form>
+  </section>
+</div>

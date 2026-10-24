@@ -63,5 +63,24 @@
       <span class="material-symbols-outlined text-[14px]" aria-hidden="true">open_in_new</span>
     </a>
     <span class="font-label-sm text-label-sm text-outline">v2.4 • Municipalidad de Arequipa</span>
+    <a
+      routerLink="/ciudadano/cuenta"
+      routerLinkActive
+      [routerLinkActiveOptions]="{ exact: true }"
+      #accountLink="routerLinkActive"
+      [class]="accountLink.isActive ? activeLinkClass : inactiveLinkClass"
+      [attr.aria-current]="accountLink.isActive ? 'page' : null"
+    >
+      <span class="material-symbols-outlined text-[20px]" aria-hidden="true">manage_accounts</span>
+      <span>Mi cuenta</span>
+    </a>
+    <button
+      type="button"
+      (click)="signOut()"
+      class="mt-space-xs flex w-full items-center gap-space-sm rounded-full px-space-sm py-space-sm font-label-lg text-label-lg text-on-surface-variant transition-colors hover:bg-error-container hover:text-on-error-container"
+    >
+      <span class="material-symbols-outlined text-[20px]" aria-hidden="true">logout</span>
+      <span>Cerrar sesión</span>
+    </button>
   </div>
 </aside>

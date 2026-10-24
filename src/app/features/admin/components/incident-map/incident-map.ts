@@ -1,36 +1,11 @@
-import { Component, input } from '@angular/core';
-import {
-  MapPin,
-  MapPinSize,
-  MapPinTone,
-  MapSummary,
-} from '../../models/dashboard.models';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, input } from '@angular/core';
+import * as L from 'leaflet';
+import { MapPin, MapPinTone, MapSummary } from '../../models/dashboard.models';
 
-const PIN_LABEL_CLASSES: Record<MapPinTone, string> = {
-  primary:
-    'mb-1 flex items-center gap-1 rounded-full border border-on-primary/30 bg-primary px-2.5 py-0.5 text-[11px] font-bold text-on-primary shadow-lg',
-  secondary:
-    'mb-1 flex items-center gap-1 rounded-full border border-outline-variant bg-surface-container-lowest px-2 py-0.5 text-[10px] font-bold text-primary shadow-md',
-  tertiary:
-    'mb-1 flex items-center gap-1 rounded-full border border-outline-variant bg-surface-container-lowest px-2 py-0.5 text-[10px] font-bold text-on-surface shadow-md',
-};
-
-const PIN_MARKER_TONE_CLASSES: Record<MapPinTone, string> = {
-  primary: 'bg-primary/90 text-on-primary shadow-xl ring-4 ring-primary/20',
-  secondary: 'bg-secondary-container text-on-secondary-container shadow-md',
-  tertiary: 'bg-tertiary text-on-tertiary shadow-md',
-};
-
-const PIN_MARKER_SIZE_CLASSES: Record<MapPinSize, string> = {
-  lg: 'h-9 w-9',
-  md: 'h-7 w-7',
-  sm: 'h-6 w-6',
-};
-
-const PIN_ICON_SIZE_CLASSES: Record<MapPinSize, string> = {
-  lg: 'text-[20px]',
-  md: 'text-[16px]',
-  sm: 'text-[14px]',
+const PIN_COLORS: Record<MapPinTone, string> = {
+  primary: '#7d1d1d',
+  secondary: '#904d00',
+  tertiary: '#00399c',
 };
 
 @Component({
@@ -38,19 +13,58 @@ const PIN_ICON_SIZE_CLASSES: Record<MapPinSize, string> = {
   host: { class: 'lg:col-span-7' },
   templateUrl: './incident-map.html',
 })
-export class IncidentMap {
+export class IncidentMap implements AfterViewInit, OnDestroy {
   readonly pins = input.required<MapPin[]>();
   readonly summary = input.required<MapSummary>();
+  @ViewChild('map', { static: true }) private readonly mapElement!: ElementRef<HTMLElement>;
 
-  protected pinLabelClass(tone: MapPinTone): string {
-    return PIN_LABEL_CLASSES[tone];
+  private map?: L.Map;
+
+  ngAfterViewInit(): void {
+    this.map = L.map(this.mapElement.nativeElement, { zoomControl: false }).setView(
+      [-16.3989, -71.535],
+      13,
+    );
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 19,
+    }).addTo(this.map);
+
+    for (const pin of this.pins()) {
+      this.addMarker(pin);
+    }
+
+    // The dashboard grid finishes sizing after this hook; refresh Leaflet once it is visible.
+    requestAnimationFrame(() => this.map?.invalidateSize({ animate: false, pan: false }));
   }
 
-  protected pinMarkerClass(tone: MapPinTone, size: MapPinSize): string {
-    return `${PIN_MARKER_TONE_CLASSES[tone]} ${PIN_MARKER_SIZE_CLASSES[size]}`;
+  ngOnDestroy(): void {
+    this.map?.remove();
   }
 
-  protected pinIconClass(size: MapPinSize): string {
-    return PIN_ICON_SIZE_CLASSES[size];
+  protected zoomIn(): void {
+    this.map?.zoomIn();
+  }
+
+  protected zoomOut(): void {
+    this.map?.zoomOut();
+  }
+
+  private addMarker(pin: MapPin): void {
+    const color = PIN_COLORS[pin.tone];
+    const marker = L.marker([pin.latitude, pin.longitude], {
+      icon: L.divIcon({
+        className: 'incident-map-marker',
+        html: `<span style="background:${color}">${pin.count}</span>`,
+        iconSize: [34, 34],
+        iconAnchor: [17, 17],
+      }),
+    }).addTo(this.map!);
+
+    marker.bindPopup(
+      `<strong>${pin.name}</strong><br>${pin.count} reportes georreferenciados`,
+      { closeButton: false },
+    );
   }
 }

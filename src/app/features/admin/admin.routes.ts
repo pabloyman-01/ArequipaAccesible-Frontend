@@ -26,6 +26,12 @@ export const ADMIN_ROUTES: Routes = [
         data: { breadcrumb: 'Plataforma Municipal de Accesibilidad' },
         loadComponent: () => import('./pages/users/users').then((module) => module.Users),
       },
+      {
+        path: 'cuenta',
+        title: 'Mi Cuenta | Arequipa Accesible',
+        data: { breadcrumb: 'Mi cuenta' },
+        loadComponent: () => import('./pages/account/account').then((module) => module.AdminAccount),
+      },
     ],
   },
 ];

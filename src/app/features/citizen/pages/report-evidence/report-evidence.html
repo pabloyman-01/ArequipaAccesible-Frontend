@@ -69,40 +69,78 @@
               <p class="font-body-sm text-body-sm text-on-surface-variant">Fotografía del obstáculo o bordillo capturada en el sitio</p>
             </div>
           </div>
-          <span class="flex items-center gap-1 rounded-full bg-primary-container/10 px-2.5 py-1 font-label-sm text-label-sm font-semibold text-primary">
-            <span class="material-symbols-outlined text-[14px]" aria-hidden="true">check_circle</span>
-            1 Foto Cargada
+          <span [class]="'flex items-center gap-1 rounded-full px-2.5 py-1 font-label-sm text-label-sm font-semibold ' + (photoPreview() ? 'bg-primary-container/10 text-primary' : 'bg-surface-container text-on-surface-variant')">
+            <span class="material-symbols-outlined text-[14px]" aria-hidden="true">{{ photoPreview() ? 'check_circle' : 'photo_camera' }}</span>
+            {{ photoPreview() ? '1 Foto Cargada' : 'Foto requerida' }}
           </span>
         </div>
 
-        <div class="flex flex-col overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-low sm:flex-row sm:items-stretch">
-          <div class="relative h-48 w-full shrink-0 overflow-hidden bg-surface-dim sm:w-64">
-            <img src="images/citizen/report-evidence.png" alt="Desnivel en una vereda de sillar de Arequipa" class="h-full w-full object-cover" />
-            <span class="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[11px] font-bold text-on-primary shadow-sm">
-              <span class="material-symbols-outlined text-[13px]" aria-hidden="true">auto_awesome</span>
-              IA Procesada
+        <input #uploadInput type="file" accept="image/*" class="sr-only" (change)="selectPhoto($event)" />
+
+        @if (cameraStream()) {
+          <div class="flex flex-col gap-space-md overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-low p-space-md">
+            <video #cameraPreview [srcObject]="cameraStream()" autoplay muted playsinline class="h-64 w-full rounded-lg bg-inverse-surface object-cover"></video>
+            <div class="flex flex-wrap justify-center gap-space-sm">
+              <button type="button" (click)="capturePhoto(cameraPreview)" class="inline-flex items-center gap-space-xs rounded-full bg-primary-container px-space-lg py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition-colors hover:bg-primary">
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">photo_camera</span>
+                Capturar foto
+              </button>
+              <button type="button" (click)="closeCamera()" class="inline-flex items-center gap-space-xs rounded-full bg-surface-container-lowest px-space-lg py-2.5 font-label-md text-label-md text-on-surface-variant shadow-sm transition-colors hover:bg-surface-container">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        } @else if (photoPreview()) {
+          <div class="flex flex-col overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-low sm:flex-row sm:items-stretch">
+            <div class="relative h-48 w-full shrink-0 overflow-hidden bg-surface-dim sm:w-64">
+              <img [src]="photoPreview()" [alt]="'Vista previa de ' + photoName()" class="h-full w-full object-cover" />
+            </div>
+            <div class="flex flex-1 flex-col justify-between gap-3 p-5">
+              <div class="flex flex-col gap-1">
+                <span class="font-title-md text-title-md font-bold text-on-surface">{{ photoName() }}</span>
+                <p class="font-body-sm text-body-sm leading-relaxed text-on-surface-variant">La evidencia se adjuntará a tu reporte. Verifica que el obstáculo sea visible antes de continuar.</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 border-t border-outline-variant/30 pt-2">
+                <button type="button" (click)="startCamera()" class="flex items-center gap-1.5 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm font-semibold text-on-surface shadow-sm transition-colors hover:bg-surface-container">
+                  <span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">photo_camera</span>
+                  Tomar otra foto
+                </button>
+                <button type="button" (click)="uploadInput.click()" class="flex items-center gap-1.5 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm font-semibold text-on-surface shadow-sm transition-colors hover:bg-surface-container">
+                  <span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">upload</span>
+                  Subir otra foto
+                </button>
+                <button type="button" (click)="removePhoto()" class="flex items-center gap-1 rounded-full px-3.5 py-1.5 font-label-sm text-label-sm font-semibold text-error transition-colors hover:bg-error-container">
+                  <span class="material-symbols-outlined text-[16px]" aria-hidden="true">delete</span>
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        } @else {
+          <div class="flex flex-col items-center justify-center gap-space-md rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-low px-space-lg py-space-xl text-center">
+            <span class="flex h-14 w-14 items-center justify-center rounded-full bg-primary-fixed text-primary">
+              <span class="material-symbols-outlined text-[28px]" aria-hidden="true">add_a_photo</span>
             </span>
-          </div>
-          <div class="flex flex-1 flex-col justify-between gap-3 p-5">
-            <div class="flex flex-col gap-2">
-              <span class="inline-flex w-fit items-center gap-1.5 rounded-full bg-secondary-fixed px-3 py-1 font-label-sm text-label-sm font-bold text-on-secondary-fixed">
-                <span class="material-symbols-outlined text-[15px]" aria-hidden="true">psychology</span>
-                IA Detectó: Vereda con desnivel en sillar (8.2 cm)
-              </span>
-              <p class="font-body-sm text-body-sm leading-relaxed text-on-surface-variant">Inclinación inadecuada con rotura del pavimento en el borde peatonal. Coordenadas EXIF validadas con precisión.</p>
+            <div class="flex flex-col gap-1">
+              <span class="font-title-md text-title-md font-bold text-on-surface">Adjunta una fotografía del obstáculo</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant">Formatos JPG, PNG o WEBP. Tamaño máximo: 10 MB.</span>
             </div>
-            <div class="flex flex-wrap items-center gap-2 border-t border-outline-variant/30 pt-2">
-              <button type="button" class="flex items-center gap-1.5 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm font-semibold text-on-surface shadow-sm transition-colors hover:bg-surface-container">
-                <span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">add_a_photo</span>
-                Tomar otra foto
+            <div class="flex flex-wrap justify-center gap-space-sm">
+              <button type="button" (click)="startCamera()" class="inline-flex items-center gap-space-xs rounded-full bg-primary-container px-space-lg py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition-colors hover:bg-primary">
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">photo_camera</span>
+                Tomar foto
               </button>
-              <button type="button" class="flex items-center gap-1 rounded-full px-3.5 py-1.5 font-label-sm text-label-sm font-semibold text-error transition-colors hover:bg-error-container">
-                <span class="material-symbols-outlined text-[16px]" aria-hidden="true">delete</span>
-                Cambiar imagen
+              <button type="button" (click)="uploadInput.click()" class="inline-flex items-center gap-space-xs rounded-full bg-surface-container-lowest px-space-lg py-2.5 font-label-md text-label-md text-primary shadow-sm transition-colors hover:bg-surface-container">
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">upload</span>
+                Subir foto
               </button>
             </div>
           </div>
-        </div>
+        }
+
+        @if (photoError()) {
+          <p role="alert" class="font-body-sm text-body-sm text-error">{{ photoError() }}</p>
+        }
       </section>
 
       <section class="flex flex-col gap-space-md overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm md:p-space-xl">
@@ -116,9 +154,9 @@
               <p class="font-body-sm text-body-sm text-on-surface-variant">Verifica o ajusta el punto de intervención en el mapa</p>
             </div>
           </div>
-          <button type="button" class="flex items-center gap-1.5 rounded-full bg-surface-container px-3 py-1.5 font-label-sm text-label-sm font-semibold text-primary shadow-sm transition-colors hover:bg-surface-container-high">
-            <span class="material-symbols-outlined text-[16px]" aria-hidden="true">my_location</span>
-            Usar mi ubicación GPS actual
+          <button type="button" (click)="useCurrentLocation()" [disabled]="isLocating()" class="flex items-center gap-1.5 rounded-full bg-surface-container px-3 py-1.5 font-label-sm text-label-sm font-semibold text-primary shadow-sm transition-colors hover:bg-surface-container-high disabled:cursor-wait disabled:opacity-70">
+            <span [class]="'material-symbols-outlined text-[16px] ' + (isLocating() ? 'animate-spin' : '')" aria-hidden="true">{{ isLocating() ? 'progress_activity' : 'my_location' }}</span>
+            {{ isLocating() ? 'Buscando ubicación...' : 'Usar mi ubicación GPS actual' }}
           </button>
         </div>
 
@@ -130,18 +168,11 @@
           </div>
         </div>
 
-        <div class="relative h-48 w-full overflow-hidden rounded-xl border border-outline-variant/30 shadow-sm">
-          <img src="images/citizen/report-map.png" alt="Mapa de referencia de Calle San Francisco y Calle Zela, Arequipa" class="h-full w-full object-cover" />
-          <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <div class="relative flex flex-col items-center">
-              <span class="absolute -top-1 h-6 w-6 animate-ping rounded-full bg-primary/30"></span>
-              <span class="z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-surface bg-primary text-on-primary shadow-lg">
-                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">accessible</span>
-              </span>
-              <span class="-mt-1 rounded-full bg-inverse-surface/90 px-2.5 py-0.5 text-[11px] font-semibold text-inverse-on-surface shadow-md">San Francisco c/ Zela</span>
-            </div>
-          </div>
-        </div>
+        <div #locationMap class="h-64 w-full overflow-hidden rounded-xl border border-outline-variant/30 shadow-sm" aria-label="Mapa interactivo para seleccionar la ubicación del reporte"></div>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">Haz clic o arrastra el marcador para ajustar la ubicación de la incidencia.</p>
+        @if (locationError()) {
+          <p role="alert" class="font-body-sm text-body-sm text-error">{{ locationError() }}</p>
+        }
       </section>
     </div>
 
