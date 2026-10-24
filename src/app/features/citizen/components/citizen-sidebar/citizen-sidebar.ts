@@ -8,8 +8,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class CitizenSidebar {
   protected readonly activeLinkClass =
-    'flex items-center gap-3 rounded-xl bg-primary px-3.5 py-2.5 text-[14px] font-semibold text-on-primary shadow-sm transition-all';
+    'flex items-center gap-space-sm rounded-full bg-primary-container px-space-md py-space-sm font-bold text-on-primary shadow-sm transition-colors';
 
   protected readonly inactiveLinkClass =
-    'flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-[14px] font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface';
+    'flex items-center gap-space-sm rounded-full px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface';
 }

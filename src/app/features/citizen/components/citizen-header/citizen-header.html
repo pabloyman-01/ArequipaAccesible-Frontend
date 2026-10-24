@@ -1,36 +1,30 @@
 <header
-  class="sticky top-0 z-40 flex h-[72px] items-center justify-between border-b border-outline-variant/30 bg-surface/90 px-4 backdrop-blur-md sm:px-8"
+  class="fixed left-0 right-0 top-0 z-40 h-16 border-b border-surface-container-high bg-surface/90 shadow-[0_1px_8px_rgba(30,24,24,0.04)] backdrop-blur-xl lg:left-72"
 >
-  <div class="flex items-center gap-3 lg:hidden">
-    <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-on-primary">
-      <span class="material-symbols-outlined text-[20px]" aria-hidden="true">account_balance</span>
-    </div>
-    <span class="text-[14px] font-bold text-primary">Arequipa Accesible</span>
-  </div>
-  <div class="hidden lg:block"></div>
-
-  <div class="flex items-center gap-4">
+  <div class="flex h-16 w-full items-center justify-between px-4 sm:px-6 lg:px-space-xl">
+    <div class="flex items-center gap-space-sm lg:hidden"><div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-container text-on-primary"><span class="material-symbols-outlined text-[20px]" aria-hidden="true">accessible</span></div><span class="font-title-md text-title-md text-primary-container">Arequipa Accesible</span></div>
+    <nav aria-label="Ruta de navegación" class="hidden items-center gap-space-sm lg:flex"><span class="hidden font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline xl:inline">AREQUIPA</span><span class="material-symbols-outlined hidden text-[16px] text-outline xl:inline" aria-hidden="true">chevron_right</span><span class="hidden font-label-sm text-label-sm text-outline xl:inline">Portal de Participación Ciudadana</span><span class="material-symbols-outlined hidden text-[16px] text-outline xl:inline" aria-hidden="true">chevron_right</span><span class="font-label-md text-label-md font-bold text-primary">Mi Panel Ciudadano</span></nav>
+    <div class="flex items-center gap-space-md">
     <button
       type="button"
       title="Notificaciones de obras y reportes"
       aria-label="Notificaciones de obras y reportes"
-      class="relative flex h-9 w-9 items-center justify-center rounded-full border border-outline-variant/30 text-on-surface-variant transition-colors hover:bg-surface-container"
+      class="relative flex h-9 w-9 items-center justify-center rounded-full bg-surface-container text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface"
     >
       <span class="material-symbols-outlined text-[20px]" aria-hidden="true">notifications</span>
       <span class="absolute right-1 top-1 h-2.5 w-2.5 rounded-full border-2 border-surface bg-primary"></span>
     </button>
-    <div class="h-6 w-px bg-outline-variant/30" aria-hidden="true"></div>
-    <div class="flex items-center gap-3 pl-1">
-      <div class="hidden flex-col items-end sm:flex">
-        <span class="text-[13px] font-bold leading-tight text-on-surface">Aarón Benito Cáceres</span>
-        <span class="mt-0.5 inline-flex items-center gap-1 text-[11px] font-semibold leading-tight text-secondary">
-          <span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>
+    <div class="h-6 w-px bg-outline-variant" aria-hidden="true"></div>
+    <div class="flex items-center gap-space-sm pl-space-xs">
+      <div class="hidden text-right sm:block">
+        <span class="block font-label-md text-label-md font-semibold leading-tight text-on-surface">Aarón Benito Cáceres</span>
+        <span class="block font-label-sm text-label-sm font-bold leading-tight text-primary">
           Ciudadano Verificado
         </span>
       </div>
-      <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-primary/20 bg-primary-fixed/50 text-primary shadow-sm">
-        <span class="material-symbols-outlined text-[22px]" aria-hidden="true">person</span>
+      <div class="flex h-9 w-9 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-sm">
+        <span class="material-symbols-outlined text-[18px]" aria-hidden="true">person</span>
       </div>
     </div>
-  </div>
+  </div></div>
 </header>

@@ -1,55 +1,41 @@
 <div class="flex w-full flex-col">
   <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
-    <nav aria-label="Ruta de navegación" class="flex flex-wrap items-center gap-2 font-label-md text-label-md text-on-surface-variant">
+    <nav aria-label="Ruta de navegación" class="flex items-center gap-2 font-label-md text-label-md text-on-surface-variant">
       <a routerLink="/ciudadano" class="flex items-center gap-1.5 transition-colors hover:text-primary">
         <span class="material-symbols-outlined text-[16px]" aria-hidden="true">home</span>
         Inicio
       </a>
       <span class="text-outline-variant" aria-hidden="true">/</span>
       <span class="font-bold text-primary">Nuevo Reporte</span>
-      <span class="text-outline-variant" aria-hidden="true">/</span>
-      <span class="text-outline">Paso 3 de 3</span>
     </nav>
-    <div class="inline-flex items-center gap-2 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm text-on-surface shadow-sm">
-      <span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">share_location</span>
+    <div class="inline-flex items-center gap-2 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm text-on-surface-variant shadow-sm">
+      <span class="h-2 w-2 animate-pulse rounded-full bg-secondary"></span>
+      <span class="material-symbols-outlined text-[15px] text-primary" aria-hidden="true">location_city</span>
       Arequipa Centro Histórico • Sistema Georreferenciado
-      <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-secondary"></span>
     </div>
   </div>
 
-  <div class="mb-8 flex flex-col gap-2">
-    <h1 class="font-headline-xl text-headline-xl font-bold tracking-tight text-on-surface">Nuevo Reporte de Barrera Arquitectónica</h1>
-    <p class="max-w-3xl font-body-md text-body-md text-on-surface-variant">Completa los 3 pasos para que las cuadrillas de OMAPED atiendan la incidencia de forma inmediata.</p>
+  <div class="mb-8 flex min-h-[126px] flex-col gap-1.5">
+    <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Asistente de Reporte Urbano</span>
+    <h1 class="font-headline-xl text-headline-xl font-bold tracking-tight text-primary">Nuevo Reporte de Barrera Arquitectónica</h1>
+    <p class="max-w-3xl font-body-md text-body-md text-on-surface-variant">Completa los 3 pasos para que las cuadrillas de OMAPED atiendan la incidencia de forma inmediata en cumplimiento de la Ley N° 29973.</p>
   </div>
 
-  <section aria-label="Progreso del reporte" class="mb-8 rounded-2xl bg-surface-container-lowest p-6 shadow-sm">
-    <ol class="grid grid-cols-1 gap-6 md:grid-cols-3">
-      <li class="relative flex items-center gap-3.5">
-        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-sm">
-          <span class="material-symbols-outlined text-[22px]" aria-hidden="true">check</span>
-        </span>
-        <span class="flex min-w-0 flex-col">
-          <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Paso 1 • Completado</span>
-          <span class="truncate font-title-md text-title-md text-on-surface">Tipo y Severidad</span>
-        </span>
+  <section aria-label="Progreso del reporte" class="mb-8 overflow-hidden rounded-xl bg-surface-container-lowest p-space-md shadow-sm">
+    <ol class="grid grid-cols-1 gap-space-md md:grid-cols-3">
+      <li class="relative flex items-center gap-space-md opacity-60">
+        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-sm"><span class="material-symbols-outlined text-[20px]" aria-hidden="true">check</span></span>
+        <span class="flex min-w-0 flex-col"><span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline">Paso 1</span><span class="truncate font-title-md text-title-md font-semibold text-on-surface">Tipo y Severidad</span></span>
         <span class="absolute right-0 top-1/2 hidden h-0.5 w-8 -translate-y-1/2 bg-primary-container/40 md:block" aria-hidden="true"></span>
       </li>
-      <li class="relative flex items-center gap-3.5">
-        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-sm">
-          <span class="material-symbols-outlined text-[22px]" aria-hidden="true">check</span>
-        </span>
-        <span class="flex min-w-0 flex-col">
-          <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Paso 2 • Completado</span>
-          <span class="truncate font-title-md text-title-md text-on-surface">Evidencia y Ubicación</span>
-        </span>
+      <li class="relative flex items-center gap-space-md opacity-60">
+        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-sm"><span class="material-symbols-outlined text-[20px]" aria-hidden="true">check</span></span>
+        <span class="flex min-w-0 flex-col"><span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline">Paso 2</span><span class="truncate font-title-md text-title-md font-semibold text-on-surface">Evidencia y Ubicación</span></span>
         <span class="absolute right-0 top-1/2 hidden h-0.5 w-8 -translate-y-1/2 bg-primary-container/40 md:block" aria-hidden="true"></span>
       </li>
-      <li class="flex items-center gap-3.5 rounded-xl bg-surface-container-low px-4 py-3">
-        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-container font-title-md text-title-md font-bold text-on-primary shadow-md">3</span>
-        <span class="flex min-w-0 flex-col">
-          <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-primary">Paso Activo</span>
-          <span class="truncate font-title-md text-title-md font-bold text-primary">Descripción Final</span>
-        </span>
+      <li class="flex items-center gap-space-md">
+        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container font-title-md text-title-md font-bold text-on-primary shadow-md ring-4 ring-primary-fixed/60">3</span>
+        <span class="flex min-w-0 flex-col"><span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-primary">Paso activo</span><span class="truncate font-title-md text-title-md font-bold text-on-surface">Descripción Final</span></span>
       </li>
     </ol>
   </section>

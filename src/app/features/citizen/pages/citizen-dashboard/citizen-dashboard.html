@@ -1,40 +1,33 @@
-<section class="relative flex flex-col gap-5 overflow-hidden rounded-2xl border border-outline-variant/25 bg-surface-container-lowest p-6 shadow-sm sm:p-8">
-  <div class="flex flex-wrap items-center justify-between gap-3">
-    <div class="flex flex-wrap items-center gap-2">
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-primary-fixed/50 px-3 py-1 text-[11px] font-semibold text-primary">
+<section class="flex flex-col justify-between gap-space-lg lg:flex-row lg:items-end">
+  <div class="max-w-3xl text-center lg:text-left">
+    <div class="mb-space-xs flex flex-wrap justify-center gap-space-xs lg:justify-start">
+      <span class="inline-flex items-center gap-space-xs rounded-full bg-primary-fixed px-space-sm py-0.5 font-label-sm text-label-sm uppercase tracking-wider text-primary">
         <span class="material-symbols-outlined text-[14px]" aria-hidden="true">verified</span>
         Vecino Verificado DNI 4482****
       </span>
-      <span class="inline-flex items-center gap-1 rounded-full border border-outline-variant/30 bg-surface-container-low px-2.5 py-1 text-[11px] font-medium text-on-surface-variant">
+      <span class="inline-flex items-center gap-space-xs rounded-full bg-surface-container-low px-space-sm py-0.5 font-label-sm text-label-sm text-on-surface-variant">
         <span class="material-symbols-outlined text-[13px] text-primary" aria-hidden="true">location_city</span>
         OMAPED Cercado • Sector 02
       </span>
     </div>
-    <div class="flex items-center gap-1.5 rounded-full border border-outline-variant/30 bg-surface-container-low px-3 py-1 text-[12px] font-medium text-on-surface-variant">
-      <span class="material-symbols-outlined text-[15px] text-primary" aria-hidden="true">calendar_today</span>
-      <span>24 de Octubre 2023</span>
-    </div>
-  </div>
-
-  <div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-    <div class="max-w-3xl">
-      <h1 class="text-[24px] font-bold leading-tight tracking-tight text-on-surface md:text-[28px]">
+    <h1 class="font-headline-xl text-headline-xl-mobile font-extrabold tracking-tight text-on-surface sm:text-headline-xl">
         ¡Bienvenido, Aarón! Tu voz transforma <span class="text-primary">Arequipa en una ciudad accesible</span>
       </h1>
-      <p class="mt-2 text-[14px] leading-relaxed text-on-surface-variant">
+      <p class="mt-space-xs font-body-md text-body-md text-on-surface-variant">
         Monitorea tus alertas de infraestructura, visualiza cuadrillas municipales de sillar en tiempo real y colabora con fiscalización urbana bajo los lineamientos de accesibilidad universal.
       </p>
-    </div>
-    <a routerLink="/ciudadano/nuevo-reporte" class="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-primary px-5 py-2.5 text-[13px] font-semibold text-on-primary shadow-sm transition-all hover:bg-primary-container">
+  </div>
+  <div class="flex flex-wrap justify-center gap-space-sm lg:justify-end">
+    <a routerLink="/ciudadano/nuevo-reporte" class="inline-flex min-h-11 shrink-0 items-center justify-center gap-space-xs rounded-full bg-primary-container px-space-md py-2 text-center font-label-md text-label-md font-bold text-on-primary shadow-sm transition-all hover:bg-primary hover:shadow-md">
       <span class="material-symbols-outlined text-[18px]" aria-hidden="true">add_circle</span>
       Iniciar Nuevo Reporte
     </a>
   </div>
 </section>
 
-<section class="grid grid-cols-1 gap-5 md:grid-cols-3">
+<section aria-label="Indicadores principales" class="mt-space-xl grid grid-cols-1 gap-space-md sm:grid-cols-2 lg:grid-cols-3">
   @for (metric of metrics; track metric.id) {
-    <div class="flex items-center justify-between rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-5 shadow-sm">
+    <div class="flex items-center justify-between rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-space-md shadow-sm">
       <div>
         <p class="text-[12px] font-semibold uppercase tracking-wider text-on-surface-variant">{{ metric.label }}</p>
         <p class="mt-1 text-[30px] font-bold leading-none" [class.text-primary]="metric.tone === 'primary'" [class.text-on-surface]="metric.tone !== 'primary'">{{ metric.value }}</p>
@@ -50,7 +43,7 @@
   }
 </section>
 
-<section id="mis-reportes" class="flex flex-col gap-4">
+<section id="mis-reportes" class="mt-space-xl flex flex-col gap-space-md">
   <div class="flex flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-center">
     <div class="flex items-center gap-2 overflow-x-auto">
       <button type="button" (click)="selectStatus('')" [class]="selectedStatus() === '' ? 'shrink-0 rounded-full bg-primary px-4 py-1.5 text-[13px] font-medium text-on-primary transition-colors' : 'shrink-0 rounded-full border border-outline-variant/30 bg-surface-container-lowest px-4 py-1.5 text-[13px] font-medium text-on-surface-variant transition-colors hover:bg-surface-container'">Todos (4)</button>
@@ -64,9 +57,9 @@
     </div>
   </div>
 
-  <div class="flex flex-col gap-3">
+  <div class="flex flex-col gap-space-sm">
     @for (report of filteredReports(); track report.key) {
-      <article class="flex flex-col items-start justify-between gap-5 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-5 shadow-sm transition-colors hover:border-outline-variant/60 md:flex-row md:items-center">
+      <article class="flex flex-col items-start justify-between gap-space-md rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-space-md shadow-sm transition-colors hover:border-outline-variant/60 md:flex-row md:items-center">
         <div class="flex flex-1 items-start gap-4">
           @if (report.image) {
             <div class="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-outline-variant/30">

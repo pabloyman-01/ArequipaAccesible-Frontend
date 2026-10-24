@@ -6,52 +6,46 @@
         Inicio
       </a>
       <span class="text-outline-variant" aria-hidden="true">/</span>
-      <span class="font-semibold text-primary">Nuevo Reporte</span>
+      <span class="font-bold text-primary">Nuevo Reporte</span>
     </nav>
-    <div class="flex items-center gap-2 rounded-full bg-surface-container-high px-3 py-1 font-label-sm text-label-sm text-on-surface-variant shadow-sm">
-      <span class="material-symbols-outlined text-[16px] text-secondary" aria-hidden="true">verified</span>
+    <div class="inline-flex items-center gap-2 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm text-on-surface-variant shadow-sm">
+      <span class="h-2 w-2 animate-pulse rounded-full bg-secondary"></span>
+      <span class="material-symbols-outlined text-[15px] text-primary" aria-hidden="true">location_city</span>
       Arequipa Centro Histórico • Sistema Georreferenciado
     </div>
   </div>
 
-  <div class="mx-auto flex w-full max-w-3xl flex-col gap-6">
-    <div class="flex flex-col gap-2">
-      <span class="font-label-sm text-label-sm font-bold uppercase tracking-widest text-secondary">Asistente de Reporte Urbano</span>
-      <h1 class="font-headline-lg text-headline-lg font-bold tracking-tight text-primary">Nuevo Reporte de Barrera Arquitectónica</h1>
-      <p class="max-w-xl font-body-md text-body-md leading-relaxed text-on-surface-variant">
-        Completa los 3 pasos para que las cuadrillas de OMAPED atiendan la incidencia de forma inmediata.
+  <div class="flex w-full flex-col">
+    <div class="mb-8 flex min-h-[126px] flex-col gap-1.5">
+      <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Asistente de Reporte Urbano</span>
+      <h1 class="font-headline-xl text-headline-xl font-bold tracking-tight text-primary">Nuevo Reporte de Barrera Arquitectónica</h1>
+      <p class="max-w-3xl font-body-md text-body-md text-on-surface-variant">
+        Completa los 3 pasos para que las cuadrillas de OMAPED atiendan la incidencia de forma inmediata en cumplimiento de la Ley N° 29973.
       </p>
     </div>
 
-    <section aria-label="Progreso del reporte" class="flex items-center justify-between gap-2 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-4 shadow-sm sm:p-5">
-      <div class="flex flex-1 items-center gap-3">
-        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary font-bold text-on-primary shadow-sm">
+    <section aria-label="Progreso del reporte" class="mb-8 overflow-hidden rounded-xl bg-surface-container-lowest p-space-md shadow-sm">
+      <ol class="grid grid-cols-1 gap-space-md md:grid-cols-3">
+        <li class="relative flex items-center gap-space-md opacity-60">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-sm">
           <span class="material-symbols-outlined text-[20px]" aria-hidden="true">check</span>
-        </span>
-        <span class="hidden min-w-0 flex-col sm:flex">
-          <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Paso 1</span>
-          <span class="truncate text-[13px] font-bold text-on-surface">Tipo y Severidad</span>
-        </span>
-      </div>
-      <span class="h-0.5 w-8 shrink-0 bg-primary/40 sm:w-16" aria-hidden="true"></span>
-      <div class="flex shrink-0 items-center gap-3 rounded-xl border border-primary/20 bg-surface-container-low px-3 py-1.5">
-        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-container text-[14px] font-bold text-on-primary shadow-sm">2</span>
-        <span class="flex min-w-0 flex-col pr-1">
-          <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-primary">Paso Activo</span>
-          <span class="truncate text-[13px] font-bold text-primary">Evidencia y Ubicación</span>
-        </span>
-      </div>
-      <span class="h-0.5 w-8 shrink-0 bg-outline-variant/50 sm:w-16" aria-hidden="true"></span>
-      <div class="flex flex-1 items-center justify-end gap-3 opacity-60 sm:justify-start">
-        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-container-high text-[14px] font-semibold text-on-surface-variant">3</span>
-        <span class="hidden min-w-0 flex-col sm:flex">
-          <span class="font-label-sm text-label-sm font-medium uppercase tracking-wider text-outline">Paso 3</span>
-          <span class="truncate text-[13px] font-medium text-on-surface-variant">Descripción Final</span>
-        </span>
-      </div>
+          </span>
+          <span class="flex min-w-0 flex-col"><span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline">Paso 1</span><span class="truncate font-title-md text-title-md font-semibold text-on-surface">Tipo y Severidad</span></span>
+          <span class="absolute right-0 top-1/2 hidden h-0.5 w-8 -translate-y-1/2 bg-primary-container/40 md:block" aria-hidden="true"></span>
+        </li>
+        <li class="relative flex items-center gap-space-md">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container font-title-md text-title-md font-bold text-on-primary shadow-md ring-4 ring-primary-fixed/60">2</span>
+          <span class="flex min-w-0 flex-col"><span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-primary">Paso activo</span><span class="truncate font-title-md text-title-md font-bold text-on-surface">Evidencia y Ubicación</span></span>
+          <span class="absolute right-0 top-1/2 hidden h-0.5 w-8 -translate-y-1/2 bg-outline-variant/40 md:block" aria-hidden="true"></span>
+        </li>
+        <li class="flex items-center gap-space-md opacity-50">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-container-high font-title-md text-title-md font-bold text-on-surface-variant">3</span>
+          <span class="flex min-w-0 flex-col"><span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline">Paso 3</span><span class="truncate font-title-md text-title-md font-semibold text-on-surface">Descripción Final</span></span>
+        </li>
+      </ol>
     </section>
 
-    <section class="flex items-center justify-between rounded-xl border border-outline-variant/30 bg-surface-container-low/70 px-4 py-2.5 font-body-sm text-body-sm text-on-surface-variant">
+    <section class="flex items-center justify-between rounded-xl bg-surface-container-low p-space-md font-body-sm text-body-sm text-on-surface-variant shadow-sm">
       <div class="flex flex-wrap items-center gap-2">
         <span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true">accessible_forward</span>
         <span>Barrera seleccionada: <strong class="text-on-surface">Rampa Rota o Inexistente</strong></span>
@@ -63,8 +57,8 @@
       </a>
     </section>
 
-    <div class="flex flex-col gap-6">
-      <section class="flex flex-col gap-4 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-6 shadow-sm">
+    <div class="flex flex-col gap-space-xl">
+      <section class="flex flex-col gap-space-md overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm md:p-space-xl">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-2.5">
             <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-fixed font-bold text-primary">
@@ -111,7 +105,7 @@
         </div>
       </section>
 
-      <section class="flex flex-col gap-4 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-6 shadow-sm">
+      <section class="flex flex-col gap-space-md overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm md:p-space-xl">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-2.5">
             <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-fixed font-bold text-primary">
@@ -151,7 +145,7 @@
       </section>
     </div>
 
-    <footer class="mt-2 flex flex-col items-center justify-between gap-4 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-4 shadow-sm sm:flex-row sm:p-5">
+    <footer class="mt-space-xs flex flex-col items-center justify-between gap-space-md rounded-xl bg-surface-container-lowest p-space-md shadow-sm sm:flex-row">
       <a routerLink="/ciudadano/nuevo-reporte" class="flex w-full items-center justify-center gap-2 rounded-full bg-surface-container px-5 py-2.5 font-label-md text-label-md font-semibold text-on-surface-variant transition-colors hover:bg-surface-container-high sm:w-auto">
         <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_back</span>
         Paso Anterior (Tipo de barrera)
