@@ -1,12 +1,12 @@
 <section
   aria-labelledby="urgent-title"
-  class="flex h-full flex-col gap-space-md rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-space-lg shadow-sm"
+  class="flex h-full flex-col gap-space-md overflow-hidden rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-space-lg shadow-sm"
 >
   <div
-    class="flex items-center justify-between border-b border-outline-variant/30 pb-space-xs"
+    class="flex flex-col items-center justify-between gap-space-sm border-b border-outline-variant/30 pb-space-sm text-center sm:flex-row sm:text-left"
   >
-    <div>
-      <div class="flex items-center gap-2">
+    <div class="min-w-0">
+        <div class="flex items-center justify-center gap-2 sm:justify-start">
         <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-error"
           >Bandeja Inmediata</span
         >
@@ -18,26 +18,25 @@
         Acción Requerida
       </h2>
     </div>
-    <span
-      aria-disabled="true"
-      title="Disponible próximamente"
-      class="flex cursor-not-allowed items-center gap-1 font-label-sm text-label-sm font-bold text-primary opacity-70"
+    <a
+      routerLink="/reportes"
+      class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-1 font-label-sm text-label-sm font-bold text-primary transition-colors hover:bg-primary-fixed hover:text-on-primary-fixed"
     >
       <span>Ver todos (51)</span>
       <span class="material-symbols-outlined text-[16px]" aria-hidden="true">arrow_forward</span>
-    </span>
+    </a>
   </div>
 
   <div class="flex flex-col gap-space-sm">
     @for (report of reports(); track report.id) {
       <article
-        class="flex flex-col gap-space-xs rounded-xl border border-outline-variant/40 bg-surface-container-low p-space-sm transition-all hover:border-primary/40"
+        class="flex min-w-0 flex-col gap-space-sm rounded-lg border border-outline-variant/40 bg-surface-container-low px-space-md py-space-sm transition-all hover:border-primary/40"
       >
-        <div class="flex items-center justify-between gap-space-sm">
-          <span class="font-mono text-label-sm font-bold text-primary">{{ report.id }}</span>
+        <div class="flex min-w-0 flex-wrap items-center justify-between gap-space-sm">
+          <span class="shrink-0 font-mono text-label-sm font-bold text-primary">{{ report.id }}</span>
           <span
             [class]="
-              'inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-label-sm text-[11px] font-bold ' +
+              'inline-flex max-w-full items-center gap-1 rounded-full px-2 py-0.5 text-center font-label-sm text-[11px] font-bold ' +
               severityMeta(report.severity).badge
             "
           >
@@ -49,19 +48,19 @@
           </span>
         </div>
 
-        <div>
-          <h3 class="font-title-md text-body-md font-bold leading-tight text-on-surface">
+        <div class="min-w-0">
+          <h3 class="break-words font-title-md text-body-md font-bold leading-normal text-on-surface">
             {{ report.title }}
           </h3>
-          <p class="mt-0.5 line-clamp-1 font-body-sm text-[12px] text-on-surface-variant">
+          <p class="mt-space-xs break-words font-body-sm text-[12px] leading-relaxed text-on-surface-variant">
             {{ report.description }}
           </p>
         </div>
 
         <div
-          class="flex items-center justify-between border-t border-outline-variant/20 pt-1"
+          class="flex flex-col items-center gap-space-xs border-t border-outline-variant/20 pt-space-sm text-center sm:flex-row sm:justify-between sm:text-left"
         >
-          <span class="font-body-sm text-[11px] text-on-surface-variant"
+          <span class="break-words font-body-sm text-[11px] text-on-surface-variant"
             >{{ report.time }} • {{ report.district }}</span
           >
           <button

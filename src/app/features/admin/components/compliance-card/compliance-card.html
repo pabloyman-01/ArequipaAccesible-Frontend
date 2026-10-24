@@ -1,6 +1,6 @@
 <section
   aria-labelledby="compliance-title"
-  class="flex h-full flex-col justify-between rounded-2xl bg-gradient-to-br from-primary to-primary-container p-space-lg text-on-primary shadow-sm"
+  class="rounded-2xl bg-gradient-to-br from-primary to-primary-container p-space-lg text-on-primary shadow-sm"
 >
   <div>
     <div class="mb-space-sm flex items-center justify-between gap-space-sm">
@@ -30,18 +30,5 @@
     <p class="mb-space-md font-body-sm text-body-sm leading-relaxed text-primary-fixed">
       {{ compliance().description }}
     </p>
-  </div>
-
-  <div
-    class="grid grid-cols-1 gap-space-sm border-t border-on-primary/15 pt-space-xs text-[12px] sm:grid-cols-2"
-  >
-    @for (metric of compliance().metrics; track metric.label) {
-      <div class="rounded-xl bg-on-primary/10 p-space-xs">
-        <span class="block text-[10px] font-bold uppercase text-primary-fixed">{{
-          metric.label
-        }}</span>
-        <span class="text-base font-bold text-on-primary">{{ metric.value }}</span>
-      </div>
-    }
   </div>
 </section>

@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ReportSeverity, UrgentReport } from '../../models/dashboard.models';
 
 interface SeverityMeta {
@@ -28,6 +29,7 @@ const SEVERITY_META: Record<ReportSeverity, SeverityMeta> = {
 @Component({
   selector: 'app-urgent-dispatch',
   host: { class: 'lg:col-span-5' },
+  imports: [RouterLink],
   templateUrl: './urgent-dispatch.html',
 })
 export class UrgentDispatch {
