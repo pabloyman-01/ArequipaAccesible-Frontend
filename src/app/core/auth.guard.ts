@@ -18,6 +18,12 @@ export function roleGuard(rol: Rol): CanActivateChildFn {
     try {
       const p = await auth.refreshProfile();
       if (!p) return router.parseUrl('/inicio-sesion/completar-perfil');
+      if (!p.roles.length) {
+        auth.error.set(
+          'Tu cuenta no tiene un rol habilitado. Contacta al responsable del proyecto.',
+        );
+        return router.parseUrl('/inicio-sesion');
+      }
       return p.roles.includes(rol) ? true : router.parseUrl(auth.home());
     } catch (error) {
       auth.error.set(mensajeError(error));

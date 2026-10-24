@@ -97,6 +97,20 @@ describe('Real session integration', () => {
     expect(TestBed.inject(Router).serializeUrl(result as any)).toBe('/ciudadano');
     expect(api.perfil).toHaveBeenCalled();
   });
+  it('handles a profile with all roles revoked without a redirect loop', async () => {
+    api.perfil.and.resolveTo({ ...citizen, roles: [] } as any);
+    const guard = roleGuard('CIUDADANO');
+    const result = await TestBed.runInInjectionContext(() => guard({} as any, {} as any));
+    expect(TestBed.inject(Router).serializeUrl(result as any)).toBe('/inicio-sesion');
+    expect(service.home()).toBe('/inicio-sesion');
+    expect(service.error()).toContain('rol habilitado');
+  });
+  it('does not announce password-login success when the profile has no roles', async () => {
+    api.perfil.and.resolveTo({ ...citizen, roles: [] } as any);
+    await expectAsync(
+      service.login('fixture@example.test', 'fixture-password'),
+    ).toBeRejectedWithError(/rol habilitado/);
+  });
   it('detects password recovery and does not route to the dashboard', async () => {
     callback('PASSWORD_RECOVERY', session);
     const guard = roleGuard('ADMINISTRADOR');

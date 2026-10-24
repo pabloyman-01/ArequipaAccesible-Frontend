@@ -109,7 +109,11 @@ export class AuthService {
   async login(email: string, password: string) {
     const { error } = await this.auth().signInWithPassword({ email, password });
     if (error) throw error;
-    await this.refreshProfile();
+    const profile = await this.refreshProfile();
+    if (profile && !profile.roles.length)
+      throw new Error(
+        'Tu cuenta no tiene un rol habilitado. Contacta al responsable del proyecto.',
+      );
   }
   async loginWithLink(email: string) {
     const { error } = await this.auth().signInWithOtp({
@@ -143,7 +147,9 @@ export class AuthService {
       ? '/inicio-sesion/completar-perfil'
       : this.profile()!.roles.includes('ADMINISTRADOR')
         ? '/'
-        : '/ciudadano';
+        : this.profile()!.roles.includes('CIUDADANO')
+          ? '/ciudadano'
+          : '/inicio-sesion';
   }
   async signOut() {
     // A local logout always removes this browser session, even when the network is unavailable.

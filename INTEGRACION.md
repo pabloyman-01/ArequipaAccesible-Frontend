@@ -45,7 +45,7 @@ También se ejecutó Prettier sobre los archivos nuevos/modificados. En el backe
 
 Compilación de producción correcta, SDK de Supabase con carga diferida y bundle inicial aproximado de 359 kB. Permanece el aviso de Leaflet CommonJS. Auditoría de producción: cero vulnerabilidades; la instalación informó tres avisos moderados en herramientas de desarrollo, sin actualizaciones forzadas.
 
-Verificación final: **55 pruebas de frontend aprobadas** en Edge Chromium headless. Incluyen HTTP/bearer restringido, multipart, blobs privados, 409 sin reintento, permisos desde Java frente a metadatos, falta de perfil/suspensión, recuperación, logout/cambio de usuario, cursores y envío único/ambiguo. Las expectativas de los antiguos datos ficticios se sustituyeron por las del contrato real. Se corrigió la inclusión accidental de helpers Jasmine en el build de producción, excluyendo src/app/testing de tsconfig.app.
+Verificación final: **57 pruebas de frontend aprobadas** en Edge Chromium headless. Incluyen HTTP/bearer restringido, multipart, blobs privados, 409 sin reintento, permisos desde Java frente a metadatos, falta de perfil/suspensión, recuperación, logout/cambio de usuario, cursores y envío único/ambiguo. Las expectativas de los antiguos datos ficticios se sustituyeron por las del contrato real. Se corrigió la inclusión accidental de helpers Jasmine en el build de producción, excluyendo src/app/testing de tsconfig.app.
 
 Backend: **141 pruebas aprobadas, cero fallos, errores y omitidas**, con PostgreSQL desechable, instalación limpia y baseline 3 + V4. No se ejecutaron fixtures en Supabase.
 
@@ -64,3 +64,5 @@ Retomar la comprobación con el titular cuando se restablezca el correo o median
 Para desplegar: definir el origen definitivo en Supabase/CORS, HTTPS de ambos servicios, config.json público real y fallback de rutas Angular a index.html. El proxy de npm start es solo de desarrollo. Los módulos opcionales siguen pendientes.
 
 Referencias: [Angular HTTP](https://angular.dev/guide/http/interceptors), [Supabase acceso](https://supabase.com/docs/reference/javascript/auth-signinwithpassword), [registro](https://supabase.com/docs/reference/javascript/auth-signup), [recuperación](https://supabase.com/docs/reference/javascript/auth-resetpasswordforemail).
+
+Revisión adicional: se cubrió una cuenta a la que se retiraron todos los roles, mostrando acceso denegado sin un bucle de redirecciones.
