@@ -25,7 +25,7 @@ El texto del registro es neutral respecto a la configuración. Solo anuncia revi
 
 Se ejecutaron `npm run build` y `npx ng test --watch=false --browsers=ChromeHeadless`, con Edge Chromium local: compilación correcta y **64 pruebas aprobadas**. Las siete nuevas verificaciones cubren la configuración pública y sus errores, la sesión inmediata, fallo de adopción sin duplicar el alta, y los dos recorridos de la pantalla de registro.
 
-Antes de aplicar el cambio, una lectura real de settings devolvió mailer_autoconfirm=false. La activación remota queda pendiente hasta verificar true después de que el propietario guarde el panel. Las pruebas automatizadas no crean usuarios ni envían correos reales. No se ha registrado un nuevo ciudadano con datos inventados para probar esta opción.
+Después de que el propietario guardó el ajuste, se verificó el endpoint real el 2026-10-24 a las 23:14:42 UTC (18:14:42 en Perú): mailer_autoconfirm=true, proveedor de correo habilitado y registros habilitados. La evidencia sin claves se conserva en .local/registration-settings-proof.json del backend, ignorada por Git. La compilación y las 64 pruebas también pasaron en CI (ejecución 40141684932). Las pruebas automatizadas no crean usuarios ni envían correos reales; queda pendiente probar un alta nueva desde el navegador con datos del titular.
 
 Comandos realmente ejecutados: Prettier sobre los archivos modificados, `npm run build`, `npx ng test --watch=false --browsers=ChromeHeadless`, GET público de settings desde Node y `git diff --check`. Archivos: core/runtime-config.service.ts, core/auth.service.ts, sus pruebas y confirmation-settings.spec.ts; pantalla register.ts/html/spec; este registro y README.md.
 
