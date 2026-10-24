@@ -1,3 +1,4 @@
+import { AuthService } from '../../../../core/auth.service';
 import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -8,6 +9,7 @@ import { filter, map, startWith } from 'rxjs';
   templateUrl: './header.html',
 })
 export class AdminHeader {
+  readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 

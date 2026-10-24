@@ -1,3 +1,4 @@
+import { uiTestProviders } from '../../../../testing/ui-providers';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { ReportDescription } from './report-description';
@@ -6,7 +7,7 @@ describe('ReportDescription', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ReportDescription],
-      providers: [provideRouter([])],
+      providers: [...uiTestProviders(), provideRouter([])],
     }).compileComponents();
   });
 
@@ -18,15 +19,15 @@ describe('ReportDescription', () => {
   it('should render the detailed description section', () => {
     const fixture = TestBed.createComponent(ReportDescription);
     fixture.detectChanges();
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain(
-      'Descripción Detallada del Incidente',
-    );
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Descripción del Reporte');
   });
 
   it('renders the voice dictation control', () => {
     const fixture = TestBed.createComponent(ReportDescription);
     fixture.detectChanges();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Dictar por voz');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain(
+      'Dictar descripción por voz',
+    );
   });
 });

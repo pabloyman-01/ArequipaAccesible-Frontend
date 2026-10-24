@@ -1,0 +1,110 @@
+<div class="grid gap-6 pb-8">
+  <a
+    class="text-primary"
+    [routerLink]="
+      auth.profile()?.roles?.includes('ADMINISTRADOR') ? '/reportes' : '/ciudadano/reportes'
+    "
+    >← Volver a reportes</a
+  >
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice" role="status">{{ notice() }}</p>
+  }
+  @if (busy()) {
+    <p role="status">Cargando…</p>
+  }
+  @if (report(); as r) {
+    <section class="panel">
+      <p class="eyebrow">{{ r.codigo }}</p>
+      <h1 class="page-title">Detalle del reporte</h1>
+      <span class="badge">{{ etiqueta(r.estado) }}</span>
+      <dl class="mt-5 grid gap-4 sm:grid-cols-2">
+        <div>
+          <dt>Barrera</dt>
+          <dd>{{ nombre(r.tipoBarreraId, 1) }}</dd>
+        </div>
+        <div>
+          <dt>Distrito</dt>
+          <dd>{{ nombre(r.distritoId, 0) }}</dd>
+        </div>
+        <div>
+          <dt>Severidad declarada</dt>
+          <dd>{{ r.severidadDeclarada }}</dd>
+        </div>
+        <div>
+          <dt>Creado</dt>
+          <dd>{{ r.fechaCreacion | date: 'dd/MM/yyyy HH:mm' : '-0500' }}</dd>
+        </div>
+        <div class="sm:col-span-2">
+          <dt>Referencia</dt>
+          <dd>{{ r.direccionReferencia }}</dd>
+        </div>
+        <div class="sm:col-span-2">
+          <dt>Descripción</dt>
+          <dd class="whitespace-pre-wrap">{{ r.descripcion }}</dd>
+        </div>
+        <div>
+          <dt>Coordenadas</dt>
+          <dd>{{ r.latitud }}, {{ r.longitud }}</dd>
+        </div>
+      </dl>
+    </section>
+    <section class="panel">
+      <h2 class="section-title">Evidencia privada</h2>
+      @if (photosError()) {
+        <p class="error" role="alert">{{ photosError() }}</p>
+      }
+      @for (image of images(); track image.id) {
+        <img
+          [src]="image.url"
+          alt="Fotografía adjunta al reporte"
+          class="mt-4 max-h-96 rounded-xl object-contain"
+        />
+      }
+      @if (!r.fotos.length) {
+        <p class="muted">El reporte no tiene fotografías.</p>
+      }
+    </section>
+    <section class="panel">
+      <h2 class="section-title">Historial de estados</h2>
+      <ol class="grid gap-4">
+        @for (e of history(); track e.id) {
+          <li class="border-l-4 border-primary pl-4">
+            <strong>{{ etiqueta(e.estadoNuevo) }}</strong>
+            <p class="muted">{{ e.fechaCambio | date: 'dd/MM/yyyy HH:mm' : '-0500' }}</p>
+            @if (e.motivo) {
+              <p>{{ e.motivo }}</p>
+            }
+          </li>
+        } @empty {
+          <li>No hay eventos registrados.</li>
+        }
+      </ol>
+    </section>
+    @if (auth.profile()?.roles?.includes('ADMINISTRADOR') && siguientes[r.estado].length) {
+      <form class="panel grid gap-4" (ngSubmit)="change()">
+        <h2 class="section-title">Cambiar estado</h2>
+        <label
+          >Nuevo estado<select class="field" name="nuevoEstado" [(ngModel)]="nuevoEstado" required>
+            <option value="">Selecciona</option>
+            @for (e of siguientes[r.estado]; track e) {
+              <option [value]="e">{{ etiqueta(e) }}</option>
+            }
+          </select></label
+        >
+        <label
+          >Motivo {{ nuevoEstado === 'RECHAZADO' ? '(obligatorio)' : '(opcional)'
+          }}<textarea
+            class="field"
+            name="motivo"
+            [(ngModel)]="motivo"
+            maxlength="500"
+            [required]="nuevoEstado === 'RECHAZADO'"
+          ></textarea></label
+        ><button class="btn" type="submit" [disabled]="busy()">Guardar cambio</button>
+      </form>
+    }
+  }
+</div>

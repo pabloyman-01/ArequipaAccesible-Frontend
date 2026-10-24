@@ -1,23 +1,19 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { ReportsService } from './reports.service';
-
 describe('ReportsService', () => {
-  let service: ReportsService;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ReportsService);
-  });
-
-  it('should load the report list', () => {
-    expect(service.reports().length).toBe(9);
-    expect(service.totalRegistered).toBe(48);
-  });
-
-  it('should update the status of a report', () => {
-    service.updateStatus('report-2', 'atendido');
-
-    const report = service.reports().find((item) => item.key === 'report-2');
-    expect(report?.status).toBe('atendido');
+  it('requests the backend collection and preserves its real empty page', async () => {
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    });
+    const service = TestBed.inject(ReportsService),
+      http = TestBed.inject(HttpTestingController);
+    const pending = service.listar({ limite: 20, cursor: 'cursor-de-prueba' });
+    const request = http.expectOne('/api/admin/reportes?limite=20&cursor=cursor-de-prueba');
+    expect(request.request.method).toBe('GET');
+    request.flush({ elementos: [], limite: 20, hayMas: false, siguienteCursor: null });
+    expect((await pending).elementos).toEqual([]);
+    http.verify();
   });
 });

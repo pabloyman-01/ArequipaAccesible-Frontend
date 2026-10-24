@@ -1,11 +1,19 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { MyReportsService } from './my-reports.service';
-
 describe('MyReportsService', () => {
-  it('should provide the citizen report history', () => {
-    TestBed.configureTestingModule({});
-    const service = TestBed.inject(MyReportsService);
-    expect(service.reports.length).toBe(4);
-    expect(service.totalRegistered).toBe(16);
+  it('requests the backend collection and preserves its real empty page', async () => {
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    });
+    const service = TestBed.inject(MyReportsService),
+      http = TestBed.inject(HttpTestingController);
+    const pending = service.listar({ limite: 20, cursor: 'cursor-de-prueba' });
+    const request = http.expectOne('/api/reportes?limite=20&cursor=cursor-de-prueba');
+    expect(request.request.method).toBe('GET');
+    request.flush({ elementos: [], limite: 20, hayMas: false, siguienteCursor: null });
+    expect((await pending).elementos).toEqual([]);
+    http.verify();
   });
 });

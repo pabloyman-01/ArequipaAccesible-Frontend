@@ -12,7 +12,7 @@ Aplicación web para la gestión y el seguimiento de incidencias de accesibilida
 - Gestión y filtrado de usuarios.
 - Carga diferida de módulos y componentes para las rutas principales.
 
-> Actualmente, las acciones de autenticación y los datos de reportes y usuarios se manejan de forma local, sin conexión a un servicio backend.
+La rama `feat/integracion-frontend`, basada en `dev`, conecta el MVP con el backend Java y Supabase Auth. Ver [INTEGRACION.md](INTEGRACION.md) para contratos, comandos ejecutados, pruebas y limitaciones verificadas. Los servicios de cuadrillas, IA y certificaciones oficiales no están habilitados.
 
 ## Tecnologías
 
@@ -32,7 +32,7 @@ Aplicación web para la gestión y el seguimiento de incidencias de accesibilida
 Instala las dependencias del proyecto:
 
 ```bash
-npm install
+npm ci
 ```
 
 Inicia el servidor de desarrollo:
@@ -41,16 +41,22 @@ Inicia el servidor de desarrollo:
 npm start
 ```
 
-La aplicación estará disponible normalmente en `http://localhost:4200/`.
+La aplicación estará disponible en **http://localhost:3000/**. El backend debe estar activo en http://localhost:8080. `npm start` usa `proxy.conf.json` para enviar `/api/**` al backend; configurar `CORS_ALLOWED_ORIGINS=http://localhost:3000` en este último.
+
+Antes de arrancar, crear `public/config.json` a partir de `public/config.example.json` con la URL y la clave **publicable real** de Supabase. El archivo se ignora en Git. También se puede ejecutar `ops/configure-local.ps1 -SupabaseUrl <URL_REAL> -SupabasePublishableKey <CLAVE_PUBLICABLE_REAL>`, sustituyendo los marcadores. Nunca copiar contraseñas JDBC, claves secretas o claves de Storage al frontend.
+
+Supabase debe autorizar el origen http://localhost:3000 como redirección local. Los correos de acceso, registro y recuperación vuelven al origen; PKCE y la sesión utilizan localStorage para funcionar entre pestañas del mismo navegador. Cerrar sesión desde la aplicación al terminar. Un límite temporal de correos se muestra como error; no hay reenvíos automáticos.
+
+En producción, definir el origen definitivo en Supabase/CORS y servir frontend/API mediante HTTPS. Usar un reverse proxy para `/api` o configurar la URL HTTPS de la API en config.json. El proxy de Angular es solo para desarrollo; configurar el fallback de rutas a index.html en el servidor web.
 
 ## Comandos disponibles
 
-| Comando | Descripción |
-| --- | --- |
-| `npm start` | Inicia el servidor de desarrollo con Angular CLI. |
-| `npm run build` | Genera la compilación de producción en `dist/`. |
-| `npm run watch` | Compila en modo desarrollo y observa cambios. |
-| `npm test` | Ejecuta las pruebas unitarias con Karma. |
+| Comando         | Descripción                                       |
+| --------------- | ------------------------------------------------- |
+| `npm start`     | Inicia el servidor de desarrollo con Angular CLI. |
+| `npm run build` | Genera la compilación de producción en `dist/`.   |
+| `npm run watch` | Compila en modo desarrollo y observa cambios.     |
+| `npm test`      | Ejecuta las pruebas unitarias con Karma.          |
 
 Para ejecutar las pruebas una sola vez en un entorno sin interfaz gráfica:
 
@@ -62,29 +68,29 @@ npx ng test --watch=false --browsers=ChromeHeadless
 
 ### Autenticación
 
-| Ruta | Descripción |
-| --- | --- |
-| `/inicio-sesion` | Inicio de sesión. |
-| `/inicio-sesion/registro` | Registro de ciudadano. |
+| Ruta                                  | Descripción                 |
+| ------------------------------------- | --------------------------- |
+| `/inicio-sesion`                      | Inicio de sesión.           |
+| `/inicio-sesion/registro`             | Registro de ciudadano.      |
 | `/inicio-sesion/recuperar-contrasena` | Recuperación de contraseña. |
 
 ### Ciudadanía
 
-| Ruta | Descripción |
-| --- | --- |
-| `/ciudadano` | Panel principal ciudadano. |
-| `/ciudadano/nuevo-reporte` | Inicio del registro de una incidencia. |
-| `/ciudadano/nuevo-reporte/evidencia` | Registro de evidencia y ubicación. |
-| `/ciudadano/nuevo-reporte/descripcion` | Descripción y resumen del reporte. |
-| `/ciudadano/reportes` | Consulta de reportes del ciudadano. |
+| Ruta                                   | Descripción                            |
+| -------------------------------------- | -------------------------------------- |
+| `/ciudadano`                           | Panel principal ciudadano.             |
+| `/ciudadano/nuevo-reporte`             | Inicio del registro de una incidencia. |
+| `/ciudadano/nuevo-reporte/evidencia`   | Registro de evidencia y ubicación.     |
+| `/ciudadano/nuevo-reporte/descripcion` | Descripción y resumen del reporte.     |
+| `/ciudadano/reportes`                  | Consulta de reportes del ciudadano.    |
 
 ### Administración
 
-| Ruta | Descripción |
-| --- | --- |
-| `/` | Dashboard administrativo. |
-| `/reportes` | Gestión de reportes. |
-| `/usuarios` | Gestión de usuarios. |
+| Ruta        | Descripción               |
+| ----------- | ------------------------- |
+| `/`         | Dashboard administrativo. |
+| `/reportes` | Gestión de reportes.      |
+| `/usuarios` | Gestión de usuarios.      |
 
 ## Estructura del proyecto
 

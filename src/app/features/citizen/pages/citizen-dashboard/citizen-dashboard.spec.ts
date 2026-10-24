@@ -1,3 +1,4 @@
+import { uiTestProviders } from '../../../../testing/ui-providers';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { CitizenDashboard } from './citizen-dashboard';
@@ -6,7 +7,7 @@ describe('CitizenDashboard', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CitizenDashboard],
-      providers: [provideRouter([])],
+      providers: [...uiTestProviders(), provideRouter([])],
     }).compileComponents();
   });
 
@@ -19,7 +20,7 @@ describe('CitizenDashboard', () => {
     const fixture = TestBed.createComponent(CitizenDashboard);
     fixture.detectChanges();
     expect((fixture.nativeElement as HTMLElement).querySelector('h1')?.textContent).toContain(
-      '¡Bienvenido, Aarón!',
+      'Mi panel ciudadano',
     );
   });
 });

@@ -1,3 +1,4 @@
+import { uiTestProviders } from '../../../../testing/ui-providers';
 import { TestBed } from '@angular/core/testing';
 import { CitizenAccount } from './account';
 
@@ -5,6 +6,7 @@ describe('CitizenAccount', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CitizenAccount],
+      providers: uiTestProviders(),
     }).compileComponents();
   });
 

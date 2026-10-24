@@ -1,60 +1,126 @@
-<div class="flex w-full flex-col gap-space-lg pb-space-xl">
-  <div class="flex flex-col justify-between gap-space-lg lg:flex-row lg:items-end">
-    <div class="flex max-w-3xl flex-col gap-space-xs">
-      <div
-        class="inline-flex items-center gap-space-xs self-start rounded-full bg-surface-container-high px-3 py-1 font-label-sm text-label-sm uppercase tracking-wider text-primary-container"
-      >
-        <span class="material-symbols-outlined text-[14px]" aria-hidden="true">shield_person</span>
-        <span>Administración del Sistema • Control de Identidades y Permisos</span>
+<div class="grid gap-6 pb-8">
+  <header>
+    <p class="eyebrow">Administración</p>
+    <h1 class="page-title">Gestión de Usuarios</h1>
+    <p class="muted">Consulta perfiles y gestiona el estado de sus cuentas.</p>
+  </header>
+  <form (ngSubmit)="apply()" class="panel grid items-end gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <label
+      >Rol<select class="field" name="rol" [(ngModel)]="rol">
+        <option value="">Todos</option>
+        <option>CIUDADANO</option>
+        <option>ADMINISTRADOR</option>
+      </select></label
+    >
+    <label
+      >Estado<select class="field" name="estado" [(ngModel)]="estadoCuenta">
+        <option value="">Todos</option>
+        <option>ACTIVA</option>
+        <option>SUSPENDIDA</option>
+      </select></label
+    >
+    <label
+      >Distrito<select class="field" name="distrito" [(ngModel)]="distritoId">
+        <option value="">Todos</option>
+        @for (d of distritos; track d.id) {
+          <option [value]="d.id">{{ d.nombre }}</option>
+        }
+      </select></label
+    ><button class="btn" [disabled]="busy()">Aplicar filtros</button>
+  </form>
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice" role="status">{{ notice() }}</p>
+  }
+  @if (busy()) {
+    <p role="status">Cargando…</p>
+  }
+  @if (page(); as data) {
+    <section class="panel overflow-x-auto">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Persona</th>
+            <th>Documento</th>
+            <th>Roles</th>
+            <th>Estado</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (u of data.elementos; track u.id) {
+            <tr>
+              <td>
+                <strong>{{ u.nombres }} {{ u.apellidos }}</strong>
+                <p class="muted">{{ u.email }}</p>
+              </td>
+              <td>
+                {{ u.documentoEnmascarado }}
+                <p class="muted">{{ u.estadoVerificacion }}</p>
+              </td>
+              <td>{{ u.roles.join(', ') }}</td>
+              <td>{{ u.estadoCuenta }}</td>
+              <td>
+                <button
+                  class="btn-secondary"
+                  type="button"
+                  (click)="select(u)"
+                  [disabled]="busy() || u.id === auth.profile()?.id"
+                >
+                  {{ u.estadoCuenta === 'ACTIVA' ? 'Suspender' : 'Activar' }}
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5">No hay usuarios con estos filtros.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <nav class="mt-5 flex justify-between gap-3" aria-label="Paginación de usuarios">
+        <span>Página {{ index + 1 }} · {{ data.elementos.length }} usuarios en esta página</span>
+        <div class="flex gap-3">
+          <button
+            class="btn-secondary"
+            (click)="load(index - 1)"
+            [disabled]="busy() || index === 0"
+          >
+            Anterior</button
+          ><button
+            class="btn-secondary"
+            (click)="load(index + 1)"
+            [disabled]="busy() || !data.hayMas"
+          >
+            Siguiente
+          </button>
+        </div>
+      </nav>
+    </section>
+  }
+  @if (selected; as u) {
+    <form class="panel grid gap-4" (ngSubmit)="change()">
+      <h2 class="section-title">
+        {{ u.estadoCuenta === 'ACTIVA' ? 'Suspender' : 'Activar' }} cuenta de {{ u.nombres }}
+        {{ u.apellidos }}
+      </h2>
+      <label
+        >Motivo<textarea
+          class="field"
+          name="motivo"
+          [(ngModel)]="motivo"
+          required
+          maxlength="500"
+        ></textarea>
+      </label>
+      <div class="flex gap-3">
+        <button class="btn" [disabled]="busy()" type="submit">Confirmar cambio</button
+        ><button class="btn-secondary" type="button" (click)="selected = null" [disabled]="busy()">
+          Cancelar
+        </button>
       </div>
-      <h1 class="font-headline-xl text-headline-xl font-bold tracking-tight text-on-surface">
-        Gestión de Usuarios y Roles
-      </h1>
-      <p class="font-body-md text-body-md leading-relaxed text-on-surface-variant">
-        Administración centralizada de cuentas de usuario del sistema bajo dos perfiles de acceso:
-        Administradores (gestión municipal y fiscalización) y Ciudadanos (acreditación y
-        participación ciudadana).
-      </p>
-    </div>
-
-    <div class="flex shrink-0 flex-wrap items-center gap-space-sm">
-      <button
-        type="button"
-        class="inline-flex cursor-pointer items-center gap-space-xs rounded-full bg-surface-container-lowest px-space-md py-2.5 font-label-md text-label-md text-on-surface shadow-sm transition-colors hover:bg-surface-container"
-      >
-        <span class="material-symbols-outlined text-[18px] text-outline" aria-hidden="true"
-          >file_download</span
-        >
-        <span>Exportar Padrón (CSV)</span>
-      </button>
-      <button
-        type="button"
-        class="inline-flex cursor-pointer items-center gap-space-xs rounded-full bg-surface-container-lowest px-space-md py-2.5 font-label-md text-label-md text-on-surface shadow-sm transition-colors hover:bg-surface-container"
-      >
-        <span class="material-symbols-outlined text-[18px] text-outline" aria-hidden="true"
-          >history</span
-        >
-        <span>Registro de Auditoría</span>
-      </button>
-      <button
-        type="button"
-        class="inline-flex cursor-pointer items-center gap-space-xs rounded-full bg-primary-container px-space-lg py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition-all hover:bg-primary"
-      >
-        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person_add</span>
-        <span>Nuevo Usuario</span>
-      </button>
-    </div>
-  </div>
-
-  <app-users-kpis [kpis]="kpis" />
-
-  <app-users-filters
-    [(search)]="search"
-    [(role)]="role"
-    [(status)]="status"
-    [(district)]="district"
-    [total]="totalRegistered"
-  />
-
-  <app-users-table [users]="filteredUsers()" [total]="totalRegistered" />
+    </form>
+  }
 </div>

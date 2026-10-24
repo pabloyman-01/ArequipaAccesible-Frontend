@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ApiService, mensajeError } from '../../../../core/api.service';
+import { ReportDraftService } from '../../../../core/report-draft.service';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { BarrierOption, SeverityOption } from '../../models/new-report.models';
 
 @Component({
@@ -7,94 +9,77 @@ import { BarrierOption, SeverityOption } from '../../models/new-report.models';
   imports: [RouterLink],
   templateUrl: './new-report.html',
 })
-export class NewReport {
-  protected readonly selectedBarrier = signal('rampa-rota');
-  protected readonly selectedSeverity = signal('critica');
-
-  protected readonly barriers: BarrierOption[] = [
-    {
-      key: 'rampa-rota',
-      title: 'Rampa Rota o Inexistente',
-      description: 'No hay rampa en la esquina o está quebrada y las sillas de ruedas no pueden subir.',
-      code: 'B-01',
-      icon: 'accessible',
-    },
-    {
-      key: 'desmonte',
-      title: 'Vereda con Desmonte u Obstáculo',
-      description: 'Tierra, piedras de obra, cables o basura que tapan el paso de los peatones.',
-      code: 'B-04',
-      icon: 'construction',
-    },
-    {
-      key: 'semaforo-sonoro',
-      title: 'Semáforo Sonoro Averiado',
-      description: 'No suena ni vibra para avisar a personas ciegas cuándo cruzar seguros.',
-      code: 'B-08',
-      icon: 'traffic',
-    },
-    {
-      key: 'escalon',
-      title: 'Escalón sin Rampa de Acceso',
-      description: 'Subida o grada alta en la vereda sin rampa alternativa para pasar con coche o silla.',
-      code: 'B-02',
-      icon: 'stairs',
-    },
-    {
-      key: 'comercio',
-      title: 'Comercio / Letrero en Vereda',
-      description: 'Mesas, mercadería, toldos o carteles que invaden y reducen la vereda.',
-      code: 'B-11',
-      icon: 'storefront',
-    },
-    {
-      key: 'adoquin',
-      title: 'Deterioro de Adoquín / Laja',
-      description: 'Huecos profundos, adoquines rotos o lajas de sillar sueltas donde la gente tropieza.',
-      code: 'B-05',
-      icon: 'grid_goldenratio',
-    },
-  ];
-
+export class NewReport implements OnInit {
+  readonly draft = inject(ReportDraftService);
+  private readonly api = inject(ApiService);
+  private readonly router = inject(Router);
+  readonly error = signal('');
+  readonly loading = signal(true);
+  protected readonly selectedBarrier = this.draft.tipoBarreraId;
+  protected readonly selectedSeverity = this.draft.severidad;
+  protected barriers: BarrierOption[] = [];
+  async ngOnInit() {
+    try {
+      const [, tipos] = await this.api.catalogos();
+      this.barriers = tipos.map((t) => ({
+        key: String(t.id),
+        title: t.nombre,
+        description: t.descripcion ?? '',
+        code: t.codigo ?? '',
+        icon: 'accessible',
+      }));
+    } catch (error) {
+      this.error.set(mensajeError(error));
+    } finally {
+      this.loading.set(false);
+    }
+  }
+  protected continue() {
+    if (!this.draft.tipoBarreraId()) {
+      this.error.set('Selecciona un tipo de barrera.');
+      return;
+    }
+    void this.router.navigateByUrl('/ciudadano/nuevo-reporte/evidencia');
+  }
   protected readonly severities: SeverityOption[] = [
     {
-      key: 'critica',
-      badge: 'Prioridad Inmediata',
-      title: 'Prioridad 1: Crítica / Alta',
+      key: 'ALTA',
+      badge: 'Valoración ciudadana',
+      title: 'Severidad alta',
       description:
         'Bloqueo total: Nadie en silla de ruedas o con bastón puede pasar y tienen que arriesgarse yendo por la pista con los autos.',
-      response: 'Respuesta estimada: < 24 horas',
+      response: 'Sin plazo de atención garantizado',
       icon: 'emergency',
       badgeClass: 'bg-error-container text-on-error-container',
     },
     {
-      key: 'moderada',
+      key: 'MEDIA',
       badge: 'Intervención Regular',
-      title: 'Prioridad 2: Moderada',
+      title: 'Severidad media',
       description:
         'Paso difícil: Se puede avanzar pero con mucho esfuerzo, peligro de caída o desviándose un poco.',
-      response: 'Respuesta estimada: 48 - 72 horas',
+      response: 'Sin plazo de atención garantizado',
       icon: 'schedule',
       badgeClass: 'bg-secondary-fixed text-on-secondary-fixed',
     },
     {
-      key: 'preventiva',
+      key: 'BAJA',
       badge: 'Mantenimiento Urbano',
-      title: 'Prioridad 3: Preventiva',
+      title: 'Severidad baja',
       description:
         'Desgaste inicial: La vereda o pintura se está dañando y conviene repararla antes de que empeore.',
-      response: 'Programación quincenal',
+      response: 'Sin plazo de atención garantizado',
       icon: 'event_note',
       badgeClass: 'bg-surface-container-highest text-on-surface-variant',
     },
   ];
 
   protected selectBarrier(key: string): void {
-    this.selectedBarrier.set(key);
+    this.selectedBarrier.set(Number(key));
   }
 
   protected selectSeverity(key: string): void {
-    this.selectedSeverity.set(key);
+    if (key === 'ALTA' || key === 'MEDIA' || key === 'BAJA') this.selectedSeverity.set(key);
   }
 
   protected selectionClass(selected: boolean): string {

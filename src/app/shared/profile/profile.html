@@ -1,0 +1,85 @@
+<section class="panel mx-auto max-w-3xl">
+  <h1 class="page-title">Mi cuenta</h1>
+  <p class="muted">
+    {{
+      auth.profile()
+        ? 'Actualiza tus datos de contacto.'
+        : 'Completa tu perfil para comenzar a usar Arequipa Accesible.'
+    }}
+  </p>
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+  @if (success()) {
+    <p class="notice" role="status">{{ success() }}</p>
+  }
+  @if (loading()) {
+    <p role="status">Cargando perfil…</p>
+  }
+  <form (ngSubmit)="save()" class="grid gap-5 sm:grid-cols-2">
+    <label
+      >Nombres<input
+        class="field"
+        name="nombres"
+        [(ngModel)]="nombres"
+        required
+        maxlength="100"
+        autocomplete="given-name"
+    /></label>
+    <label
+      >Apellidos<input
+        class="field"
+        name="apellidos"
+        [(ngModel)]="apellidos"
+        required
+        maxlength="100"
+        autocomplete="family-name"
+    /></label>
+    @if (!auth.profile()) {
+      <label
+        >Tipo de documento<select class="field" name="tipoDocumento" [(ngModel)]="tipoDocumento">
+          <option>DNI</option>
+          <option>CE</option>
+          <option>PASAPORTE</option>
+        </select></label
+      >
+      <label
+        >Documento<input
+          class="field"
+          name="documento"
+          [(ngModel)]="documento"
+          required
+          [pattern]="tipoDocumento === 'DNI' ? '[0-9]{8}' : '[A-Za-z0-9]{6,20}'"
+          maxlength="20"
+      /></label>
+    } @else {
+      <p>Documento: {{ auth.profile()?.documentoEnmascarado }}</p>
+      <p>Correo: {{ auth.profile()?.email }}</p>
+    }
+    <label
+      >Teléfono<input
+        class="field"
+        name="telefono"
+        [(ngModel)]="telefono"
+        pattern="[+0-9 ()-]{6,20}"
+        maxlength="20"
+        autocomplete="tel"
+    /></label>
+    <label
+      >Distrito<select class="field" name="distritoId" [(ngModel)]="distritoId">
+        <option value="">Sin especificar</option>
+        @for (d of distritos; track d.id) {
+          <option [value]="d.id">{{ d.nombre }}</option>
+        }
+      </select></label
+    >
+    <p class="muted sm:col-span-2">
+      La identidad figura como {{ auth.profile()?.estadoVerificacion || 'NO_VERIFICADO' }}. El
+      registro no realiza validación RENIEC.
+    </p>
+    <button class="btn" type="submit" [disabled]="busy() || loading()">
+      {{ busy() ? 'Guardando…' : 'Guardar perfil' }}
+    </button>
+    <button class="btn-secondary" type="button" (click)="auth.signOut()">Cerrar sesión</button>
+  </form>
+</section>

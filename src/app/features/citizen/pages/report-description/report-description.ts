@@ -1,8 +1,7 @@
-import { Component, computed, OnDestroy, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
-
-const INITIAL_DESCRIPTION =
-  'El rebaje de la vereda de sillar en la intersección se encuentra quebrado con desnivel abrupto de 8.2 cm, bloqueando el giro seguro de sillas de ruedas e impidiendo cruzar hacia la Calle San Francisco.';
+import { ApiService, mensajeError } from '../../../../core/api.service';
+import { ReportDraftService } from '../../../../core/report-draft.service';
+import { Component, inject, computed, OnInit, OnDestroy, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 
 interface VoiceRecognitionResult {
   isFinal: boolean;
@@ -37,8 +36,16 @@ type VoiceRecognitionConstructor = new () => VoiceRecognition;
   imports: [RouterLink],
   templateUrl: './report-description.html',
 })
-export class ReportDescription implements OnDestroy {
-  protected readonly description = signal(INITIAL_DESCRIPTION);
+export class ReportDescription implements OnInit, OnDestroy {
+  readonly draft = inject(ReportDraftService);
+  private readonly api = inject(ApiService);
+  private readonly router = inject(Router);
+  readonly error = signal('');
+  readonly created = signal<{ id: number; codigo: string } | null>(null);
+  protected readonly description = this.draft.descripcion;
+  ngOnInit() {
+    if (!this.draft.ready()) void this.router.navigateByUrl('/ciudadano/nuevo-reporte');
+  }
   protected readonly isListening = signal(false);
   protected readonly isSubmitting = signal(false);
   protected readonly showSuccess = signal(false);
@@ -72,8 +79,8 @@ export class ReportDescription implements OnDestroy {
       if (event.error !== 'aborted') {
         this.voiceError.set(
           event.error === 'not-allowed'
-            ? 'Debes permitir el acceso al micrófono para usar el dictado.'
-            : 'No se pudo procesar el dictado. Inténtalo nuevamente.',
+            ? 'Debes permitir el acceso al micrÃ³fono para usar el dictado.'
+            : 'No se pudo procesar el dictado. IntÃ©ntalo nuevamente.',
         );
       }
     };
@@ -88,20 +95,53 @@ export class ReportDescription implements OnDestroy {
       this.voiceError.set('');
       this.isListening.set(true);
     } catch {
-      this.voiceError.set('No se pudo iniciar el dictado. Inténtalo nuevamente.');
+      this.voiceError.set('No se pudo iniciar el dictado. IntÃ©ntalo nuevamente.');
     }
   }
 
-  protected submit(): void {
-    if (this.isSubmitting()) {
+  protected async submit(): Promise<void> {
+    if (this.isSubmitting() || this.showSuccess() || this.draft.uncertain()) return;
+    if (!this.draft.ready() || !this.description().trim()) {
+      this.error.set('Completa los tres pasos y escribe una descripciÃ³n.');
       return;
     }
-
     this.isSubmitting.set(true);
-    window.setTimeout(() => {
-      this.isSubmitting.set(false);
+    this.error.set('');
+    try {
+      const u = this.draft.ubicacion()!;
+      const result = await this.api.crear(
+        {
+          tipoBarreraId: this.draft.tipoBarreraId(),
+          severidadDeclarada: this.draft.severidad(),
+          distritoId: this.draft.distritoId(),
+          direccionReferencia: this.draft.direccion().trim(),
+          descripcion: this.description().trim(),
+          latitud: u.lat,
+          longitud: u.lng,
+        },
+        this.draft.foto()!,
+        this.draft.nombreFoto(),
+      );
+      this.created.set(result);
       this.showSuccess.set(true);
-    }, 700);
+      this.draft.clear();
+    } catch (error) {
+      this.error.set(mensajeError(error));
+      // No automatic retry for multipart writes: a lost response may follow a successful commit.
+      if (
+        error &&
+        typeof error === 'object' &&
+        'status' in error &&
+        (error.status === 0 || Number(error.status) >= 500)
+      ) {
+        this.draft.uncertain.set(true);
+        this.error.set(
+          'No se pudo confirmar la respuesta. Consulta Mis Reportes antes de intentar registrar nuevamente.',
+        );
+      }
+    } finally {
+      this.isSubmitting.set(false);
+    }
   }
 
   private getRecognitionConstructor(): VoiceRecognitionConstructor | undefined {
@@ -128,7 +168,7 @@ export class ReportDescription implements OnDestroy {
 
     this.description.update((description) => {
       const separator = description.trim() ? ' ' : '';
-      return `${description.trimEnd()}${separator}${transcript.trim()}`.slice(0, 500);
+      return `${description.trimEnd()}${separator}${transcript.trim()}`.slice(0, 3000);
     });
   }
 }

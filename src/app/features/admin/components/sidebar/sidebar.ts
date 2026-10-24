@@ -1,3 +1,4 @@
+import { AuthService } from '../../../../core/auth.service';
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -7,6 +8,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './sidebar.html',
 })
 export class AdminSidebar {
+  readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
   protected readonly activeLinkClass =
@@ -16,6 +18,6 @@ export class AdminSidebar {
     'flex items-center gap-space-sm rounded-full px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface';
 
   protected signOut(): void {
-    void this.router.navigate(['/inicio-sesion']);
+    void this.auth.signOut();
   }
 }

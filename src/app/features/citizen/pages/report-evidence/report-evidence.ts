@@ -1,5 +1,17 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ApiService, mensajeError } from '../../../../core/api.service';
+import { Catalogo } from '../../../../core/api.models';
+import { ReportDraftService } from '../../../../core/report-draft.service';
+import {
+  AfterViewInit,
+  OnInit,
+  inject,
+  Component,
+  ElementRef,
+  OnDestroy,
+  ViewChild,
+  signal,
+} from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import * as L from 'leaflet';
 
 @Component({
@@ -7,8 +19,35 @@ import * as L from 'leaflet';
   imports: [RouterLink],
   templateUrl: './report-evidence.html',
 })
-export class ReportEvidence implements AfterViewInit, OnDestroy {
-  protected readonly address = signal('Calle San Francisco 312, Cercado de Arequipa');
+export class ReportEvidence implements OnInit, AfterViewInit, OnDestroy {
+  readonly draft = inject(ReportDraftService);
+  private readonly api = inject(ApiService);
+  private readonly router = inject(Router);
+  distritos: Catalogo[] = [];
+  readonly error = signal('');
+  protected readonly address = this.draft.direccion;
+  async ngOnInit() {
+    if (!this.draft.tipoBarreraId()) {
+      void this.router.navigateByUrl('/ciudadano/nuevo-reporte');
+      return;
+    }
+    try {
+      [this.distritos] = await this.api.catalogos();
+    } catch (error) {
+      this.error.set(mensajeError(error));
+    }
+    if (this.draft.foto()) this.setPhoto(this.draft.foto()!, this.draft.nombreFoto());
+  }
+  protected continue() {
+    if (!this.draft.ready()) {
+      this.error.set(
+        'Adjunta una foto JPEG/PNG, selecciona la ubicación en el mapa, el distrito y escribe una referencia.',
+      );
+      return;
+    }
+    void this.router.navigateByUrl('/ciudadano/nuevo-reporte/descripcion');
+  }
+
   protected readonly photoName = signal('');
   protected readonly photoPreview = signal<string | null>(null);
   protected readonly photoError = signal('');
@@ -30,7 +69,7 @@ export class ReportEvidence implements AfterViewInit, OnDestroy {
       maxZoom: 19,
     }).addTo(this.map);
 
-    this.setLocation({ lat: -16.3989, lng: -71.535 }, false);
+    if (this.draft.ubicacion()) this.setLocation(this.draft.ubicacion()!, false);
     this.map.on('click', (event: L.LeafletMouseEvent) => this.setLocation(event.latlng));
     requestAnimationFrame(() => this.map?.invalidateSize({ animate: false, pan: false }));
   }
@@ -69,19 +108,25 @@ export class ReportEvidence implements AfterViewInit, OnDestroy {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     canvas.getContext('2d')?.drawImage(video, 0, 0, canvas.width, canvas.height);
-    canvas.toBlob((photo) => {
-      if (!photo) {
-        this.photoError.set('No se pudo capturar la fotografía. Inténtalo nuevamente.');
-        return;
-      }
+    canvas.toBlob(
+      (photo) => {
+        if (!photo) {
+          this.photoError.set('No se pudo capturar la fotografía. Inténtalo nuevamente.');
+          return;
+        }
 
-      this.setPhoto(photo, `evidencia-${Date.now()}.jpg`);
-      this.closeCamera();
-    }, 'image/jpeg', 0.9);
+        this.setPhoto(photo, `evidencia-${Date.now()}.jpg`);
+        this.closeCamera();
+      },
+      'image/jpeg',
+      0.9,
+    );
   }
 
   protected closeCamera(): void {
-    this.cameraStream()?.getTracks().forEach((track) => track.stop());
+    this.cameraStream()
+      ?.getTracks()
+      .forEach((track) => track.stop());
     this.cameraStream.set(null);
   }
 
@@ -101,7 +146,9 @@ export class ReportEvidence implements AfterViewInit, OnDestroy {
         this.isLocating.set(false);
       },
       () => {
-        this.locationError.set('No se pudo obtener tu ubicación. Revisa los permisos del navegador.');
+        this.locationError.set(
+          'No se pudo obtener tu ubicación. Revisa los permisos del navegador.',
+        );
         this.isLocating.set(false);
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
@@ -121,17 +168,19 @@ export class ReportEvidence implements AfterViewInit, OnDestroy {
   }
 
   private setPhoto(photo: Blob, name: string): void {
-    if (!photo.type.startsWith('image/')) {
-      this.photoError.set('Selecciona un archivo de imagen válido.');
+    if (!['image/jpeg', 'image/png'].includes(photo.type)) {
+      this.photoError.set('Selecciona una fotografía JPEG o PNG válida.');
       return;
     }
 
-    if (photo.size > 10 * 1024 * 1024) {
-      this.photoError.set('La fotografía no puede superar los 10 MB.');
+    if (photo.size > 5 * 1024 * 1024) {
+      this.photoError.set('La fotografía no puede superar los 5 MiB.');
       return;
     }
 
     this.revokePreview();
+    this.draft.foto.set(photo);
+    this.draft.nombreFoto.set(name);
     this.photoName.set(name);
     this.photoPreview.set(URL.createObjectURL(photo));
     this.photoError.set('');
@@ -139,6 +188,8 @@ export class ReportEvidence implements AfterViewInit, OnDestroy {
 
   protected removePhoto(): void {
     this.revokePreview();
+    this.draft.foto.set(null);
+    this.draft.nombreFoto.set('');
     this.photoName.set('');
     this.photoError.set('');
   }
@@ -170,8 +221,10 @@ export class ReportEvidence implements AfterViewInit, OnDestroy {
       this.locationMarker.on('dragend', () => this.setLocation(this.locationMarker!.getLatLng()));
     }
 
-    if (updateAddress) {
-      this.address.set(`Ubicación seleccionada: ${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`);
-    }
+    if (updateAddress)
+      this.draft.ubicacion.set({
+        lat: Number(location.lat.toFixed(7)),
+        lng: Number(location.lng.toFixed(7)),
+      });
   }
 }

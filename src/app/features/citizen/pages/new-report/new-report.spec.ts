@@ -1,3 +1,4 @@
+import { uiTestProviders } from '../../../../testing/ui-providers';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { NewReport } from './new-report';
@@ -6,7 +7,7 @@ describe('NewReport', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NewReport],
-      providers: [provideRouter([])],
+      providers: [...uiTestProviders(), provideRouter([])],
     }).compileComponents();
   });
 

@@ -1,3 +1,4 @@
+import { roleGuard } from '../../core/auth.guard';
 import { Routes } from '@angular/router';
 import { CitizenLayout } from './layout/citizen-layout';
 
@@ -5,7 +6,13 @@ export const CITIZEN_ROUTES: Routes = [
   {
     path: '',
     component: CitizenLayout,
+    canActivateChild: [roleGuard('CIUDADANO')],
     children: [
+      {
+        path: 'reportes/:id',
+        loadComponent: () =>
+          import('../../shared/report-detail/report-detail').then((m) => m.ReportDetail),
+      },
       {
         path: '',
         pathMatch: 'full',
@@ -18,7 +25,8 @@ export const CITIZEN_ROUTES: Routes = [
       {
         path: 'nuevo-reporte',
         title: 'Nuevo Reporte | Arequipa Accesible',
-        loadComponent: () => import('./pages/new-report/new-report').then((module) => module.NewReport),
+        loadComponent: () =>
+          import('./pages/new-report/new-report').then((module) => module.NewReport),
       },
       {
         path: 'nuevo-reporte/evidencia',
@@ -37,7 +45,8 @@ export const CITIZEN_ROUTES: Routes = [
       {
         path: 'reportes',
         title: 'Mis Reportes | Arequipa Accesible',
-        loadComponent: () => import('./pages/my-reports/my-reports').then((module) => module.MyReports),
+        loadComponent: () =>
+          import('./pages/my-reports/my-reports').then((module) => module.MyReports),
       },
       {
         path: 'cuenta',

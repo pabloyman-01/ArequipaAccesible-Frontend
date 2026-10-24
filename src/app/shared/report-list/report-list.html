@@ -1,0 +1,163 @@
+<div class="grid gap-6 pb-8">
+  <header class="flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <p class="eyebrow">{{ admin ? 'Administración' : 'Portal ciudadano' }}</p>
+      <h1 class="page-title">
+        {{
+          admin ? 'Panel de Gestión de Reportes' : welcome ? 'Mi panel ciudadano' : 'Mis Reportes'
+        }}
+      </h1>
+      <p class="muted">
+        {{
+          admin
+            ? 'Consulta y gestiona los reportes registrados.'
+            : 'Consulta el estado y la evidencia de tus reportes.'
+        }}
+      </p>
+    </div>
+    @if (!admin) {
+      <a class="btn" routerLink="/ciudadano/nuevo-reporte"
+        ><span class="material-symbols-outlined" aria-hidden="true">add_circle</span>Nuevo
+        reporte</a
+      >
+    }
+  </header>
+  <form (ngSubmit)="apply()" class="panel grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <label
+      >Código exacto<input
+        class="field"
+        name="codigo"
+        [(ngModel)]="codigo"
+        placeholder="ARQ-2026-000001"
+    /></label>
+    <label
+      >Estado<select class="field" name="estado" [(ngModel)]="estado">
+        <option value="">Todos</option>
+        @for (e of estados; track e) {
+          <option [value]="e">{{ etiqueta(e) }}</option>
+        }
+      </select></label
+    >
+    <label
+      >Distrito<select class="field" name="distritoId" [(ngModel)]="distritoId">
+        <option value="">Todos</option>
+        @for (d of distritos; track d.id) {
+          <option [value]="d.id">{{ d.nombre }}</option>
+        }
+      </select></label
+    >
+    <label
+      >Tipo de barrera<select class="field" name="tipo" [(ngModel)]="tipoBarreraId">
+        <option value="">Todos</option>
+        @for (t of tipos; track t.id) {
+          <option [value]="t.id">{{ t.nombre }}</option>
+        }
+      </select></label
+    >
+    <label
+      >Severidad declarada<select class="field" name="severidad" [(ngModel)]="severidadDeclarada">
+        <option value="">Todas</option>
+        <option>BAJA</option>
+        <option>MEDIA</option>
+        <option>ALTA</option>
+      </select></label
+    >
+    <label
+      >Creado desde<input
+        class="field"
+        name="desde"
+        type="date"
+        [(ngModel)]="desde"
+        min="2000-01-01"
+        max="9999-12-31"
+    /></label>
+    <label
+      >Creado hasta<input
+        class="field"
+        name="hasta"
+        type="date"
+        [(ngModel)]="hasta"
+        min="2000-01-01"
+        max="9999-12-31"
+    /></label>
+    <button class="btn self-end" type="submit" [disabled]="busy()">Aplicar filtros</button>
+  </form>
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+  @if (busy()) {
+    <p role="status">Cargando reportes…</p>
+  }
+  @if (page(); as data) {
+    <section class="panel overflow-x-auto">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Código / creación</th>
+            <th>Barrera / ubicación</th>
+            <th>Severidad</th>
+            <th>Estado</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of data.elementos; track r.id) {
+            <tr>
+              <td>
+                <strong>{{ r.codigo }}</strong
+                ><br /><span class="muted">{{
+                  r.fechaCreacion | date: 'dd/MM/yyyy HH:mm' : '-0500'
+                }}</span>
+              </td>
+              <td>
+                <strong>{{ nombre(r.tipoBarreraId, tipos) }}</strong>
+                <p>{{ r.direccionReferencia }}</p>
+                <span class="muted">{{ nombre(r.distritoId, distritos) }}</span>
+              </td>
+              <td>{{ r.severidadDeclarada }}</td>
+              <td>
+                <span class="badge">{{ etiqueta(r.estado) }}</span>
+              </td>
+              <td>
+                <a
+                  class="btn-secondary"
+                  [routerLink]="admin ? ['/reportes', r.id] : ['/ciudadano/reportes', r.id]"
+                  >Ver detalle e historial</a
+                >
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5">No hay reportes con estos filtros.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <nav
+        aria-label="Paginación de reportes"
+        class="mt-5 flex flex-wrap items-center justify-between gap-4"
+      >
+        <span class="muted"
+          >Página {{ index + 1 }} · {{ data.elementos.length }} reportes en esta página</span
+        >
+        <div class="flex gap-3">
+          <button
+            class="btn-secondary"
+            type="button"
+            (click)="load(index - 1)"
+            [disabled]="busy() || index === 0"
+          >
+            Anterior</button
+          ><button
+            class="btn-secondary"
+            type="button"
+            (click)="load(index + 1)"
+            [disabled]="busy() || !data.hayMas"
+          >
+            Siguiente
+          </button>
+        </div>
+      </nav>
+    </section>
+  }
+</div>

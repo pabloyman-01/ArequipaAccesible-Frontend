@@ -41,3 +41,11 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+# Runtime configuration and private test artifacts
+/public/config.json
+/.local/
+.env
+.env.*
+!.env.example
+
+*.log

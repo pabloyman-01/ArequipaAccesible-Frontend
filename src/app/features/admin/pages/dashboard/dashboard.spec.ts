@@ -1,3 +1,4 @@
+import { uiTestProviders } from '../../../../testing/ui-providers';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { Dashboard } from './dashboard';
@@ -6,7 +7,7 @@ describe('Dashboard', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Dashboard],
-      providers: [provideRouter([])],
+      providers: [...uiTestProviders(), provideRouter([])],
     }).compileComponents();
   });
 
@@ -20,8 +21,6 @@ describe('Dashboard', () => {
     const fixture = TestBed.createComponent(Dashboard);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain(
-      'Centro de Control y Monitoreo de Reportes',
-    );
+    expect(compiled.querySelector('h1')?.textContent).toContain('Dashboard de Gestión');
   });
 });

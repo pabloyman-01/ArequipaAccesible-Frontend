@@ -1,0 +1,5 @@
+{
+  "apiBaseUrl": "/api",
+  "supabaseUrl": "https://TU_PROYECTO.supabase.co",
+  "supabasePublishableKey": "COPIAR_CLAVE_PUBLICABLE_REAL"
+}

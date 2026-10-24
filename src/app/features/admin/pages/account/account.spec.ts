@@ -1,3 +1,4 @@
+import { uiTestProviders } from '../../../../testing/ui-providers';
 import { TestBed } from '@angular/core/testing';
 import { AdminAccount } from './account';
 
@@ -5,6 +6,7 @@ describe('AdminAccount', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AdminAccount],
+      providers: uiTestProviders(),
     }).compileComponents();
   });
 

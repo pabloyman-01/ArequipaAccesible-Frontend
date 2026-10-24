@@ -1,6 +1,20 @@
+import { sessionGuard } from '../../core/auth.guard';
 import { Routes } from '@angular/router';
 
 export const AUTH_ROUTES: Routes = [
+  {
+    path: 'confirmar',
+    loadComponent: () => import('./pages/confirm/confirm').then((m) => m.Confirm),
+  },
+  {
+    path: 'nueva-contrasena',
+    loadComponent: () => import('./pages/new-password/new-password').then((m) => m.NewPassword),
+  },
+  {
+    path: 'completar-perfil',
+    canActivate: [sessionGuard],
+    loadComponent: () => import('../../shared/profile/profile').then((m) => m.Profile),
+  },
   {
     path: '',
     title: 'Iniciar Sesión | Arequipa Accesible',

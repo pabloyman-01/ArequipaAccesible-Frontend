@@ -1,3 +1,4 @@
+import { uiTestProviders } from '../../../../testing/ui-providers';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { ReportEvidence } from './report-evidence';
@@ -6,7 +7,7 @@ describe('ReportEvidence', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ReportEvidence],
-      providers: [provideRouter([])],
+      providers: [...uiTestProviders(), provideRouter([])],
     }).compileComponents();
   });
 
@@ -28,7 +29,7 @@ describe('ReportEvidence', () => {
     const inputs = page.querySelectorAll('input[type="file"]');
 
     expect(inputs.length).toBe(1);
-    expect(inputs[0].getAttribute('accept')).toBe('image/*');
+    expect(inputs[0].getAttribute('accept')).toBe('image/jpeg,image/png');
     expect(page.textContent).toContain('Tomar foto');
   });
 
@@ -37,7 +38,11 @@ describe('ReportEvidence', () => {
     fixture.detectChanges();
     const page = fixture.nativeElement as HTMLElement;
 
-    expect(page.querySelector('[aria-label="Mapa interactivo para seleccionar la ubicación del reporte"]')).toBeTruthy();
+    expect(
+      page.querySelector(
+        '[aria-label="Mapa interactivo para seleccionar la ubicación del reporte"]',
+      ),
+    ).toBeTruthy();
     expect(page.textContent).toContain('Usar mi ubicación GPS actual');
   });
 });

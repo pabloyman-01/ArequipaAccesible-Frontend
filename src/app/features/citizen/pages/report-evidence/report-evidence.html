@@ -1,136 +1,327 @@
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+<section class="panel mb-5 grid gap-4">
+  <label
+    >Distrito del reporte<select
+      class="field"
+      [value]="draft.distritoId() ?? ''"
+      (change)="draft.distritoId.set(+$any($event.target).value || null)"
+    >
+      <option value="">Selecciona el distrito</option>
+      @for (d of distritos; track d.id) {
+        <option [value]="d.id">{{ d.nombre }}</option>
+      }
+    </select></label
+  >
+  <p class="muted">
+    Selecciona el punto en el mapa o usa tu ubicación. El área actual es el piloto aprobado de
+    Arequipa (Cercado).
+  </p>
+  @if (draft.ubicacion(); as u) {
+    <p role="status">Ubicación: {{ u.lat }}, {{ u.lng }}</p>
+  } @else {
+    <p>Ubicación pendiente de seleccionar.</p>
+  }
+</section>
 <div class="flex w-full flex-col">
   <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
-    <nav aria-label="Ruta de navegación" class="flex items-center gap-2 font-label-md text-label-md text-on-surface-variant">
-      <a routerLink="/ciudadano" class="flex items-center gap-1.5 transition-colors hover:text-primary">
+    <nav
+      aria-label="Ruta de navegación"
+      class="flex items-center gap-2 font-label-md text-label-md text-on-surface-variant"
+    >
+      <a
+        routerLink="/ciudadano"
+        class="flex items-center gap-1.5 transition-colors hover:text-primary"
+      >
         <span class="material-symbols-outlined text-[16px]" aria-hidden="true">home</span>
         Inicio
       </a>
       <span class="text-outline-variant" aria-hidden="true">/</span>
       <span class="font-bold text-primary">Nuevo Reporte</span>
     </nav>
-    <div class="inline-flex items-center gap-2 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm text-on-surface-variant shadow-sm">
+    <div
+      class="inline-flex items-center gap-2 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm text-on-surface-variant shadow-sm"
+    >
       <span class="h-2 w-2 animate-pulse rounded-full bg-secondary"></span>
-      <span class="material-symbols-outlined text-[15px] text-primary" aria-hidden="true">location_city</span>
+      <span class="material-symbols-outlined text-[15px] text-primary" aria-hidden="true"
+        >location_city</span
+      >
       Arequipa Centro Histórico • Sistema Georreferenciado
     </div>
   </div>
 
   <div class="flex w-full flex-col">
     <div class="mb-8 flex min-h-[126px] flex-col gap-1.5">
-      <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Asistente de Reporte Urbano</span>
-      <h1 class="font-headline-xl text-headline-xl font-bold tracking-tight text-primary">Nuevo Reporte de Barrera Arquitectónica</h1>
+      <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary"
+        >Asistente de Reporte Urbano</span
+      >
+      <h1 class="font-headline-xl text-headline-xl font-bold tracking-tight text-primary">
+        Nuevo Reporte de Barrera Arquitectónica
+      </h1>
       <p class="max-w-3xl font-body-md text-body-md text-on-surface-variant">
-        Completa los 3 pasos para que las cuadrillas de OMAPED atiendan la incidencia de forma inmediata en cumplimiento de la Ley N° 29973.
+        Completa los 3 pasos para que las cuadrillas de OMAPED atiendan la incidencia de forma
+        inmediata en cumplimiento de la Ley N° 29973.
       </p>
     </div>
 
-    <section aria-label="Progreso del reporte" class="mb-8 overflow-hidden rounded-xl bg-surface-container-lowest p-space-md shadow-sm">
+    <section
+      aria-label="Progreso del reporte"
+      class="mb-8 overflow-hidden rounded-xl bg-surface-container-lowest p-space-md shadow-sm"
+    >
       <ol class="grid grid-cols-1 gap-space-md md:grid-cols-3">
         <li class="relative flex items-center gap-space-md opacity-60">
-          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-sm">
-          <span class="material-symbols-outlined text-[20px]" aria-hidden="true">check</span>
+          <span
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-sm"
+          >
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">check</span>
           </span>
-          <span class="flex min-w-0 flex-col"><span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline">Paso 1</span><span class="truncate font-title-md text-title-md font-semibold text-on-surface">Tipo y Severidad</span></span>
-          <span class="absolute right-0 top-1/2 hidden h-0.5 w-8 -translate-y-1/2 bg-primary-container/40 md:block" aria-hidden="true"></span>
+          <span class="flex min-w-0 flex-col"
+            ><span
+              class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline"
+              >Paso 1</span
+            ><span class="truncate font-title-md text-title-md font-semibold text-on-surface"
+              >Tipo y Severidad</span
+            ></span
+          >
+          <span
+            class="absolute right-0 top-1/2 hidden h-0.5 w-8 -translate-y-1/2 bg-primary-container/40 md:block"
+            aria-hidden="true"
+          ></span>
         </li>
         <li class="relative flex items-center gap-space-md">
-          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container font-title-md text-title-md font-bold text-on-primary shadow-md ring-4 ring-primary-fixed/60">2</span>
-          <span class="flex min-w-0 flex-col"><span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-primary">Paso activo</span><span class="truncate font-title-md text-title-md font-bold text-on-surface">Evidencia y Ubicación</span></span>
-          <span class="absolute right-0 top-1/2 hidden h-0.5 w-8 -translate-y-1/2 bg-outline-variant/40 md:block" aria-hidden="true"></span>
+          <span
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container font-title-md text-title-md font-bold text-on-primary shadow-md ring-4 ring-primary-fixed/60"
+            >2</span
+          >
+          <span class="flex min-w-0 flex-col"
+            ><span
+              class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-primary"
+              >Paso activo</span
+            ><span class="truncate font-title-md text-title-md font-bold text-on-surface"
+              >Evidencia y Ubicación</span
+            ></span
+          >
+          <span
+            class="absolute right-0 top-1/2 hidden h-0.5 w-8 -translate-y-1/2 bg-outline-variant/40 md:block"
+            aria-hidden="true"
+          ></span>
         </li>
         <li class="flex items-center gap-space-md opacity-50">
-          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-container-high font-title-md text-title-md font-bold text-on-surface-variant">3</span>
-          <span class="flex min-w-0 flex-col"><span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline">Paso 3</span><span class="truncate font-title-md text-title-md font-semibold text-on-surface">Descripción Final</span></span>
+          <span
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-container-high font-title-md text-title-md font-bold text-on-surface-variant"
+            >3</span
+          >
+          <span class="flex min-w-0 flex-col"
+            ><span
+              class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline"
+              >Paso 3</span
+            ><span class="truncate font-title-md text-title-md font-semibold text-on-surface"
+              >Descripción Final</span
+            ></span
+          >
         </li>
       </ol>
     </section>
 
-    <section class="flex items-center justify-between rounded-xl bg-surface-container-low p-space-md font-body-sm text-body-sm text-on-surface-variant shadow-sm">
+    <section
+      class="flex items-center justify-between rounded-xl bg-surface-container-low p-space-md font-body-sm text-body-sm text-on-surface-variant shadow-sm"
+    >
       <div class="flex flex-wrap items-center gap-2">
-        <span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true">accessible_forward</span>
-        <span>Barrera seleccionada: <strong class="text-on-surface">Rampa Rota o Inexistente</strong></span>
-        <span class="ml-1 rounded-full bg-error-container px-2 py-0.5 text-[11px] font-bold text-on-error-container">Crítica / Alta</span>
+        <span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true"
+          >accessible_forward</span
+        >
+        <span
+          >Barrera seleccionada:
+          <strong class="text-on-surface">Rampa Rota o Inexistente</strong></span
+        >
+        <span
+          class="ml-1 rounded-full bg-error-container px-2 py-0.5 text-[11px] font-bold text-on-error-container"
+          >Crítica / Alta</span
+        >
       </div>
-      <a routerLink="/ciudadano/nuevo-reporte" class="flex shrink-0 items-center gap-0.5 text-[12px] font-semibold text-primary hover:underline">
+      <a
+        routerLink="/ciudadano/nuevo-reporte"
+        class="flex shrink-0 items-center gap-0.5 text-[12px] font-semibold text-primary hover:underline"
+      >
         Modificar
         <span class="material-symbols-outlined text-[14px]" aria-hidden="true">edit</span>
       </a>
     </section>
 
     <div class="flex flex-col gap-space-xl">
-      <section class="flex flex-col gap-space-md overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm md:p-space-xl">
+      <section
+        class="flex flex-col gap-space-md overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm md:p-space-xl"
+      >
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-2.5">
-            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-fixed font-bold text-primary">
-              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">photo_camera</span>
+            <span
+              class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-fixed font-bold text-primary"
+            >
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true"
+                >photo_camera</span
+              >
             </span>
             <div>
-              <h2 class="font-headline-md text-headline-md font-bold text-on-surface">1. Evidencia Fotográfica</h2>
-              <p class="font-body-sm text-body-sm text-on-surface-variant">Fotografía del obstáculo o bordillo capturada en el sitio</p>
+              <h2 class="font-headline-md text-headline-md font-bold text-on-surface">
+                1. Evidencia Fotográfica
+              </h2>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">
+                Fotografía del obstáculo o bordillo capturada en el sitio
+              </p>
             </div>
           </div>
-          <span [class]="'flex items-center gap-1 rounded-full px-2.5 py-1 font-label-sm text-label-sm font-semibold ' + (photoPreview() ? 'bg-primary-container/10 text-primary' : 'bg-surface-container text-on-surface-variant')">
-            <span class="material-symbols-outlined text-[14px]" aria-hidden="true">{{ photoPreview() ? 'check_circle' : 'photo_camera' }}</span>
+          <span
+            [class]="
+              'flex items-center gap-1 rounded-full px-2.5 py-1 font-label-sm text-label-sm font-semibold ' +
+              (photoPreview()
+                ? 'bg-primary-container/10 text-primary'
+                : 'bg-surface-container text-on-surface-variant')
+            "
+          >
+            <span class="material-symbols-outlined text-[14px]" aria-hidden="true">{{
+              photoPreview() ? 'check_circle' : 'photo_camera'
+            }}</span>
             {{ photoPreview() ? '1 Foto Cargada' : 'Foto requerida' }}
           </span>
         </div>
 
-        <input #uploadInput type="file" accept="image/*" class="sr-only" (change)="selectPhoto($event)" />
+        <input
+          #uploadInput
+          type="file"
+          accept="image/jpeg,image/png"
+          class="sr-only"
+          (change)="selectPhoto($event)"
+        />
 
         @if (cameraStream()) {
-          <div class="flex flex-col gap-space-md overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-low p-space-md">
-            <video #cameraPreview [srcObject]="cameraStream()" autoplay muted playsinline class="h-64 w-full rounded-lg bg-inverse-surface object-cover"></video>
+          <div
+            class="flex flex-col gap-space-md overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-low p-space-md"
+          >
+            <video
+              #cameraPreview
+              [srcObject]="cameraStream()"
+              autoplay
+              muted
+              playsinline
+              class="h-64 w-full rounded-lg bg-inverse-surface object-cover"
+            ></video>
             <div class="flex flex-wrap justify-center gap-space-sm">
-              <button type="button" (click)="capturePhoto(cameraPreview)" class="inline-flex items-center gap-space-xs rounded-full bg-primary-container px-space-lg py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition-colors hover:bg-primary">
-                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">photo_camera</span>
+              <button
+                type="button"
+                (click)="capturePhoto(cameraPreview)"
+                class="inline-flex items-center gap-space-xs rounded-full bg-primary-container px-space-lg py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition-colors hover:bg-primary"
+              >
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true"
+                  >photo_camera</span
+                >
                 Capturar foto
               </button>
-              <button type="button" (click)="closeCamera()" class="inline-flex items-center gap-space-xs rounded-full bg-surface-container-lowest px-space-lg py-2.5 font-label-md text-label-md text-on-surface-variant shadow-sm transition-colors hover:bg-surface-container">
+              <button
+                type="button"
+                (click)="closeCamera()"
+                class="inline-flex items-center gap-space-xs rounded-full bg-surface-container-lowest px-space-lg py-2.5 font-label-md text-label-md text-on-surface-variant shadow-sm transition-colors hover:bg-surface-container"
+              >
                 Cancelar
               </button>
             </div>
           </div>
         } @else if (photoPreview()) {
-          <div class="flex flex-col overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-low sm:flex-row sm:items-stretch">
+          <div
+            class="flex flex-col overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-low sm:flex-row sm:items-stretch"
+          >
             <div class="relative h-48 w-full shrink-0 overflow-hidden bg-surface-dim sm:w-64">
-              <img [src]="photoPreview()" [alt]="'Vista previa de ' + photoName()" class="h-full w-full object-cover" />
+              <img
+                [src]="photoPreview()"
+                [alt]="'Vista previa de ' + photoName()"
+                class="h-full w-full object-cover"
+              />
             </div>
             <div class="flex flex-1 flex-col justify-between gap-3 p-5">
               <div class="flex flex-col gap-1">
-                <span class="font-title-md text-title-md font-bold text-on-surface">{{ photoName() }}</span>
-                <p class="font-body-sm text-body-sm leading-relaxed text-on-surface-variant">La evidencia se adjuntará a tu reporte. Verifica que el obstáculo sea visible antes de continuar.</p>
+                <span class="font-title-md text-title-md font-bold text-on-surface">{{
+                  photoName()
+                }}</span>
+                <p class="font-body-sm text-body-sm leading-relaxed text-on-surface-variant">
+                  La evidencia se adjuntará a tu reporte. Verifica que el obstáculo sea visible
+                  antes de continuar.
+                </p>
               </div>
-              <div class="flex flex-wrap items-center gap-2 border-t border-outline-variant/30 pt-2">
-                <button type="button" (click)="startCamera()" class="flex items-center gap-1.5 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm font-semibold text-on-surface shadow-sm transition-colors hover:bg-surface-container">
-                  <span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">photo_camera</span>
+              <div
+                class="flex flex-wrap items-center gap-2 border-t border-outline-variant/30 pt-2"
+              >
+                <button
+                  type="button"
+                  (click)="startCamera()"
+                  class="flex items-center gap-1.5 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm font-semibold text-on-surface shadow-sm transition-colors hover:bg-surface-container"
+                >
+                  <span
+                    class="material-symbols-outlined text-[16px] text-primary"
+                    aria-hidden="true"
+                    >photo_camera</span
+                  >
                   Tomar otra foto
                 </button>
-                <button type="button" (click)="uploadInput.click()" class="flex items-center gap-1.5 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm font-semibold text-on-surface shadow-sm transition-colors hover:bg-surface-container">
-                  <span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">upload</span>
+                <button
+                  type="button"
+                  (click)="uploadInput.click()"
+                  class="flex items-center gap-1.5 rounded-full bg-surface-container-high px-3.5 py-1.5 font-label-sm text-label-sm font-semibold text-on-surface shadow-sm transition-colors hover:bg-surface-container"
+                >
+                  <span
+                    class="material-symbols-outlined text-[16px] text-primary"
+                    aria-hidden="true"
+                    >upload</span
+                  >
                   Subir otra foto
                 </button>
-                <button type="button" (click)="removePhoto()" class="flex items-center gap-1 rounded-full px-3.5 py-1.5 font-label-sm text-label-sm font-semibold text-error transition-colors hover:bg-error-container">
-                  <span class="material-symbols-outlined text-[16px]" aria-hidden="true">delete</span>
+                <button
+                  type="button"
+                  (click)="removePhoto()"
+                  class="flex items-center gap-1 rounded-full px-3.5 py-1.5 font-label-sm text-label-sm font-semibold text-error transition-colors hover:bg-error-container"
+                >
+                  <span class="material-symbols-outlined text-[16px]" aria-hidden="true"
+                    >delete</span
+                  >
                   Eliminar
                 </button>
               </div>
             </div>
           </div>
         } @else {
-          <div class="flex flex-col items-center justify-center gap-space-md rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-low px-space-lg py-space-xl text-center">
-            <span class="flex h-14 w-14 items-center justify-center rounded-full bg-primary-fixed text-primary">
-              <span class="material-symbols-outlined text-[28px]" aria-hidden="true">add_a_photo</span>
+          <div
+            class="flex flex-col items-center justify-center gap-space-md rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-low px-space-lg py-space-xl text-center"
+          >
+            <span
+              class="flex h-14 w-14 items-center justify-center rounded-full bg-primary-fixed text-primary"
+            >
+              <span class="material-symbols-outlined text-[28px]" aria-hidden="true"
+                >add_a_photo</span
+              >
             </span>
             <div class="flex flex-col gap-1">
-              <span class="font-title-md text-title-md font-bold text-on-surface">Adjunta una fotografía del obstáculo</span>
-              <span class="font-body-sm text-body-sm text-on-surface-variant">Formatos JPG, PNG o WEBP. Tamaño máximo: 10 MB.</span>
+              <span class="font-title-md text-title-md font-bold text-on-surface"
+                >Adjunta una fotografía del obstáculo</span
+              >
+              <span class="font-body-sm text-body-sm text-on-surface-variant"
+                >Formatos JPG, PNG o WEBP. Tamaño máximo: 5 MiB.</span
+              >
             </div>
             <div class="flex flex-wrap justify-center gap-space-sm">
-              <button type="button" (click)="startCamera()" class="inline-flex items-center gap-space-xs rounded-full bg-primary-container px-space-lg py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition-colors hover:bg-primary">
-                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">photo_camera</span>
+              <button
+                type="button"
+                (click)="startCamera()"
+                class="inline-flex items-center gap-space-xs rounded-full bg-primary-container px-space-lg py-2.5 font-label-md text-label-md text-on-primary shadow-sm transition-colors hover:bg-primary"
+              >
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true"
+                  >photo_camera</span
+                >
                 Tomar foto
               </button>
-              <button type="button" (click)="uploadInput.click()" class="inline-flex items-center gap-space-xs rounded-full bg-surface-container-lowest px-space-lg py-2.5 font-label-md text-label-md text-primary shadow-sm transition-colors hover:bg-surface-container">
+              <button
+                type="button"
+                (click)="uploadInput.click()"
+                class="inline-flex items-center gap-space-xs rounded-full bg-surface-container-lowest px-space-lg py-2.5 font-label-md text-label-md text-primary shadow-sm transition-colors hover:bg-surface-container"
+              >
                 <span class="material-symbols-outlined text-[18px]" aria-hidden="true">upload</span>
                 Subir foto
               </button>
@@ -143,52 +334,102 @@
         }
       </section>
 
-      <section class="flex flex-col gap-space-md overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm md:p-space-xl">
+      <section
+        class="flex flex-col gap-space-md overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm md:p-space-xl"
+      >
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-2.5">
-            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-fixed font-bold text-primary">
+            <span
+              class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-fixed font-bold text-primary"
+            >
               <span class="material-symbols-outlined text-[18px]" aria-hidden="true">pin_drop</span>
             </span>
             <div>
-              <h2 class="font-headline-md text-headline-md font-bold text-on-surface">2. Ubicación Georreferenciada</h2>
-              <p class="font-body-sm text-body-sm text-on-surface-variant">Verifica o ajusta el punto de intervención en el mapa</p>
+              <h2 class="font-headline-md text-headline-md font-bold text-on-surface">
+                2. Ubicación Georreferenciada
+              </h2>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">
+                Verifica o ajusta el punto de intervención en el mapa
+              </p>
             </div>
           </div>
-          <button type="button" (click)="useCurrentLocation()" [disabled]="isLocating()" class="flex items-center gap-1.5 rounded-full bg-surface-container px-3 py-1.5 font-label-sm text-label-sm font-semibold text-primary shadow-sm transition-colors hover:bg-surface-container-high disabled:cursor-wait disabled:opacity-70">
-            <span [class]="'material-symbols-outlined text-[16px] ' + (isLocating() ? 'animate-spin' : '')" aria-hidden="true">{{ isLocating() ? 'progress_activity' : 'my_location' }}</span>
+          <button
+            type="button"
+            (click)="useCurrentLocation()"
+            [disabled]="isLocating()"
+            class="flex items-center gap-1.5 rounded-full bg-surface-container px-3 py-1.5 font-label-sm text-label-sm font-semibold text-primary shadow-sm transition-colors hover:bg-surface-container-high disabled:cursor-wait disabled:opacity-70"
+          >
+            <span
+              [class]="
+                'material-symbols-outlined text-[16px] ' + (isLocating() ? 'animate-spin' : '')
+              "
+              aria-hidden="true"
+              >{{ isLocating() ? 'progress_activity' : 'my_location' }}</span
+            >
             {{ isLocating() ? 'Buscando ubicación...' : 'Usar mi ubicación GPS actual' }}
           </button>
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label for="addressInput" class="font-label-sm text-label-sm font-semibold text-on-surface">Dirección o Referencia</label>
+          <label
+            for="addressInput"
+            class="font-label-sm text-label-sm font-semibold text-on-surface"
+            >Dirección o Referencia</label
+          >
           <div class="relative flex items-center">
-            <span class="material-symbols-outlined absolute left-3.5 text-[20px] text-primary" aria-hidden="true">search</span>
-            <input id="addressInput" type="text" [value]="address()" (input)="address.set($any($event.target).value)" class="w-full rounded-xl border border-outline-variant/30 bg-surface-container-low py-2.5 pl-10 pr-4 font-body-md text-body-md text-on-surface transition-all focus:border-primary focus:bg-surface-container-lowest focus:outline-none" />
+            <span
+              class="material-symbols-outlined absolute left-3.5 text-[20px] text-primary"
+              aria-hidden="true"
+              >search</span
+            >
+            <input
+              id="addressInput"
+              type="text"
+              [value]="address()"
+              (input)="address.set($any($event.target).value)"
+              class="w-full rounded-xl border border-outline-variant/30 bg-surface-container-low py-2.5 pl-10 pr-4 font-body-md text-body-md text-on-surface transition-all focus:border-primary focus:bg-surface-container-lowest focus:outline-none"
+            />
           </div>
         </div>
 
-        <div #locationMap class="h-64 w-full overflow-hidden rounded-xl border border-outline-variant/30 shadow-sm" aria-label="Mapa interactivo para seleccionar la ubicación del reporte"></div>
-        <p class="font-body-sm text-body-sm text-on-surface-variant">Haz clic o arrastra el marcador para ajustar la ubicación de la incidencia.</p>
+        <div
+          #locationMap
+          class="h-64 w-full overflow-hidden rounded-xl border border-outline-variant/30 shadow-sm"
+          aria-label="Mapa interactivo para seleccionar la ubicación del reporte"
+        ></div>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">
+          Haz clic o arrastra el marcador para ajustar la ubicación de la incidencia.
+        </p>
         @if (locationError()) {
           <p role="alert" class="font-body-sm text-body-sm text-error">{{ locationError() }}</p>
         }
       </section>
     </div>
 
-    <footer class="mt-space-xs flex flex-col items-center justify-between gap-space-md rounded-xl bg-surface-container-lowest p-space-md shadow-sm sm:flex-row">
-      <a routerLink="/ciudadano/nuevo-reporte" class="flex w-full items-center justify-center gap-2 rounded-full bg-surface-container px-5 py-2.5 font-label-md text-label-md font-semibold text-on-surface-variant transition-colors hover:bg-surface-container-high sm:w-auto">
+    <footer
+      class="mt-space-xs flex flex-col items-center justify-between gap-space-md rounded-xl bg-surface-container-lowest p-space-md shadow-sm sm:flex-row"
+    >
+      <a
+        routerLink="/ciudadano/nuevo-reporte"
+        class="flex w-full items-center justify-center gap-2 rounded-full bg-surface-container px-5 py-2.5 font-label-md text-label-md font-semibold text-on-surface-variant transition-colors hover:bg-surface-container-high sm:w-auto"
+      >
         <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_back</span>
         Paso Anterior (Tipo de barrera)
       </a>
       <div class="flex items-center gap-2 font-label-sm text-label-sm text-outline">
-        <span class="material-symbols-outlined text-[16px] text-secondary" aria-hidden="true">cloud_done</span>
-        Borrador guardado automáticamente
+        <span class="material-symbols-outlined text-[16px] text-secondary" aria-hidden="true"
+          >cloud_done</span
+        >
+        Borrador en memoria de esta pestaña
       </div>
-      <a routerLink="/ciudadano/nuevo-reporte/descripcion" class="flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5 font-label-md text-label-md font-bold text-on-primary shadow-md transition-all hover:bg-primary-container sm:w-auto">
+      <button
+        type="button"
+        (click)="continue()"
+        class="flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5 font-label-md text-label-md font-bold text-on-primary shadow-md transition-all hover:bg-primary-container sm:w-auto"
+      >
         Continuar al Paso 3
         <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
-      </a>
+      </button>
     </footer>
   </div>
 </div>

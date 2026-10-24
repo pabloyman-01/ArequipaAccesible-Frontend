@@ -3,17 +3,31 @@
 >
   <div class="flex flex-1 flex-col overflow-y-auto">
     <div class="flex items-center gap-space-sm p-space-lg">
-      <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-sm">
+      <div
+        class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-sm"
+      >
         <span class="material-symbols-outlined text-[22px]" aria-hidden="true">accessible</span>
       </div>
       <div class="flex flex-col">
-        <span class="font-title-md text-title-md leading-tight tracking-tight text-primary-container">Arequipa Accesible</span>
-        <span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Gobierno Municipal</span>
+        <span
+          class="font-title-md text-title-md leading-tight tracking-tight text-primary-container"
+          >Arequipa Accesible</span
+        >
+        <span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant"
+          >Gobierno Municipal</span
+        >
       </div>
     </div>
 
-    <div class="px-space-md py-space-xs"><span class="px-space-sm font-label-sm text-label-sm uppercase tracking-wider text-outline">Panel Ciudadano</span></div>
-    <nav aria-label="Navegación ciudadana" class="mt-space-xs flex flex-col gap-space-xs px-space-md">
+    <div class="px-space-md py-space-xs">
+      <span class="px-space-sm font-label-sm text-label-sm uppercase tracking-wider text-outline"
+        >Panel Ciudadano</span
+      >
+    </div>
+    <nav
+      aria-label="Navegación ciudadana"
+      class="mt-space-xs flex flex-col gap-space-xs px-space-md"
+    >
       <a
         routerLink="/ciudadano"
         routerLinkActive
@@ -49,7 +63,9 @@
     </nav>
   </div>
 
-  <div class="flex flex-col gap-space-xs border-t border-outline-variant/30 px-space-lg py-space-md">
+  <div
+    class="flex flex-col gap-space-xs border-t border-outline-variant/30 px-space-lg py-space-md"
+  >
     <a
       href="https://www.congreso.gob.pe/Docs/leyes/ley29973.html"
       target="_blank"
@@ -83,4 +99,7 @@
       <span>Cerrar sesión</span>
     </button>
   </div>
+  @if (auth.profile()?.roles?.includes('ADMINISTRADOR')) {
+    <a routerLink="/" class="btn-secondary m-3">Panel administrador</a>
+  }
 </aside>

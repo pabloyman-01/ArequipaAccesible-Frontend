@@ -1,68 +1,107 @@
-<section class="flex flex-col justify-between gap-space-lg lg:flex-row lg:items-end">
-  <div class="max-w-3xl text-center lg:text-left">
-    <div
-      class="mb-space-xs inline-flex items-center gap-space-xs rounded-full bg-primary-fixed px-space-sm py-0.5 font-label-sm text-label-sm uppercase tracking-wider text-primary"
-    >
-      <span class="h-2 w-2 animate-pulse rounded-full bg-primary" aria-hidden="true"></span>
-      <span>Monitoreo Provincial Operativo en Tiempo Real</span>
-    </div>
-    <h1
-      class="font-headline-xl text-headline-xl-mobile font-extrabold tracking-tight text-on-surface sm:text-headline-xl"
-    >
-      Centro de Control y Monitoreo de Reportes
-    </h1>
-    <p class="mt-space-xs font-body-md text-body-md text-on-surface-variant">
-      Gestión técnica, despacho de cuadrillas y auditoría de barreras arquitectónicas en el Centro
-      Histórico y distritos metropolitanos.
+<div class="grid gap-6 pb-8">
+  <header>
+    <p class="eyebrow">Arequipa Accesible</p>
+    <h1 class="page-title">Dashboard de Gestión</h1>
+    <p class="muted">
+      Indicadores de los reportes registrados. Las fechas filtran la creación; los estados son los
+      actuales.
     </p>
-  </div>
-
-  <div class="flex flex-wrap justify-center gap-space-sm lg:justify-end">
-    <button
-      type="button"
-      class="group inline-flex min-h-11 cursor-pointer items-center justify-center gap-space-xs rounded-full border border-outline-variant/60 bg-surface-container-lowest px-space-md py-2 text-center text-on-surface shadow-xs transition-colors hover:bg-surface-container-high"
-    >
-      <span
-        class="material-symbols-outlined text-[18px] text-outline transition-colors group-hover:text-primary"
-        aria-hidden="true"
-        >calendar_today</span
-      >
-      <span class="font-label-md text-label-md font-semibold text-on-surface"
-        >Filtro por Período: Últimos 30 días</span
-      >
-      <span
-        class="material-symbols-outlined text-[16px] text-outline transition-colors group-hover:text-on-surface"
-        aria-hidden="true"
-        >expand_more</span
-      >
-    </button>
-
-    <button
-      type="button"
-      class="inline-flex min-h-11 cursor-pointer items-center justify-center gap-space-xs rounded-full border border-outline-variant/30 bg-primary-container px-space-md py-2 text-center font-label-md text-label-md font-bold text-on-primary shadow-sm transition-all hover:bg-primary hover:shadow-md"
-    >
-      <span class="material-symbols-outlined text-[18px] text-primary-fixed" aria-hidden="true"
-        >picture_as_pdf</span
-      >
-      <span>Descargar Informe Mensual (PDF)</span>
-    </button>
-  </div>
-</section>
-
-<section aria-label="Indicadores principales" class="mt-space-xl grid grid-cols-1 gap-space-md sm:grid-cols-2 lg:grid-cols-4">
-  @for (kpi of data.kpis; track kpi.id) {
-    <app-kpi-card [kpi]="kpi" />
+  </header>
+  <form class="panel grid items-end gap-4 sm:grid-cols-2 xl:grid-cols-4" (ngSubmit)="load()">
+    <label
+      >Desde<input
+        class="field"
+        name="desde"
+        type="date"
+        [(ngModel)]="desde"
+        min="2000-01-01"
+        max="9999-12-31" /></label
+    ><label
+      >Hasta<input
+        class="field"
+        name="hasta"
+        type="date"
+        [(ngModel)]="hasta"
+        min="2000-01-01"
+        max="9999-12-31"
+    /></label>
+    <label
+      >Distrito<select class="field" name="distrito" [(ngModel)]="distritoId">
+        <option value="">Todos</option>
+        @for (d of distritos; track d.id) {
+          <option [value]="d.id">{{ d.nombre }}</option>
+        }
+      </select></label
+    ><button class="btn" type="submit" [disabled]="busy()">Actualizar indicadores</button>
+  </form>
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
   }
-</section>
-
-<div class="mt-space-xl flex flex-col gap-space-lg">
-  <div class="grid grid-cols-1 items-start gap-space-lg lg:grid-cols-12">
-    <app-incident-map [pins]="data.mapPins" [summary]="data.mapSummary" />
-    <app-urgent-dispatch [reports]="data.urgentReports" />
-  </div>
-
-  <div class="grid grid-cols-1 items-stretch gap-space-lg lg:grid-cols-2">
-    <app-barrier-distribution [items]="data.barriers" />
-    <app-compliance-card [compliance]="data.compliance" />
-  </div>
+  @if (busy()) {
+    <p role="status">Cargando indicadores…</p>
+  }
+  @if (summary(); as s) {
+    <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      @for (kpi of kpis(); track kpi.id) {
+        <app-kpi-card [kpi]="kpi" />
+      }
+    </section>
+    <div class="grid gap-6 xl:grid-cols-2">
+      <section class="panel">
+        <h2 class="section-title">Distribución por barreras</h2>
+        @for (t of s.porTipoBarrera; track t.id) {
+          <div class="mb-4">
+            <div class="flex justify-between gap-4">
+              <span>{{ t.nombre }}</span
+              ><strong>{{ t.cantidad }}</strong>
+            </div>
+            <div class="mt-2 h-2 rounded-full bg-surface-container">
+              <div
+                class="h-2 rounded-full bg-primary"
+                [style.width.%]="s.total ? (t.cantidad * 100) / s.total : 0"
+              ></div>
+            </div>
+          </div>
+        } @empty {
+          <p class="muted">Sin reportes para estos filtros.</p>
+        }
+      </section>
+      <section class="panel">
+        <h2 class="section-title">Estados</h2>
+        <table class="data-table">
+          <tbody>
+            @for (e of estados; track e) {
+              <tr>
+                <td>{{ etiqueta(e) }}</td>
+                <td>{{ s.porEstado[e] }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </section>
+    </div>
+    <section class="panel">
+      <h2 class="section-title">Reportes por distrito</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Distrito</th>
+            <th>Cantidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (d of s.porDistrito; track d.id) {
+            <tr>
+              <td>{{ d.nombre }}</td>
+              <td>{{ d.cantidad }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="2">Sin reportes.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+  }
 </div>

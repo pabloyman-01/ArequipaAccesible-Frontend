@@ -13,35 +13,29 @@
       <span class="font-title-md text-title-md text-primary-container">Arequipa Accesible</span>
     </div>
 
-    <nav
-      aria-label="Ruta de navegación"
-      class="hidden items-center gap-space-sm lg:flex"
-    >
+    <nav aria-label="Ruta de navegación" class="hidden items-center gap-space-sm lg:flex">
       <span
         class="hidden font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline xl:inline"
         >AREQUIPA</span
       >
-      <span class="material-symbols-outlined hidden text-[16px] text-outline xl:inline" aria-hidden="true"
+      <span
+        class="material-symbols-outlined hidden text-[16px] text-outline xl:inline"
+        aria-hidden="true"
         >chevron_right</span
       >
       <span class="hidden font-label-sm text-label-sm text-outline xl:inline"
         >Gerencia de Desarrollo Urbano &amp; OMAPED</span
       >
-      <span class="material-symbols-outlined hidden text-[16px] text-outline xl:inline" aria-hidden="true"
+      <span
+        class="material-symbols-outlined hidden text-[16px] text-outline xl:inline"
+        aria-hidden="true"
         >chevron_right</span
       >
       <span class="font-label-md text-label-md font-bold text-primary">{{ breadcrumb() }}</span>
     </nav>
 
-      <div class="flex items-center gap-space-md">
-        <div class="relative">
-        <button
-          type="button"
-          aria-label="Notificaciones"
-          class="flex h-9 w-9 items-center justify-center rounded-full bg-surface-container text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface"
-        >
-          <span class="material-symbols-outlined text-[20px]" aria-hidden="true">notifications</span>
-        </button>
+    <div class="flex items-center gap-space-md">
+      <div class="relative">
         <span
           class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-error"
           aria-hidden="true"
@@ -52,11 +46,12 @@
 
       <div class="flex items-center gap-space-sm pl-space-xs">
         <div class="hidden text-right sm:block">
-          <span class="block font-label-md text-label-md font-semibold leading-tight text-on-surface"
-            >Valeria Paredes</span
+          <span
+            class="block font-label-md text-label-md font-semibold leading-tight text-on-surface"
+            >{{ auth.profile()?.nombres }} {{ auth.profile()?.apellidos }}</span
           >
           <span class="block font-label-sm text-label-sm font-bold leading-tight text-primary"
-            >Supervisora General</span
+            >Administrador</span
           >
         </div>
         <div
