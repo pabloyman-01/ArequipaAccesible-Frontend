@@ -28,6 +28,8 @@ export function mensajeError(error: unknown): string {
   if (error instanceof HttpErrorResponse) {
     if (error.status === 0) return 'No se pudo conectar con el backend. Comprueba que esté activo.';
     if (error.status === 401) return 'Tu sesión caducó. Inicia sesión nuevamente.';
+    if (error.status === 409 && error.error?.code === 'PERFIL_CONFLICTO')
+      return 'No se pudo guardar el perfil: el documento o correo puede estar vinculado a una cuenta existente. Si ya te registraste, cierra sesión e ingresa con esa cuenta. Si los datos son correctos y el problema continúa, solicita ayuda.';
     if (error.status === 409)
       return 'Los datos cambiaron o ya están registrados. Recarga antes de volver a intentar.';
     if (error.status === 403)

@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { firstValueFrom } from 'rxjs';
-import { ApiService } from './api.service';
+import { ApiService, mensajeError } from './api.service';
 import { authInterceptor } from './auth.interceptor';
 import { AuthService } from './auth.service';
 import { RuntimeConfigService } from './runtime-config.service';
@@ -27,6 +27,20 @@ describe('Backend HTTP integration contract', () => {
     http = TestBed.inject(HttpTestingController);
   });
   afterEach(() => http.verify());
+  it('explains profile conflicts without suggesting reload or exposing an account', () => {
+    const message = mensajeError(
+      new HttpErrorResponse({ status: 409, error: { code: 'PERFIL_CONFLICTO' } }),
+    );
+    expect(message).toContain('documento o correo');
+    expect(message).toContain('cierra sesión');
+    expect(message).not.toContain('Recarga');
+    expect(message).not.toContain('@');
+  });
+  it('keeps reload guidance for concurrent state conflicts', () => {
+    expect(
+      mensajeError(new HttpErrorResponse({ status: 409, error: { code: 'ESTADO_CONFLICTO' } })),
+    ).toContain('Recarga');
+  });
   it('attaches the current access token only to the configured backend', async () => {
     const pending = api.reportes(false, {
       estado: 'EN_EVALUACION',
