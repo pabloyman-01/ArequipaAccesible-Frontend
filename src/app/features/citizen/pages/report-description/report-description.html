@@ -14,7 +14,11 @@
     <section class="panel">
       <h2 class="section-title">Reporte registrado</h2>
       <p class="notice" role="status">Código: {{ r.codigo }} · Estado inicial: RECIBIDO</p>
-      <a class="btn" [routerLink]="['/ciudadano/reportes', r.id]">Ver detalle e historial</a>
+      @if (asistido()) {
+        <p>El titular puede consultar el estado desde su propia cuenta. Comparte con esa persona el código del reporte.</p>
+      } @else {
+        <a class="btn" [routerLink]="['/ciudadano/reportes', r.id]">Ver detalle e historial</a>
+      }
     </section>
   } @else {
     <section class="panel grid gap-5">
@@ -24,7 +28,7 @@
       <label for="reportDescription"
         >Descripción<textarea
           id="reportDescription"
-          class="field"
+          class="field !text-base"
           rows="5"
           maxlength="3000"
           [value]="description()"
@@ -44,6 +48,18 @@
       </button>
       @if (voiceError()) {
         <p class="error" role="alert">{{ voiceError() }}</p>
+      }
+      <label for="codigoAutorizacion">
+        Código de autorización (solo si reportas en nombre de otra persona)
+        <input id="codigoAutorizacion" type="text" class="field" maxlength="36" autocomplete="off"
+          [value]="draft.codigoAutorizacion()" (input)="draft.codigoAutorizacion.set($any($event.target).value)" />
+      </label>
+      @if (!draft.codigoAutorizacion().trim()) {
+      <label class="flex items-start gap-3">
+        <input type="checkbox" class="mt-1" [checked]="draft.publicarEnMapa()"
+          (change)="draft.publicarEnMapa.set($any($event.target).checked)" />
+        <span>Mostrar este reporte en el mapa público. Solo se publica el tipo, el estado y una ubicación aproximada. Puedes retirarlo desde el detalle.</span>
+      </label>
       }
       <div class="flex flex-wrap gap-3">
         <a class="btn-secondary" routerLink="/ciudadano/nuevo-reporte/evidencia"

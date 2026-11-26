@@ -1,4 +1,7 @@
+import { HttpContextToken } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
+export const API_PUBLICA = new HttpContextToken(() => false);
 
 export interface RuntimeConfig {
   apiBaseUrl: string;

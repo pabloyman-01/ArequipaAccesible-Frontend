@@ -1,4 +1,4 @@
-import { ApiService, mensajeError } from '../../../../core/api.service';
+import { ApiService, mensajeError, SugerenciaBarrera } from '../../../../core/api.service';
 import { Catalogo } from '../../../../core/api.models';
 import { ReportDraftService } from '../../../../core/report-draft.service';
 import {
@@ -24,19 +24,36 @@ export class ReportEvidence implements OnInit, AfterViewInit, OnDestroy {
   private readonly api = inject(ApiService);
   private readonly router = inject(Router);
   distritos: Catalogo[] = [];
+  protected readonly tipoNombre = signal('');
+  protected readonly clasificacionDisponible = signal(false);
+  protected readonly analizando = signal(false);
+  protected readonly sugerencia = signal<SugerenciaBarrera | null>(null);
+  protected readonly mensajeSugerencia = signal('');
+  private solicitudSugerencia = 0;
+  private destroyed = false;
   readonly error = signal('');
   protected readonly address = this.draft.direccion;
   async ngOnInit() {
-    if (!this.draft.tipoBarreraId()) {
+    if (!this.draft.hasClassification()) {
       void this.router.navigateByUrl('/ciudadano/nuevo-reporte');
       return;
     }
     try {
-      [this.distritos] = await this.api.catalogos();
+      const [distritos, tipos] = await this.api.catalogos();
+      if (this.destroyed) return;
+      this.distritos = distritos;
+      this.tipoNombre.set(tipos.find((tipo) => tipo.id === this.draft.tipoBarreraId())?.nombre ?? '');
     } catch (error) {
       this.error.set(mensajeError(error));
     }
+    if (this.destroyed) return;
     if (this.draft.foto()) this.setPhoto(this.draft.foto()!, this.draft.nombreFoto());
+    try {
+      const estado = await this.api.disponibilidadClasificacion();
+      if (!this.destroyed) this.clasificacionDisponible.set(estado.disponible);
+    } catch {
+      this.clasificacionDisponible.set(false);
+    }
   }
   protected continue() {
     if (!this.draft.ready()) {
@@ -75,9 +92,12 @@ export class ReportEvidence implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.destroyed = true;
+    this.solicitudSugerencia++;
     this.closeCamera();
     this.revokePreview();
     this.map?.remove();
+    this.map = undefined;
   }
 
   protected async startCamera(): Promise<void> {
@@ -91,6 +111,11 @@ export class ReportEvidence implements OnInit, AfterViewInit, OnDestroy {
         video: { facingMode: { ideal: 'environment' } },
         audio: false,
       });
+      if (this.destroyed) {
+        stream.getTracks().forEach((track) => track.stop());
+        return;
+      }
+      this.closeCamera();
       this.cameraStream.set(stream);
       this.photoError.set('');
     } catch {
@@ -110,6 +135,7 @@ export class ReportEvidence implements OnInit, AfterViewInit, OnDestroy {
     canvas.getContext('2d')?.drawImage(video, 0, 0, canvas.width, canvas.height);
     canvas.toBlob(
       (photo) => {
+        if (this.destroyed) return;
         if (!photo) {
           this.photoError.set('No se pudo capturar la fotografía. Inténtalo nuevamente.');
           return;
@@ -130,6 +156,12 @@ export class ReportEvidence implements OnInit, AfterViewInit, OnDestroy {
     this.cameraStream.set(null);
   }
 
+  protected useMapCenter(): void {
+    if (!this.map) return;
+    this.setLocation(this.map.getCenter());
+    this.locationError.set('');
+  }
+
   protected useCurrentLocation(): void {
     if (!navigator.geolocation) {
       this.locationError.set('Tu navegador no permite obtener la ubicación actual.');
@@ -147,7 +179,7 @@ export class ReportEvidence implements OnInit, AfterViewInit, OnDestroy {
       },
       () => {
         this.locationError.set(
-          'No se pudo obtener tu ubicación. Revisa los permisos del navegador.',
+          'No se pudo obtener tu ubicación. Revisa los permisos o marca el punto en el mapa.',
         );
         this.isLocating.set(false);
       },
@@ -179,6 +211,7 @@ export class ReportEvidence implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.revokePreview();
+    this.limpiarSugerencia();
     this.draft.foto.set(photo);
     this.draft.nombreFoto.set(name);
     this.photoName.set(name);
@@ -186,7 +219,44 @@ export class ReportEvidence implements OnInit, AfterViewInit, OnDestroy {
     this.photoError.set('');
   }
 
+  protected async analizarFoto(): Promise<void> {
+    const foto = this.draft.foto();
+    if (!foto || this.analizando()) return;
+    const solicitud = ++this.solicitudSugerencia;
+    this.analizando.set(true);
+    this.sugerencia.set(null);
+    this.mensajeSugerencia.set('');
+    try {
+      const tipo = await this.api.sugerirBarrera(foto, this.draft.nombreFoto());
+      if (solicitud !== this.solicitudSugerencia) return;
+      this.sugerencia.set(tipo);
+      if (!tipo) this.mensajeSugerencia.set('No hay una sugerencia para esta foto. Puedes continuar con tu selección.');
+    } catch (error) {
+      if (solicitud === this.solicitudSugerencia) this.mensajeSugerencia.set(mensajeError(error));
+    } finally {
+      if (solicitud === this.solicitudSugerencia) this.analizando.set(false);
+    }
+  }
+
+  protected resolverSugerencia(aceptar: boolean): void {
+    const tipo = this.sugerencia();
+    if (!tipo) return;
+    if (aceptar) {
+      this.draft.tipoBarreraId.set(tipo.tipoBarreraId);
+      this.tipoNombre.set(tipo.nombre);
+    }
+    this.sugerencia.set(null);
+  }
+
+  private limpiarSugerencia(): void {
+    this.solicitudSugerencia++;
+    this.analizando.set(false);
+    this.sugerencia.set(null);
+    this.mensajeSugerencia.set('');
+  }
+
   protected removePhoto(): void {
+    this.limpiarSugerencia();
     this.revokePreview();
     this.draft.foto.set(null);
     this.draft.nombreFoto.set('');

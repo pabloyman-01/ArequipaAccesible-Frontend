@@ -1,0 +1,34 @@
+<app-profile />
+<section class="panel mb-8 grid gap-4">
+  <div>
+    <h2 class="section-title">Permitir que otra persona reporte por mí</h2>
+    <p>
+      Genera un código y compártelo solo con la persona que te asistirá. Puede usarlo una vez
+      durante 24 horas y tú verás el reporte en tu cuenta.
+    </p>
+    <p>Generar un código nuevo sustituye al anterior.</p>
+  </div>
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+  @if (aviso()) {
+    <p class="notice" role="status">{{ aviso() }}</p>
+  }
+  @if (autorizacion(); as a) {
+    <p class="break-all font-mono"><strong>Código</strong> {{ a.codigo }}</p>
+    <p>Vence el {{ a.venceEn | date: 'dd/MM/yyyy HH:mm' : '-0500' }}</p>
+  }
+  <div class="flex flex-wrap gap-3">
+    <button type="button" class="btn" [disabled]="busy()" (click)="cambiarAutorizacion(true)">
+      Generar código
+    </button>
+    <button
+      type="button"
+      class="btn-secondary"
+      [disabled]="busy()"
+      (click)="cambiarAutorizacion(false)"
+    >
+      Revocar código activo
+    </button>
+  </div>
+</section>

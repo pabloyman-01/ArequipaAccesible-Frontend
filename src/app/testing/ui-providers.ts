@@ -8,6 +8,10 @@ import { ReportDraftService } from '../core/report-draft.service';
 export function uiTestProviders() {
   const api = jasmine.createSpyObj('ApiService', [
     'catalogos',
+    'avisos',
+    'cambiarPublicacion',
+    'disponibilidadClasificacion',
+    'sugerirBarrera',
     'reportes',
     'perfil',
     'guardarPerfil',
@@ -22,6 +26,8 @@ export function uiTestProviders() {
   ]);
   const page = { elementos: [], limite: 20, hayMas: false, siguienteCursor: null };
   api.catalogos.and.resolveTo([[], []]);
+  api.avisos.and.resolveTo([]);
+  api.disponibilidadClasificacion.and.resolveTo({ disponible: false });
   api.reportes.and.resolveTo(page);
   api.usuarios.and.resolveTo(page);
   api.perfil.and.resolveTo(null);
@@ -50,6 +56,7 @@ export function uiTestProviders() {
   };
   const draft = new ReportDraftService();
   draft.tipoBarreraId.set(1);
+  draft.severidad.set('MEDIA');
   return [
     provideRouter([]),
     { provide: ApiService, useValue: api },

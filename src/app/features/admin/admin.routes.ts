@@ -28,6 +28,11 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./pages/reports/reports').then((module) => module.Reports),
       },
       {
+        path: 'prioridades',
+        title: 'Bandeja de prioridad | Arequipa Accesible',
+        loadComponent: () => import('./pages/priorities/priorities').then((m) => m.Priorities),
+      },
+      {
         path: 'usuarios',
         title: 'Gestión de Usuarios | Arequipa Accesible',
         data: { breadcrumb: 'Plataforma Municipal de Accesibilidad' },

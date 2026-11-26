@@ -117,8 +117,7 @@
           </h2>
         </div>
         <p class="pl-3.5 font-body-md text-body-md text-on-surface-variant">
-          Selecciona el impedimento arquitectónico o de tránsito en la vía pública (Catálogo Oficial
-          OMAPED):
+          Selecciona el tipo de barrera del catálogo del piloto.
         </p>
       </div>
 
@@ -132,6 +131,8 @@
             type="button"
             role="radio"
             [attr.aria-checked]="selectedBarrier() === +barrier.key"
+            [tabIndex]="selectedBarrier() === +barrier.key || (selectedBarrier() === null && $first) ? 0 : -1"
+            (keydown)="moveRadio($event)"
             (click)="selectBarrier(barrier.key)"
             [class]="
               'flex min-h-52 cursor-pointer flex-col gap-space-sm rounded-xl p-space-md text-left transition-all duration-200 ' +
@@ -213,6 +214,8 @@
             type="button"
             role="radio"
             [attr.aria-checked]="selectedSeverity() === severity.key"
+            [tabIndex]="selectedSeverity() === severity.key || (selectedSeverity() === null && $first) ? 0 : -1"
+            (keydown)="moveRadio($event)"
             (click)="selectSeverity(severity.key)"
             [class]="
               'flex min-h-60 cursor-pointer flex-col justify-between rounded-xl p-space-md text-left transition-all duration-200 ' +
@@ -291,7 +294,7 @@
           >verified_user</span
         >
         <span class="font-label-sm text-label-sm font-bold text-secondary"
-          >Validado por OMAPED Arequipa</span
+          >Catálogo interno del piloto</span
         >
       </div>
     </aside>
@@ -299,20 +302,21 @@
     <footer
       class="mt-space-xs flex flex-col items-center justify-between gap-space-md overflow-hidden rounded-xl bg-surface-container-lowest p-space-md shadow-sm sm:flex-row"
     >
-      <a
-        routerLink="/ciudadano"
+      <button
+        type="button"
+        (click)="cancel()"
         class="inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 font-label-lg text-label-lg text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-primary sm:w-auto"
       >
         <span class="material-symbols-outlined text-[20px]" aria-hidden="true">arrow_back</span>
         Cancelar y Volver al Inicio
-      </a>
+      </button>
       <div
         class="order-last flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant sm:order-none"
       >
         <span class="material-symbols-outlined text-[18px] text-outline" aria-hidden="true"
           >cloud_done</span
         >
-        Borrador guardado automáticamente
+        Borrador temporal. Se pierde al recargar.
       </div>
       <button
         type="button"

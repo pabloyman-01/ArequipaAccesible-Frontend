@@ -39,6 +39,11 @@ export class NewReport implements OnInit {
       this.error.set('Selecciona un tipo de barrera.');
       return;
     }
+    if (!this.draft.severidad()) {
+      this.error.set('Selecciona la severidad de la barrera.');
+      return;
+    }
+    this.error.set('');
     void this.router.navigateByUrl('/ciudadano/nuevo-reporte/evidencia');
   }
   protected readonly severities: SeverityOption[] = [
@@ -80,6 +85,28 @@ export class NewReport implements OnInit {
 
   protected selectSeverity(key: string): void {
     if (key === 'ALTA' || key === 'MEDIA' || key === 'BAJA') this.selectedSeverity.set(key);
+  }
+
+  protected cancel(): void {
+    if (this.draft.hasData() && !window.confirm('¿Quieres descartar los datos del borrador?')) return;
+    this.draft.clear();
+    void this.router.navigateByUrl('/ciudadano');
+  }
+
+  protected moveRadio(event: KeyboardEvent): void {
+    const button = event.currentTarget as HTMLButtonElement;
+    const group = button.closest('[role="radiogroup"]');
+    const options = Array.from(group?.querySelectorAll<HTMLButtonElement>('button[role="radio"]') ?? []);
+    const current = options.indexOf(button);
+    const directions: Partial<Record<string, number>> = {
+      ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1,
+    };
+    const direction = directions[event.key];
+    if (current < 0 || direction === undefined) return;
+    event.preventDefault();
+    const next = options[(current + direction + options.length) % options.length];
+    next.focus();
+    next.click();
   }
 
   protected selectionClass(selected: boolean): string {

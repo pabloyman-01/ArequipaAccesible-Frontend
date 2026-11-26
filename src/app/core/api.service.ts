@@ -1,10 +1,16 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { RuntimeConfigService } from './runtime-config.service';
+import { API_PUBLICA, RuntimeConfigService } from './runtime-config.service';
 import {
   Catalogo,
+  AvisoReporte,
+  AreaMunicipal,
+  AsignacionMunicipal,
+  MapaPublico,
   DetalleReporte,
+  DatosPrioridad,
+  EvaluacionPrioridad,
   EventoReporte,
   Pagina,
   Perfil,
@@ -13,6 +19,7 @@ import {
   EstadoReporte,
 } from './api.models';
 
+export interface SugerenciaBarrera { tipoBarreraId: number; nombre: string; }
 export type Filtros = Record<string, string | number | null | undefined>;
 export function correoLimitado(error: unknown): boolean {
   return Boolean(
@@ -45,11 +52,27 @@ export class ApiService {
   url(path: string) {
     return this.config.value.apiBaseUrl + path;
   }
-  get<T>(path: string, filtros: Filtros = {}): Promise<T> {
+  get<T>(path: string, filtros: Filtros = {}, publico = false): Promise<T> {
     let params = new HttpParams();
     for (const [key, value] of Object.entries(filtros))
       if (value !== '' && value != null) params = params.set(key, String(value));
-    return firstValueFrom(this.http.get<T>(this.url(path), { params }));
+    const context = new HttpContext().set(API_PUBLICA, publico);
+    return firstValueFrom(this.http.get<T>(this.url(path), { params, context }));
+  }
+  mapaPublico(filtros: Filtros) {
+    return this.get<MapaPublico>('/publico/mapa', filtros, true);
+  }
+  avisos() {
+    return this.get<AvisoReporte[]>('/reportes/avisos');
+  }
+  emitirAutorizacion() {
+    return firstValueFrom(this.http.post<{ codigo: string; venceEn: string }>(this.url('/reportes/autorizaciones'), null));
+  }
+  revocarAutorizacion() {
+    return firstValueFrom(this.http.delete<void>(this.url('/reportes/autorizaciones/activa')));
+  }
+  cambiarPublicacion(id: number, publicada: boolean) {
+    return firstValueFrom(this.http.patch<void>(this.url('/reportes/' + id + '/publicacion'), { publicada }));
   }
   perfil() {
     return this.get<Perfil>('/usuarios/me');
@@ -63,8 +86,8 @@ export class ApiService {
   }
   catalogos() {
     return Promise.all([
-      this.get<Catalogo[]>('/catalogos/distritos'),
-      this.get<Catalogo[]>('/catalogos/tipos-barrera'),
+      this.get<Catalogo[]>('/catalogos/distritos', {}, true),
+      this.get<Catalogo[]>('/catalogos/tipos-barrera', {}, true),
     ]);
   }
   reportes(admin: boolean, filtros: Filtros) {
@@ -81,6 +104,14 @@ export class ApiService {
       this.http.get(this.url(`/reportes/${id}/fotos/${foto}`), { responseType: 'blob' }),
     );
   }
+  disponibilidadClasificacion() {
+    return this.get<{ disponible: boolean }>('/reportes/ia');
+  }
+  sugerirBarrera(foto: Blob, nombre: string) {
+    const form = new FormData();
+    form.append('foto', foto, nombre);
+    return firstValueFrom(this.http.post<SugerenciaBarrera | null>(this.url('/reportes/ia/sugerencia'), form));
+  }
   crear(datos: object, foto: Blob, nombre: string) {
     const form = new FormData();
     form.append('datos', new Blob([JSON.stringify(datos)], { type: 'application/json' }));
@@ -91,6 +122,24 @@ export class ApiService {
         form,
       ),
     );
+  }
+  areasMunicipales() {
+    return this.get<AreaMunicipal[]>('/admin/areas');
+  }
+  asignacionMunicipal(id: number) {
+    return this.get<AsignacionMunicipal | null>(`/admin/reportes/${id}/asignacion`);
+  }
+  asignarReporte(id: number, areaId: number) {
+    return firstValueFrom(this.http.post<AsignacionMunicipal>(this.url(`/admin/reportes/${id}/asignacion`), { areaId }));
+  }
+  prioridad(id: number) {
+    return this.get<EvaluacionPrioridad>(`/admin/reportes/${id}/prioridad`);
+  }
+  guardarPrioridad(id: number, datos: DatosPrioridad) {
+    return firstValueFrom(this.http.put<EvaluacionPrioridad>(this.url(`/admin/reportes/${id}/prioridad`), datos));
+  }
+  bandejaPrioridad() {
+    return this.get<EvaluacionPrioridad[]>('/admin/prioridades');
   }
   cambiarReporte(
     id: number,

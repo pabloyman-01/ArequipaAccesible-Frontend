@@ -41,6 +41,7 @@ export class ReportDescription implements OnInit, OnDestroy {
   private readonly api = inject(ApiService);
   private readonly router = inject(Router);
   readonly error = signal('');
+  readonly asistido = signal(false);
   readonly created = signal<{ id: number; codigo: string } | null>(null);
   protected readonly description = this.draft.descripcion;
   ngOnInit() {
@@ -79,8 +80,8 @@ export class ReportDescription implements OnInit, OnDestroy {
       if (event.error !== 'aborted') {
         this.voiceError.set(
           event.error === 'not-allowed'
-            ? 'Debes permitir el acceso al micrÃ³fono para usar el dictado.'
-            : 'No se pudo procesar el dictado. IntÃ©ntalo nuevamente.',
+            ? 'Debes permitir el acceso al micrófono para usar el dictado.'
+            : 'No se pudo procesar el dictado. Inténtalo nuevamente.',
         );
       }
     };
@@ -95,14 +96,19 @@ export class ReportDescription implements OnInit, OnDestroy {
       this.voiceError.set('');
       this.isListening.set(true);
     } catch {
-      this.voiceError.set('No se pudo iniciar el dictado. IntÃ©ntalo nuevamente.');
+      this.voiceError.set('No se pudo iniciar el dictado. Inténtalo nuevamente.');
     }
   }
 
   protected async submit(): Promise<void> {
     if (this.isSubmitting() || this.showSuccess() || this.draft.uncertain()) return;
     if (!this.draft.ready() || !this.description().trim()) {
-      this.error.set('Completa los tres pasos y escribe una descripciÃ³n.');
+      this.error.set('Completa los tres pasos y escribe una descripción.');
+      return;
+    }
+    const codigo = this.draft.codigoAutorizacion().trim();
+    if (codigo && !/^[a-f\d]{8}(?:-[a-f\d]{4}){3}-[a-f\d]{12}$/i.test(codigo)) {
+      this.error.set('El código de autorización debe tener 36 caracteres con guiones.');
       return;
     }
     this.isSubmitting.set(true);
@@ -118,10 +124,13 @@ export class ReportDescription implements OnInit, OnDestroy {
           descripcion: this.description().trim(),
           latitud: u.lat,
           longitud: u.lng,
+          publicarEnMapa: !codigo && this.draft.publicarEnMapa(),
+          ...(codigo ? { codigoAutorizacion: codigo } : {}),
         },
         this.draft.foto()!,
         this.draft.nombreFoto(),
       );
+      this.asistido.set(Boolean(codigo));
       this.created.set(result);
       this.showSuccess.set(true);
       this.draft.clear();

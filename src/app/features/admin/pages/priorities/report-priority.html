@@ -1,0 +1,65 @@
+<section class="panel grid gap-4">
+  <div>
+    <h2 class="section-title">Prioridad experimental</h2>
+    <p>Modelo entrenado con datos simulados. Verifica los factores antes de usar el resultado.</p>
+  </div>
+  @if (error()) {
+    <p role="alert" class="error">{{ error() }}</p>
+  }
+  @if (estado(); as e) {
+    <p>
+      {{ e.reportesCercanos }} reportes abiertos a 100 m · {{ e.diasSinAtencion }} días desde el
+      registro
+    </p>
+  }
+  @if (estado()?.prioridad; as p) {
+    <p role="status" class="notice">
+      Probabilidad estimada de prioridad alta: {{ p.probabilidad | percent: '1.0-0' }}. Sugerida:
+      {{ p.nivelSugerido }}. Aplicada: {{ p.nivelAplicado }}.
+    </p>
+  }
+  <form class="grid gap-4 sm:grid-cols-2" (ngSubmit)="guardar()">
+    <label
+      >Tipo para el modelo
+      <select class="field" name="tipo" [(ngModel)]="tipo" required>
+        <option value="">Selecciona el tipo</option>
+        @for (opcion of tipos; track opcion.value) {
+          <option [value]="opcion.value">{{ opcion.label }}</option>
+        }
+      </select>
+    </label>
+    <label
+      >Zona sensible (hospital, escuela o paradero)
+      <select class="field" name="zona" [(ngModel)]="zona">
+        <option [ngValue]="null">Selecciona</option>
+        <option [ngValue]="true">Sí</option>
+        <option [ngValue]="false">No</option>
+      </select>
+    </label>
+    <label
+      >Flujo peatonal, de 1 (bajo) a 5 (alto)
+      <select class="field" name="flujo" [(ngModel)]="flujo">
+        <option [ngValue]="null">Selecciona</option>
+        @for (nivel of [1, 2, 3, 4, 5]; track nivel) {
+          <option [ngValue]="nivel">{{ nivel }}</option>
+        }
+      </select>
+    </label>
+    <label
+      >Corrección manual (opcional)
+      <select class="field" name="correccion" [(ngModel)]="correccion">
+        <option value="">Usar la sugerencia</option>
+        <option value="ALTA">Alta</option>
+        <option value="MEDIA">Media</option>
+        <option value="BAJA">Baja</option>
+      </select>
+    </label>
+    <button
+      type="submit"
+      class="btn justify-self-start"
+      [disabled]="busy() || !tipo || zona === null || flujo === null"
+    >
+      {{ busy() ? 'Procesando…' : 'Guardar y calcular prioridad' }}
+    </button>
+  </form>
+</section>

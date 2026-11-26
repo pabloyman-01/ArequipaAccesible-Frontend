@@ -48,6 +48,7 @@ describe('Connected citizen report flow', () => {
   function readyDraft() {
     const draft = TestBed.inject(ReportDraftService);
     draft.tipoBarreraId.set(1);
+    draft.severidad.set('MEDIA');
     draft.distritoId.set(1);
     draft.ubicacion.set({ lat: -16.3989, lng: -71.535 });
     draft.direccion.set('Referencia de prueba');

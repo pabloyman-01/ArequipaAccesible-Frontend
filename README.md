@@ -16,6 +16,16 @@ La rama `feat/integracion-frontend`, basada en `dev`, conecta el MVP con el back
 
 El registro soporta el piloto sin confirmación de correo cuando se desactiva Confirm email en Supabase. Consulta el ajuste real antes de cada alta y abre el perfil inmediatamente si recibe sesión. Ver [REGISTRO_PILOTO.md](REGISTRO_PILOTO.md) para la configuración remota, el alcance temporal y las pruebas; el código por sí solo no cambia la opción del proyecto.
 
+## Funciones del informe
+
+- **Reporte web**. Selección explícita de severidad, borrador temporal y sugerencia opcional por foto cuando el backend tiene un modelo local habilitado. La categoría cambia al aceptar la sugerencia.
+- **Mapa público** en `/mapa`. El titular puede publicar o retirar un reporte. El mapa muestra tipo, estado y coordenadas redondeadas.
+- **Avisos**. El encabezado ciudadano consulta automáticamente cambios de estado mientras la aplicación está visible. El estado de lectura se guarda en ese navegador.
+- **Reporte asistido**. El titular emite un código en «Mi cuenta». La persona que lo asiste lo usa en el último paso del formulario. El reporte queda en la cuenta del titular.
+- **Administración**. La bandeja de prioridad usa la PoC del informe como modelo experimental. La asignación se habilita al disponer de un catálogo municipal activo.
+
+Usa el backend de la rama `codex/funciones-pendientes` y sus migraciones V5 a V8 en una base de desarrollo. WhatsApp y la validación manual de accesibilidad se mantienen pendientes.
+
 ## Tecnologías
 
 - Angular 20

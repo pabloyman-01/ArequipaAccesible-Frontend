@@ -51,6 +51,16 @@
         </div>
       </dl>
     </section>
+    @if (r.puedeCambiarPublicacion) {
+      <section class="panel grid gap-3">
+        <h2 class="section-title">Mapa público</h2>
+        <p>Al publicar, se muestra el tipo, el estado y la ubicación aproximada.</p>
+        <button type="button" class="btn-secondary justify-self-start" [disabled]="busy()"
+          (click)="cambiarPublicacion(!r.publicadoEnMapa)">
+          {{ r.publicadoEnMapa ? 'Retirar del mapa público' : 'Publicar en el mapa' }}
+        </button>
+      </section>
+    }
     <section class="panel">
       <h2 class="section-title">Evidencia privada</h2>
       @if (photosError()) {
@@ -83,7 +93,11 @@
         }
       </ol>
     </section>
+    @if (auth.profile()?.roles?.includes('ADMINISTRADOR')) {
+      <app-report-assignment [reporteId]="r.id" [estado]="r.estado" (asignado)="actualizarAsignacion()" />
+    }
     @if (auth.profile()?.roles?.includes('ADMINISTRADOR') && siguientes[r.estado].length) {
+      <app-report-priority [reporteId]="r.id" />
       <form class="panel grid gap-4" (ngSubmit)="change()">
         <h2 class="section-title">Cambiar estado</h2>
         <label

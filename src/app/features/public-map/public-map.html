@@ -1,0 +1,60 @@
+<main class="mx-auto max-w-6xl space-y-5 p-4 sm:p-8">
+  <header class="flex flex-wrap items-start justify-between gap-4">
+    <div>
+      <h1 class="page-title">Mapa de barreras de accesibilidad</h1>
+      <p class="muted">Ubicaciones aproximadas de los reportes compartidos por la ciudadanía.</p>
+    </div>
+    <a class="btn-secondary" routerLink="/inicio-sesion">Acceso a la plataforma</a>
+  </header>
+  <form class="panel grid items-end gap-4 sm:grid-cols-3" (ngSubmit)="buscar()">
+    <label
+      >Estado
+      <select class="field" [(ngModel)]="estado" name="estado">
+        <option value="">Todos los estados</option>
+        @for (opcion of estados; track opcion) {
+          <option [value]="opcion">{{ etiquetaEstado(opcion) }}</option>
+        }
+      </select>
+    </label>
+    <label
+      >Tipo de barrera
+      <select class="field" [(ngModel)]="tipo" name="tipo">
+        <option value="">Todos los tipos</option>
+        @for (opcion of tipos(); track opcion.id) {
+          <option [value]="opcion.id">{{ opcion.nombre }}</option>
+        }
+      </select>
+    </label>
+    <button type="submit" class="btn" [disabled]="busy()">Aplicar filtros</button>
+  </form>
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+  @if (busy()) {
+    <p role="status">Cargando reportes…</p>
+  }
+  <div #map class="h-80 rounded-xl sm:h-96" aria-label="Mapa público de reportes"></div>
+  <section class="panel">
+    <h2 class="section-title">Ubicaciones publicadas</h2>
+    @if (hayMas()) {
+      <p class="muted">
+        Se muestran las primeras 500 ubicaciones. Aplica filtros para acotar los resultados.
+      </p>
+    }
+    @if (!busy() && !error() && !puntos().length) {
+      <p>No hay ubicaciones publicadas para estos filtros.</p>
+    }
+    <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      @for (punto of puntos(); track punto) {
+        <li class="rounded-xl bg-surface-container-low p-4">
+          <p class="font-bold">{{ punto.tipo }}</p>
+          <p>{{ etiquetaEstado(punto.estado) }} · Reportes: {{ punto.cantidad }}</p>
+          <p>Coordenadas aproximadas: {{ punto.latitud }}, {{ punto.longitud }}</p>
+          <button type="button" class="btn-secondary mt-2" (click)="enfocar(punto)">
+            Centrar en el mapa
+          </button>
+        </li>
+      }
+    </ul>
+  </section>
+</main>

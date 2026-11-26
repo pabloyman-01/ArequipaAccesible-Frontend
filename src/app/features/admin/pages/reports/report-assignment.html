@@ -1,0 +1,30 @@
+@if (asignacion() || estado() === 'EN_EVALUACION' || error()) {
+  <section class="panel grid gap-4">
+    <h2 class="section-title">Asignación municipal</h2>
+    @if (error()) {
+      <p role="alert" class="error">{{ error() }}</p>
+    }
+    @if (asignacion(); as asignada) {
+      <p>{{ asignada.area.nombre }} · {{ asignada.fecha | date: 'dd/MM/yyyy HH:mm' : '-0500' }}</p>
+    } @else if (busy()) {
+      <p role="status">Cargando áreas…</p>
+    } @else if (estado() === 'EN_EVALUACION' && areas().length > 0) {
+      <form class="grid gap-4" (ngSubmit)="asignar()">
+        <label
+          >Área municipal
+          <select class="field" name="area" [(ngModel)]="areaId" required>
+            <option [ngValue]="null">Selecciona un área</option>
+            @for (area of areas(); track area.id) {
+              <option [ngValue]="area.id">{{ area.nombre }}</option>
+            }
+          </select>
+        </label>
+        <button type="submit" class="btn justify-self-start" [disabled]="busy() || !areaId">
+          Asignar reporte
+        </button>
+      </form>
+    } @else if (estado() === 'EN_EVALUACION' && !error()) {
+      <p>El catálogo municipal aún no tiene áreas activas.</p>
+    }
+  </section>
+}
